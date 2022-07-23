@@ -25,12 +25,12 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       TextEditingController();
   final TextEditingController _numberController = TextEditingController();
 
-  GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
-  final bool _isShowPassword = true;
-
+  // ignore: unused_field
   String? _profileUrl;
 
+  @override
   void dispose() {
     _examTypeController.dispose();
     _dobController.dispose();
@@ -63,17 +63,17 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
           const SizedBox(
             height: 17,
           ),
-          TextFieldContainer(
+          TextFormFieldWidget(
               controller: _groupNameController,
-              keyboardType: TextInputType.text,
+              type: TextInputType.text,
               hintText: 'group name',
               prefixIcon: Icons.change_circle),
           const SizedBox(
             height: 10,
           ),
-          TextFieldContainer(
+          TextFormFieldWidget(
             controller: _numberUsersJoinController,
-            keyboardType: TextInputType.emailAddress,
+            type: TextInputType.emailAddress,
             hintText: 'number of users join group',
             prefixIcon: Icons.format_list_numbered,
           ),

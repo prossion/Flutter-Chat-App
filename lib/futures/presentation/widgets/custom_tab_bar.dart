@@ -4,16 +4,19 @@ typedef TabClickListener = Function(int index);
 
 class CustomTabBar extends StatefulWidget {
   final TabClickListener tabClickListener;
-  final index;
+  final int index;
 
-  const CustomTabBar({Key? key, this.index = 0, required this.tabClickListener})
-      : super(key: key);
+  const CustomTabBar({
+    Key? key,
+    this.index = 0,
+    required this.tabClickListener,
+  }) : super(key: key);
 
   @override
-  _CustomTabBarState createState() => _CustomTabBarState();
+  CustomTabBarState createState() => CustomTabBarState();
 }
 
-class _CustomTabBarState extends State<CustomTabBar> {
+class CustomTabBarState extends State<CustomTabBar> {
   int _indexHolder = 0;
 
   @override
@@ -104,8 +107,9 @@ class TabBarCustomButton extends StatelessWidget {
         height: height,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: borderColor, width: borderWidth))),
+          border: Border(
+              bottom: BorderSide(color: borderColor, width: borderWidth)),
+        ),
         child: Text(
           text,
           textAlign: TextAlign.center,

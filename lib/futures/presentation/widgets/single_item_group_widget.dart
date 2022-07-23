@@ -31,7 +31,9 @@ class SingleItemGroupWidget extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(50)),
-                        child: profileWidget(imageUrl: group.groupProfileImage),
+                        child: profileWidget(
+                            imageUrl: group.groupProfileImage,
+                            name: group.groupName),
                       ),
                     ),
                     const SizedBox(

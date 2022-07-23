@@ -22,8 +22,8 @@ class _SingleChatPageState extends State<SingleChatPage> {
   String messageContent = "";
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final bool _changeKeyboardType = false;
-  final int _menuIndex = 0;
+  // final bool _changeKeyboardType = false;
+  // final int _menuIndex = 0;
 
   @override
   void initState() {

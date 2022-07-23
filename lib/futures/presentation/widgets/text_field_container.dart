@@ -1,38 +1,38 @@
 import 'package:flutter/material.dart';
 
-class TextFieldContainer extends StatelessWidget {
+class TextFormFieldWidget extends StatelessWidget {
+  const TextFormFieldWidget({
+    Key? key,
+    this.controller,
+    this.validator,
+    required this.hintText,
+    required this.type,
+    this.suffixIcon,
+    this.prefixIcon,
+    this.autovalidateMode,
+  }) : super(key: key);
   final TextEditingController? controller;
-  final bool? isObscureText;
-  final String? hintText;
+  final FormFieldValidator? validator;
+  final AutovalidateMode? autovalidateMode;
+  final String hintText;
+  final TextInputType type;
+  final Widget? suffixIcon;
   final IconData? prefixIcon;
-  final TextInputType? keyboardType;
-  const TextFieldContainer(
-      {Key? key,
-      this.keyboardType,
-      this.prefixIcon,
-      this.hintText,
-      this.controller,
-      this.isObscureText})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 45,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: Colors.black.withOpacity(.2),
-          borderRadius: const BorderRadius.all(Radius.circular(10))),
-      child: TextField(
-        obscureText: isObscureText == true ? true : false,
-        keyboardType: keyboardType ?? TextInputType.text,
+    return TextFormField(
+        keyboardType: type,
         controller: controller,
         decoration: InputDecoration(
-          prefixIcon: Icon(prefixIcon ?? Icons.circle),
           hintText: hintText,
-          border: InputBorder.none,
+          suffixIcon: suffixIcon,
+          prefixIcon: Icon(prefixIcon),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
         ),
-      ),
-    );
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: validator);
   }
 }

@@ -18,9 +18,12 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController? _emailController;
   TextEditingController? _numController;
 
+  // ignore: unused_field
   String? _username;
+  // ignore: unused_field
   String? _phoneNumber;
 
+  @override
   void dispose() {
     _nameController!.dispose();
     _statusController!.dispose();
@@ -52,10 +55,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _profileWidget(List<UserEntity> users) {
     final user = users.firstWhere((user) => user.uid == widget.uid,
-        orElse: () => UserModel());
-    _nameController!.value = TextEditingValue(text: "${user.name}");
-    _emailController!.value = TextEditingValue(text: "${user.email}");
-    _statusController!.value = TextEditingValue(text: "${user.status}");
+        orElse: () => const UserModel());
+    _nameController!.value = TextEditingValue(text: user.name);
+    _emailController!.value = TextEditingValue(text: user.email);
+    _statusController!.value = TextEditingValue(text: user.status);
 
     return SingleChildScrollView(
       child: Column(

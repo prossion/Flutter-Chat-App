@@ -17,8 +17,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       : super(AuthInitialState()) {
     on<AppStartedEvent>((event, emit) async {
       try {
+        // ignore: unused_local_variable
         bool isSignIn = await isSignInUseCase.call();
-        print(isSignIn);
+        // print(isSignIn);
         if (isSignIn = true) {
           final uid = await getCurrentUIDUseCase.call();
           emit(AuthenticatedState(uid: uid));
@@ -33,10 +34,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoggedInEvent>((event, emit) async {
       try {
         final uid = await getCurrentUIDUseCase.call();
-        print("user Id $uid");
+        // print("user Id $uid");
         emit(AuthenticatedState(uid: uid));
       } catch (_) {
-        print("user Id null");
+        // print("user Id null");
         emit(UnAunthenticatedState());
         rethrow;
       }

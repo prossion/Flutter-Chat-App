@@ -215,6 +215,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
       if (chatChannelId.exists) {
         return chatChannelId.get('channelId');
       } else {
+        // ignore: null_argument_to_non_null_type
         return Future.value(null);
       }
     });
@@ -244,12 +245,11 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
         return chatChannelDoc.get('channelId');
       }
 
-      final _chatChannelId = oneToOneChatChannelRef.doc().id;
+      final chatChannelId = oneToOneChatChannelRef.doc().id;
 
-      var channel = {'channelId': _chatChannelId};
-      var channel1 = {'channelId': _chatChannelId};
+      var channel = {'channelId': chatChannelId};
 
-      oneToOneChatChannelRef.doc(_chatChannelId).set(channel);
+      oneToOneChatChannelRef.doc(chatChannelId).set(channel);
 
       // currentUser
       userCollectionRef
@@ -265,7 +265,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
           .doc(engageUserEntity.otherUid)
           .set(channel);
 
-      return _chatChannelId;
+      return chatChannelId;
     });
     return Future.value("");
   }

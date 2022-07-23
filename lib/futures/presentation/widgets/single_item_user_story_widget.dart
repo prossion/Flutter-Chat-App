@@ -26,7 +26,8 @@ class SingleItemStoriesStatusWidget extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(50))),
                     child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      child: profileWidget(imageUrl: user.photoUrl),
+                      child: profileWidget(
+                          imageUrl: user.photoUrl, name: user.name),
                     ),
                   ),
                   const SizedBox(
@@ -44,7 +45,7 @@ class SingleItemStoriesStatusWidget extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        user.status == null || user.status == ""
+                        user.status == ""
                             ? "Hi! I'm using this app"
                             : user.status,
                         overflow: TextOverflow.ellipsis,

@@ -8,6 +8,7 @@ import 'package:flutter_social_app/futures/presentation/bloc/credential/credenti
 import 'package:flutter_social_app/futures/presentation/bloc/credential/credential_event.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/credential/credential_state.dart';
 import 'package:flutter_social_app/futures/presentation/pages/home_page.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/text_field_container.dart';
 
 import 'package:flutter_social_app/page_const.dart';
 
@@ -105,18 +106,10 @@ class _LoginPageState extends State<LoginPage> {
                         key: _formKey,
                         child: Column(
                           children: [
-                            TextFormField(
-                              keyboardType: TextInputType.emailAddress,
+                            TextFormFieldWidget(
+                              hintText: "Email",
                               controller: _emailController,
-                              decoration: const InputDecoration(
-                                hintText: "Email",
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                ),
-                              ),
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
+                              type: TextInputType.emailAddress,
                               validator: (value) {
                                 return value != null &&
                                         !EmailValidator.validate(value)
@@ -125,26 +118,19 @@ class _LoginPageState extends State<LoginPage> {
                               },
                             ),
                             const SizedBox(height: 10),
-                            TextFormField(
-                              keyboardType: TextInputType.text,
+                            TextFormFieldWidget(
+                              hintText: "Password",
                               controller: _passwordController,
-                              obscureText: _hidePass,
-                              decoration: InputDecoration(
-                                hintText: "Password",
-                                border: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(_hidePass
-                                      ? Icons.visibility
-                                      : Icons.visibility_off),
-                                  onPressed: () {
-                                    setState(() {
-                                      _hidePass = !_hidePass;
-                                    });
-                                  },
-                                ),
+                              type: TextInputType.text,
+                              suffixIcon: IconButton(
+                                icon: Icon(_hidePass
+                                    ? Icons.visibility
+                                    : Icons.visibility_off),
+                                onPressed: () {
+                                  setState(() {
+                                    _hidePass = !_hidePass;
+                                  });
+                                },
                               ),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
