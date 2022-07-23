@@ -1,6 +1,15 @@
-# flutter_social_app
+# Flutter News App
+Group communication apps using Flutter and Firebase-Firestore Database
 
-A new Flutter project.
+# Technology
+1. Flutter Bloc
+2. Firebase Auth
+3. Google Auth
+4. Cloud Firestore
+5. Firebase Storage
+6. intl
+7. get_it
+8. cached_netowrk_image
 
 ## Getting Started
 
