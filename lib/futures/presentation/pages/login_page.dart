@@ -109,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                             TextFormFieldWidget(
                               hintText: "Email",
                               controller: _emailController,
+                              prefixIcon: Icons.mail,
                               type: TextInputType.emailAddress,
                               validator: (value) {
                                 return value != null &&
@@ -122,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "Password",
                               controller: _passwordController,
                               type: TextInputType.text,
+                              prefixIcon: Icons.password,
                               suffixIcon: IconButton(
                                 icon: Icon(_hidePass
                                     ? Icons.visibility
@@ -139,6 +141,25 @@ class _LoginPageState extends State<LoginPage> {
                                     ? 'Enter min. 6 characters'
                                     : null;
                               },
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, PageConst.forgotPage);
+                                },
+                                child: const Text(
+                                  'Forgot password?',
+                                  style: TextStyle(
+                                      color: Colors.blueAccent,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 12),
                             SizedBox(
