@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/profile_widget.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 
-class SingleItemStoriesStatusWidget extends StatelessWidget {
+class ProfileCard extends StatelessWidget {
   final UserEntity user;
 
-  const SingleItemStoriesStatusWidget({Key? key, required this.user})
-      : super(key: key);
+  const ProfileCard({Key? key, required this.user}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

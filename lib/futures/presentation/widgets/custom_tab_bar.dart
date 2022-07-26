@@ -47,7 +47,7 @@ class CustomTabBarState extends State<CustomTabBar> {
           Expanded(
             child: TabBarCustomButton(
               text: "Users",
-              textColor: widget.index == 1 ? Colors.blueAccent : Colors.grey,
+              textColor: widget.index == 1 ? Colors.white : Colors.grey,
               borderColor:
                   widget.index == 1 ? Colors.blueAccent : Colors.transparent,
               onTap: () {
@@ -61,7 +61,7 @@ class CustomTabBarState extends State<CustomTabBar> {
           Expanded(
             child: TabBarCustomButton(
               text: "Profile",
-              textColor: widget.index == 2 ? Colors.blueAccent : Colors.grey,
+              textColor: widget.index == 2 ? Colors.white : Colors.grey,
               borderColor:
                   widget.index == 2 ? Colors.blueAccent : Colors.transparent,
               onTap: () {

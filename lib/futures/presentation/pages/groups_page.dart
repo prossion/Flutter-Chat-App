@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/futures/data/model/user_model.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/single_item_group_widget.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:flutter_social_app/page_const.dart';
 
 class GroupsPage extends StatefulWidget {
@@ -69,7 +69,7 @@ class _GroupsPageState extends State<GroupsPage> {
                             : ListView.builder(
                                 itemCount: filteredGroups.length,
                                 itemBuilder: (_, index) {
-                                  return SingleItemGroupWidget(
+                                  return GroupCard(
                                     group: filteredGroups[index],
                                     onTap: () {
                                       BlocProvider.of<GroupBloc>(context).add(

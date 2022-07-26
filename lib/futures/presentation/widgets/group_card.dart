@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/profile_widget.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 
-class SingleItemGroupWidget extends StatelessWidget {
+class GroupCard extends StatelessWidget {
   final GroupEntity group;
   final VoidCallback onTap;
 
-  const SingleItemGroupWidget(
-      {Key? key, required this.group, required this.onTap})
+  const GroupCard({Key? key, required this.group, required this.onTap})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

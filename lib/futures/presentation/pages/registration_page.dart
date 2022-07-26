@@ -1,8 +1,12 @@
 // import 'dart:io';
 
+import 'dart:io';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
+import 'package:flutter_social_app/futures/data/datasources/remote/storage_provider.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/auth/auth_bloc.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/auth/auth_event.dart';
@@ -12,7 +16,8 @@ import 'package:flutter_social_app/futures/presentation/bloc/credential/credenti
 import 'package:flutter_social_app/futures/presentation/bloc/credential/credential_state.dart';
 import 'package:flutter_social_app/futures/presentation/pages/home_page.dart';
 import 'package:flutter_social_app/futures/presentation/pages/login_page.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/text_field_container.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -35,32 +40,36 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   bool _hidePass = true;
 
-  // File? _image;
-  // String? _profileUrl;
+  File? _image;
+  String? _profileUrl;
 
-  // Future getImage() async {
-  //   try {
-  //     final pickedFile =
-  //         await ImagePicker.platform.getImage(source: ImageSource.gallery);
+  Future getImage() async {
+    try {
+      final pickedFile =
+          await ImagePicker.platform.getImage(source: ImageSource.gallery);
 
-  //     setState(
-  //       () {
-  //         if (pickedFile != null) {
-  //           _image = File(pickedFile.path);
-  //           StorageProviderRemoteDataSource.uploadFile(file: _image!)
-  //               .then((value) {
-  //             print("profileUrl");
-  //             setState(() {
-  //               _profileUrl = value;
-  //             });
-  //           });
-  //         } else {}
-  //       },
-  //     );
-  //   } catch (e) {
-  //     Text("error $e");
-  //   }
-  // }
+      setState(
+        () {
+          if (pickedFile != null) {
+            _image = File(pickedFile.path);
+            StorageProviderRemoteDataSource.uploadFile(file: _image!)
+                .then((value) {
+              setState(() {
+                _profileUrl = value;
+              });
+            });
+          } else {
+            const photo = 'assets/icons/profile_default.png';
+            setState(() {
+              _profileUrl = photo;
+            });
+          }
+        },
+      );
+    } catch (e) {
+      Text("error $e");
+    }
+  }
 
   @override
   void dispose() {
@@ -133,6 +142,40 @@ class _RegistrationPageState extends State<RegistrationPage> {
               const SizedBox(
                 height: 10,
               ),
+              GestureDetector(
+                onTap: () async {
+                  getImage();
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      height: 62,
+                      width: 62,
+                      decoration: const BoxDecoration(
+                        color: picturePhoto,
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                      ),
+                      child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50)),
+                          child: profileWidget(image: _image)),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    const Text(
+                      'Add profile photo',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.blueAccent),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 17,
+              ),
               Center(
                 child: Form(
                   key: _formKey,
@@ -154,6 +197,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         hintText: "Email",
                         controller: _emailController,
                         type: TextInputType.emailAddress,
+                        prefixIcon: Icons.mail,
+                        obscureText: false,
                         validator: (value) {
                           return value != null &&
                                   !EmailValidator.validate(value)
@@ -176,6 +221,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         hintText: "Password",
                         controller: _passwordController,
                         type: TextInputType.text,
+                        prefixIcon: Icons.password,
+                        obscureText: _hidePass,
                         suffixIcon: IconButton(
                           icon: Icon(_hidePass
                               ? Icons.visibility
@@ -198,6 +245,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         hintText: "Password Again",
                         controller: _passwordAgainController,
                         type: TextInputType.text,
+                        prefixIcon: Icons.password,
+                        obscureText: _hidePass,
                         suffixIcon: IconButton(
                           icon: Icon(_hidePass
                               ? Icons.visibility
@@ -274,7 +323,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         email: _emailController.text,
         phoneNumber: _numberController.text,
         name: _usernameController.text,
-        // photoUrl: _profileUrl!,
+        photoUrl: _profileUrl!,
         password: _passwordController.text,
         isOnline: false,
         status: "Hi! there i'm using this app",

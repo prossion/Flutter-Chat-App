@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/user/user_bloc.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/user/user_state.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/single_item_user_story_widget.dart';
+import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 
 class AllUsersPage extends StatefulWidget {
   final String uid;
@@ -57,7 +56,7 @@ class _AllUsersPageState extends State<AllUsersPage> {
                       : ListView.builder(
                           itemCount: filteredUsers.length,
                           itemBuilder: (_, index) {
-                            return SingleItemStoriesStatusWidget(
+                            return ProfileCard(
                               user: filteredUsers[index],
                             );
                           },

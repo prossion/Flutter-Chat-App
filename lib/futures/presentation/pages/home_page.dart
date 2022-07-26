@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/auth/auth_bloc.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/auth/auth_event.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/group/group_bloc.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/group/group_event.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/user/user_bloc.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/user/user_event.dart';
-import 'package:flutter_social_app/futures/presentation/pages/all_users_page.dart';
-import 'package:flutter_social_app/futures/presentation/pages/groups_page.dart';
-import 'package:flutter_social_app/futures/presentation/pages/profile_page.dart';
+import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:flutter_social_app/futures/presentation/pages/pages.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/custom_tab_bar.dart';
 
 class HomePage extends StatefulWidget {

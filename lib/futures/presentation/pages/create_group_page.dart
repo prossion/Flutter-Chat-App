@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
+import 'package:flutter_social_app/futures/data/datasources/remote/storage_provider.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/text_field_container.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateGroupPage extends StatefulWidget {
   final String uid;
@@ -27,8 +32,34 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
+  File? _image;
   // ignore: unused_field
   String? _profileUrl;
+
+  Future getImage() async {
+    try {
+      final pickedFile =
+          await ImagePicker.platform.getImage(source: ImageSource.gallery);
+
+      setState(() {
+        if (pickedFile != null) {
+          _image = File(pickedFile.path);
+
+          StorageProviderRemoteDataSource.uploadFile(file: _image!)
+              .then((value) {
+            print("profileUrl");
+            setState(() {
+              _profileUrl = value;
+            });
+          });
+        } else {
+          print('No image selected.');
+        }
+      });
+    } catch (e) {
+      const Text('Error');
+    }
+  }
 
   @override
   void dispose() {
@@ -60,14 +91,46 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
       child: Column(
         children: [
+          GestureDetector(
+            onTap: () async {
+              getImage();
+            },
+            child: Column(
+              children: [
+                Container(
+                  height: 62,
+                  width: 62,
+                  decoration: const BoxDecoration(
+                    color: picturePhoto,
+                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                  ),
+                  child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      child: profileWidget(image: _image)),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                const Text(
+                  'Add Group Image',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.blueAccent),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(
             height: 17,
           ),
           TextFormFieldWidget(
-              controller: _groupNameController,
-              type: TextInputType.text,
-              hintText: 'group name',
-              prefixIcon: Icons.change_circle),
+            controller: _groupNameController,
+            type: TextInputType.text,
+            hintText: 'group name',
+            prefixIcon: Icons.change_circle,
+            obscureText: false,
+          ),
           const SizedBox(
             height: 10,
           ),
@@ -76,6 +139,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
             type: TextInputType.emailAddress,
             hintText: 'number of users join group',
             prefixIcon: Icons.format_list_numbered,
+            obscureText: false,
           ),
           const SizedBox(
             height: 17,
@@ -166,10 +230,10 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
   }
 
   _submit() async {
-    // if (_image==null){
-    //   Text('Add profile photo');
-    //   return;
-    // }
+    if (_image == null) {
+      const Text('Add profile photo');
+      return;
+    }
     if (_groupNameController.text.isEmpty) {
       const Text('enter your surname');
       return;
@@ -185,7 +249,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       uid: widget.uid,
       groupName: _groupNameController.text,
       creationTime: Timestamp.now(),
-      // groupProfileImage: _profileUrl!,
+      groupProfileImage: _profileUrl!,
       joinUsers: "0",
       limitUsers: _numberUsersJoinController.text,
     )));
@@ -198,7 +262,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       _groupNameController.clear();
       _numberUsersJoinController.clear();
       _profileUrl = "";
-      //  _image=null;
+      _image = null;
     });
   }
 }

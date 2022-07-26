@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
+import 'package:flutter_social_app/futures/data/datasources/remote/storage_provider.dart';
 import 'package:flutter_social_app/futures/data/model/user_model.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/profile_widget.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   final String uid;
@@ -18,10 +24,13 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController? _emailController;
   TextEditingController? _numController;
 
+  File? _image;
+  String? _profileUrl;
   // ignore: unused_field
   String? _username;
   // ignore: unused_field
   String? _phoneNumber;
+  final picker = ImagePicker();
 
   @override
   void dispose() {
@@ -39,6 +48,29 @@ class _ProfilePageState extends State<ProfilePage> {
     _emailController = TextEditingController(text: "");
     _numController = TextEditingController(text: "");
     super.initState();
+  }
+
+  Future getImage() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+      setState(() {
+        if (pickedFile != null) {
+          _image = File(pickedFile.path);
+          StorageProviderRemoteDataSource.uploadFile(file: _image!)
+              .then((value) {
+            print("profileUrl");
+            setState(() {
+              _profileUrl = value;
+            });
+          });
+        } else {
+          print('No image selected.');
+        }
+      });
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
@@ -63,6 +95,39 @@ class _ProfilePageState extends State<ProfilePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
+          const SizedBox(
+            height: 10,
+          ),
+          GestureDetector(
+            onTap: () {
+              getImage();
+            },
+            child: Container(
+              height: 62,
+              width: 62,
+              decoration: const BoxDecoration(
+                color: picturePhoto,
+                borderRadius: BorderRadius.all(Radius.circular(50)),
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                child: profileWidget(imageUrl: user.photoUrl, image: _image),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 14,
+          ),
+          const Text(
+            'Remove profile photo',
+            style: TextStyle(
+                color: Colors.blueAccent,
+                fontSize: 16,
+                fontWeight: FontWeight.w400),
+          ),
+          const SizedBox(
+            height: 28,
+          ),
           const SizedBox(
             height: 10,
           ),
@@ -165,7 +230,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 44,
                 width: MediaQuery.of(context).size.width,
                 decoration: const BoxDecoration(
-                  color: Colors.green,
+                  color: Colors.blueAccent,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: const Text(
@@ -187,7 +252,7 @@ class _ProfilePageState extends State<ProfilePage> {
         uid: widget.uid,
         name: _nameController!.text,
         status: _statusController!.text,
-        // profileUrl: _profileUrl!,
+        photoUrl: _profileUrl!,
       ),
     ));
   }

@@ -1,15 +1,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/auth/auth_bloc.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/auth/auth_event.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/auth/auth_state.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/credential/credential_bloc.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/credential/credential_event.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/credential/credential_state.dart';
-import 'package:flutter_social_app/futures/presentation/pages/home_page.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/text_field_container.dart';
-
+import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:flutter_social_app/futures/presentation/pages/pages.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:flutter_social_app/page_const.dart';
 
 class LoginPage extends StatefulWidget {
@@ -111,6 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                               controller: _emailController,
                               prefixIcon: Icons.mail,
                               type: TextInputType.emailAddress,
+                              obscureText: false,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               validator: (value) {
                                 return value != null &&
                                         !EmailValidator.validate(value)
@@ -124,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                               controller: _passwordController,
                               type: TextInputType.text,
                               prefixIcon: Icons.password,
+                              obscureText: _hidePass,
                               suffixIcon: IconButton(
                                 icon: Icon(_hidePass
                                     ? Icons.visibility

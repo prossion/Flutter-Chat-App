@@ -10,6 +10,7 @@ class TextFormFieldWidget extends StatelessWidget {
     this.suffixIcon,
     this.prefixIcon,
     this.autovalidateMode,
+    required this.obscureText,
   }) : super(key: key);
   final TextEditingController? controller;
   final FormFieldValidator? validator;
@@ -18,21 +19,24 @@ class TextFormFieldWidget extends StatelessWidget {
   final TextInputType type;
   final Widget? suffixIcon;
   final IconData? prefixIcon;
+  final bool obscureText;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        keyboardType: type,
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: hintText,
-          suffixIcon: suffixIcon,
-          prefixIcon: Icon(prefixIcon),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          ),
+      keyboardType: type,
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hintText,
+        suffixIcon: suffixIcon,
+        prefixIcon: Icon(prefixIcon),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: validator);
+      ),
+      autovalidateMode: autovalidateMode,
+      validator: validator,
+      obscureText: obscureText,
+    );
   }
 }
