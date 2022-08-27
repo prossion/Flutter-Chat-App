@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_social_app/futures/data/datasources/remote/firebase_remote_data_source.dart';
+import 'package:flutter_social_app/futures/data/model/chat_messages_model.dart';
 import 'package:flutter_social_app/futures/data/model/chat_model.dart';
 import 'package:flutter_social_app/futures/data/model/group_model.dart';
 import 'package:flutter_social_app/futures/data/model/text_message_model.dart';
@@ -282,7 +283,6 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
 
     final newMessage = TextMessageModel(
       content: textMessageEntity.content,
-      messageId: messageId,
       receiverName: textMessageEntity.receiverName,
       recipientId: textMessageEntity.recipientId,
       senderId: textMessageEntity.senderId,
@@ -489,4 +489,69 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
     userCollection.doc(groupEntity.groupId).update(groupInformation);
   }
   // GROUPS
+
+  @override
+  Stream<List<ChatMessagesModel>> getChatMessage(
+      String groupChatId, int limit) {
+    final messagesRef = firestore
+        .collection("messages")
+        .doc(groupChatId)
+        .collection(groupChatId);
+    return messagesRef
+        .orderBy("time", descending: true)
+        .limit(limit)
+        .snapshots()
+        .map((querySnap) => querySnap.docs
+            .map((queryDoc) => ChatMessagesModel.fromDocument(queryDoc))
+            .toList());
+  }
+
+  @override
+  Future<void> sendChatMessage(String content, int type, String groupChatId,
+      String currentUserId, String peerId) async {
+    DocumentReference documentReference = firestore
+        .collection("messages")
+        .doc(groupChatId)
+        .collection(groupChatId)
+        .doc(DateTime.now().millisecondsSinceEpoch.toString());
+    ChatMessagesModel chatMessages = ChatMessagesModel(
+        idFrom: currentUserId,
+        idTo: peerId,
+        timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
+        content: content,
+        type: type);
+
+    FirebaseFirestore.instance.runTransaction((transaction) async {
+      transaction.set(documentReference, chatMessages.toJson());
+    });
+  }
+
+  @override
+  Future<void> updateDataFirestore(String collectionPath, String docPath,
+      Map<String, dynamic> dataNeedUpdate) {
+    return firestore
+        .collection(collectionPath)
+        .doc(docPath)
+        .update(dataNeedUpdate);
+  }
+
+  @override
+  Future<void> joinChatMessage(String groupChatId) async {
+    final chatCollection = firestore.collection("groupChatChannel");
+
+    chatCollection.doc(groupChatId).get().then((groupChannel) {
+      Map<String, dynamic> groupMap = {"groupChatChannel": groupChatId};
+      if (!groupChannel.exists) {
+        chatCollection.doc(groupChatId).set(groupMap);
+        return;
+      }
+      return;
+    });
+  }
+}
+
+class TypeMessage {
+  static const text = 0;
+  static const image = 1;
+  static const sticker = 2;
 }

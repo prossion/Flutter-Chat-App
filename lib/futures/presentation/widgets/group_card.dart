@@ -52,8 +52,9 @@ class GroupCard extends StatelessWidget {
                         Text(
                           group.lastMessage == ""
                               ? group.groupName
-                              : group.lastMessage,
-                          overflow: TextOverflow.ellipsis,
+                              : group.lastMessage.length > 40
+                                  ? '${group.lastMessage.substring(0, 40)}...'
+                                  : group.lastMessage,
                         ),
                       ],
                     )

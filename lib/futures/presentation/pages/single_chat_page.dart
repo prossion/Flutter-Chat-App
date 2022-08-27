@@ -143,6 +143,8 @@ class _SingleChatPageState extends State<SingleChatPage> {
                         senderId: widget.singleChatEntity.uid,
                         content: _messageController.text,
                         senderName: widget.singleChatEntity.username,
+                        receiverName: '',
+                        recipientId: '',
                         type: "TEXT"),
                     channelId: widget.singleChatEntity.groupId));
                 BlocProvider.of<GroupBloc>(context).add(UpdateGroupEvent(

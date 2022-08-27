@@ -13,3 +13,6 @@ export 'group/group_event.dart';
 export 'user/user_bloc.dart';
 export 'user/user_state.dart';
 export 'user/user_event.dart';
+export 'my_group_bloc/my_group_bloc.dart';
+export 'my_group_bloc/my_group_event.dart';
+export 'my_group_bloc/my_group_state.dart';

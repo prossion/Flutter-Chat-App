@@ -1,4 +1,5 @@
 import 'package:flutter_social_app/futures/data/datasources/remote/firebase_remote_data_source.dart';
+import 'package:flutter_social_app/futures/data/model/chat_messages_model.dart';
 import 'package:flutter_social_app/futures/domain/entites/group_entity.dart';
 import 'package:flutter_social_app/futures/domain/entites/user_entity.dart';
 import 'package:flutter_social_app/futures/domain/entites/text_message_entity.dart';
@@ -96,4 +97,24 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   @override
   Future<void> updateGroup(GroupEntity groupEntity) async =>
       remoteDataSource.updateGroup(groupEntity);
+  @override
+  Future<void> updateDataFirestore(String collectionPath, String docPath,
+          Map<String, dynamic> dataNeedUpdate) =>
+      remoteDataSource.updateDataFirestore(
+          collectionPath, docPath, dataNeedUpdate);
+
+  @override
+  Stream<List<ChatMessagesModel>> getChatMessage(
+          String groupChatId, int limit) =>
+      remoteDataSource.getChatMessage(groupChatId, limit);
+
+  @override
+  Future<void> sendChatMessage(String content, int type, String groupChatId,
+          String currentUserId, String peerId) =>
+      remoteDataSource.sendChatMessage(
+          content, type, groupChatId, currentUserId, peerId);
+
+  @override
+  Future<void> joinChatMessage(String groupChatId) async =>
+      remoteDataSource.joinChatMessage(groupChatId);
 }

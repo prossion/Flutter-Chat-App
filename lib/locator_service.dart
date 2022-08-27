@@ -4,6 +4,7 @@ import 'package:flutter_social_app/futures/data/datasources/remote/firebase_remo
 import 'package:flutter_social_app/futures/data/datasources/remote/firebase_remote_data_source_impl.dart';
 import 'package:flutter_social_app/futures/data/repositories/firebase_repository_impl.dart';
 import 'package:flutter_social_app/futures/domain/repositories/firebase_repository.dart';
+import 'package:flutter_social_app/futures/domain/usecases/join_chat_message_usecase.dart';
 import 'package:flutter_social_app/futures/domain/usecases/usecase.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -37,6 +38,10 @@ Future<void> init() async {
   sl.registerFactory<ChatBloc>(() => ChatBloc(
         sendTextMessageUseCase: sl.call(),
         getMessageUseCase: sl.call(),
+      ));
+  sl.registerFactory<MyGroupBloc>(() => MyGroupBloc(
+        updateDataFirestoreUseCase: sl.call(),
+        joinChatMessageUseCase: sl.call(),
       ));
 
   // UseCases
@@ -72,6 +77,14 @@ Future<void> init() async {
       () => JoinGroupUseCase(repository: sl.call()));
   sl.registerLazySingleton<UpdateGroupUseCase>(
       () => UpdateGroupUseCase(repository: sl.call()));
+  sl.registerLazySingleton<GetChatMessageUsecase>(
+      () => GetChatMessageUsecase(repository: sl.call()));
+  sl.registerLazySingleton<SendChatMessageUsecase>(
+      () => SendChatMessageUsecase(repository: sl.call()));
+  sl.registerLazySingleton<UpdateDataFirestoreUseCase>(
+      () => UpdateDataFirestoreUseCase(repository: sl.call()));
+  sl.registerLazySingleton<JoinChatMessageUseCase>(
+      () => JoinChatMessageUseCase(repository: sl.call()));
 
   // Repository
   sl.registerLazySingleton<FirebaseRepository>(

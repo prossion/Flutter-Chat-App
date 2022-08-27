@@ -5,13 +5,19 @@ import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/pages/home_page.dart';
 import 'package:flutter_social_app/futures/presentation/pages/login_page.dart';
 import 'package:flutter_social_app/generate_route.dart';
+import 'package:flutter_social_app/simple_bloc_observer.dart';
 import 'locator_service.dart' as di;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await di.init();
-  runApp(const MyApp());
+  BlocOverrides.runZoned(
+    () {
+      runApp(const MyApp());
+    },
+    blocObserver: SimpleBlocObserver(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -35,6 +41,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<ChatBloc>(
             create: (_) => di.sl<ChatBloc>(),
+          ),
+          BlocProvider<MyGroupBloc>(
+            create: (_) => di.sl<MyGroupBloc>(),
           ),
         ],
         child: MaterialApp(
