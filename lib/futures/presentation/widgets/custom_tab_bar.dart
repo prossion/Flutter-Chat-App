@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
 
 typedef TabClickListener = Function(int index);
 
@@ -24,7 +25,7 @@ class CustomTabBarState extends State<CustomTabBar> {
     return Container(
       height: 50,
       decoration: const BoxDecoration(
-        color: Colors.blueAccent,
+        color: blueAccentTextStyle,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -33,9 +34,9 @@ class CustomTabBarState extends State<CustomTabBar> {
             child: TabBarCustomButton(
               width: 50,
               text: "Groups",
-              textColor: widget.index == 0 ? Colors.white : Colors.grey,
+              textColor: widget.index == 0 ? whiteTextStyle : greyTextStyle,
               borderColor:
-                  widget.index == 0 ? Colors.blueAccent : Colors.transparent,
+                  widget.index == 0 ? blueAccentTextStyle : Colors.transparent,
               onTap: () {
                 setState(() {
                   _indexHolder = 0;
@@ -47,9 +48,9 @@ class CustomTabBarState extends State<CustomTabBar> {
           Expanded(
             child: TabBarCustomButton(
               text: "Users",
-              textColor: widget.index == 1 ? Colors.white : Colors.grey,
+              textColor: widget.index == 1 ? whiteTextStyle : greyTextStyle,
               borderColor:
-                  widget.index == 1 ? Colors.blueAccent : Colors.transparent,
+                  widget.index == 1 ? blueAccentTextStyle : Colors.transparent,
               onTap: () {
                 setState(() {
                   _indexHolder = 1;
@@ -61,9 +62,9 @@ class CustomTabBarState extends State<CustomTabBar> {
           Expanded(
             child: TabBarCustomButton(
               text: "Profile",
-              textColor: widget.index == 2 ? Colors.white : Colors.grey,
+              textColor: widget.index == 2 ? whiteTextStyle : greyTextStyle,
               borderColor:
-                  widget.index == 2 ? Colors.blueAccent : Colors.transparent,
+                  widget.index == 2 ? blueAccentTextStyle : Colors.transparent,
               onTap: () {
                 setState(() {
                   _indexHolder = 2;
@@ -92,9 +93,9 @@ class TabBarCustomButton extends StatelessWidget {
     this.text = "",
     this.width = 50.0,
     this.height = 50.0,
-    this.borderColor = Colors.white,
+    this.borderColor = whiteTextStyle,
     this.borderWidth = 3.0,
-    this.textColor = Colors.white,
+    this.textColor = whiteTextStyle,
     required this.onTap,
   }) : super(key: key);
 

@@ -488,44 +488,8 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
 
     userCollection.doc(groupEntity.groupId).update(groupInformation);
   }
+
   // GROUPS
-
-  @override
-  Stream<List<ChatMessagesModel>> getChatMessage(
-      String groupChatId, int limit) {
-    final messagesRef = firestore
-        .collection("messages")
-        .doc(groupChatId)
-        .collection(groupChatId);
-    return messagesRef
-        .orderBy("time", descending: true)
-        .limit(limit)
-        .snapshots()
-        .map((querySnap) => querySnap.docs
-            .map((queryDoc) => ChatMessagesModel.fromDocument(queryDoc))
-            .toList());
-  }
-
-  @override
-  Future<void> sendChatMessage(String content, int type, String groupChatId,
-      String currentUserId, String peerId) async {
-    DocumentReference documentReference = firestore
-        .collection("messages")
-        .doc(groupChatId)
-        .collection(groupChatId)
-        .doc(DateTime.now().millisecondsSinceEpoch.toString());
-    ChatMessagesModel chatMessages = ChatMessagesModel(
-        idFrom: currentUserId,
-        idTo: peerId,
-        timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
-        content: content,
-        type: type);
-
-    FirebaseFirestore.instance.runTransaction((transaction) async {
-      transaction.set(documentReference, chatMessages.toJson());
-    });
-  }
-
   @override
   Future<void> updateDataFirestore(String collectionPath, String docPath,
       Map<String, dynamic> dataNeedUpdate) {
@@ -548,10 +512,4 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
       return;
     });
   }
-}
-
-class TypeMessage {
-  static const text = 0;
-  static const image = 1;
-  static const sticker = 2;
 }

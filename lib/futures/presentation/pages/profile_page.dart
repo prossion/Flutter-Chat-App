@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -121,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
           const Text(
             'Remove profile photo',
             style: TextStyle(
-                color: Colors.blueAccent,
+                color: blueAccentTextStyle,
                 fontSize: 16,
                 fontWeight: FontWeight.w400),
           ),
@@ -136,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
             height: 47,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(.2),
+              color: greyTextStyle.withOpacity(.2),
               borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
             child: TextField(
@@ -148,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 border: InputBorder.none,
                 prefixIcon: Icon(
                   Icons.person,
-                  color: Colors.grey,
+                  color: greyTextStyle,
                 ),
                 hintText: 'username',
                 hintStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
@@ -173,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   border: InputBorder.none,
                   prefixIcon: Icon(
                     Icons.mail,
-                    color: Colors.grey,
+                    color: greenTextStyle,
                   ),
                   hintText: 'email',
                   hintStyle:
@@ -199,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 border: InputBorder.none,
                 prefixIcon: Icon(
                   Icons.text_decrease,
-                  color: Colors.grey,
+                  color: greyTextStyle,
                 ),
                 hintText: 'status',
                 hintStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
@@ -230,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 44,
                 width: MediaQuery.of(context).size.width,
                 decoration: const BoxDecoration(
-                  color: Colors.blueAccent,
+                  color: blueAccentTextStyle,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: const Text(
@@ -238,7 +240,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white),
+                      color: whiteTextStyle),
                 )),
           )
         ],

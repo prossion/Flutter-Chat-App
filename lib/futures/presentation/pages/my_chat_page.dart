@@ -4,7 +4,7 @@ import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_social_app/futures/data/datasources/remote/firebase_remote_data_source_impl.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/error_widget.dart';
@@ -22,7 +22,7 @@ class MyChatPage extends StatefulWidget {
 class _MyChatPageState extends State<MyChatPage> {
   String messageContent = "";
   final TextEditingController _messageController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -59,13 +59,19 @@ class _MyChatPageState extends State<MyChatPage> {
   }
 
   Widget _messagesListWidget(ChatLoadedState messages) {
-    Timer(const Duration(milliseconds: 100), () {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInQuad,
-      );
+    _scrollController = ScrollController(initialScrollOffset: 50.0);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        Timer(const Duration(milliseconds: 100), () {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInQuad,
+          );
+        });
+      }
     });
+
     return Expanded(
       child: widget.arguments.groupChatId.isNotEmpty
           ? ListView.builder(
@@ -156,7 +162,7 @@ class _MyChatPageState extends State<MyChatPage> {
                     textAlign: align,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.black.withOpacity(
+                      color: blackTextStyle.withOpacity(
                         .4,
                       ),
                     ),

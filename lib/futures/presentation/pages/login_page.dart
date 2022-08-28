@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/pages/pages.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
@@ -153,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: const Text(
                                   'Forgot password?',
                                   style: TextStyle(
-                                      color: Colors.blueAccent,
+                                      color: blueAccentTextStyle,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700),
                                 ),
@@ -197,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.blueAccent),
+                                    color: blueAccentTextStyle),
                               ),
                             ),
                           ],
@@ -218,11 +219,11 @@ class _LoginPageState extends State<LoginPage> {
                             children: const [
                               ImageIcon(
                                 AssetImage("assets/icons/google.png"),
-                                color: Colors.white,
+                                color: whiteTextStyle,
                               ),
                               SizedBox(width: 12),
                               Text('Sign in with Google',
-                                  style: TextStyle(color: Colors.white)),
+                                  style: TextStyle(color: whiteTextStyle)),
                             ],
                           ),
                         ),

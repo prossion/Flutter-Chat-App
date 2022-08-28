@@ -29,10 +29,6 @@ abstract class FirebaseRepository {
       ChatEntity myChatEntity, List<String> selectUserList);
   Future<void> getCreateNewGroupChatRoom(
       ChatEntity myChatEntity, List<String> selectUserList);
-
-  Future<void> sendChatMessage(String content, int type, String groupChatId,
-      String currentUserId, String peerId);
-  Stream<List<ChatMessagesModel>> getChatMessage(String groupChatId, int limit);
   Future<void> updateDataFirestore(String collectionPath, String docPath,
       Map<String, dynamic> dataNeedUpdate);
   Future<void> joinChatMessage(String groupChatId);

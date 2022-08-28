@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/data/model/user_model.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
@@ -50,19 +51,18 @@ class _GroupsPageState extends State<GroupsPage> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(
-                                      Icons.group,
-                                      size: 40,
-                                      color: Colors.black.withOpacity(.4),
-                                    ),
+                                    Icon(Icons.group,
+                                        size: 40,
+                                        color: blackTextStyle.withOpacity(.4)),
                                     const SizedBox(
                                       height: 10,
                                     ),
                                     Text(
                                       "No Group Created yet",
                                       style: TextStyle(
-                                          color: Colors.black.withOpacity(.2)),
-                                    )
+                                        color: blackTextStyle.withOpacity(.2),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               )

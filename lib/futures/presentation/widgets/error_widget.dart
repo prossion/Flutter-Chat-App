@@ -50,7 +50,7 @@ class ErrorDisplay extends StatelessWidget {
                   Text(
                     text,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
