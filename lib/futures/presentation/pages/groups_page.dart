@@ -26,7 +26,7 @@ class _GroupsPageState extends State<GroupsPage> {
           Navigator.pushNamed(context, PageConst.createGroupPage,
               arguments: widget.uid);
         },
-        child: const Icon(Icons.addchart_outlined),
+        child: const Icon(Icons.group_add_outlined),
       ),
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {

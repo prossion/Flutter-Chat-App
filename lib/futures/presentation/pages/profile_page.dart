@@ -175,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   border: InputBorder.none,
                   prefixIcon: Icon(
                     Icons.mail,
-                    color: greenTextStyle,
+                    color: greyTextStyle,
                   ),
                   hintText: 'email',
                   hintStyle:

@@ -13,24 +13,11 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   FirebaseRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<void> addToMyChat(ChatEntity chatEntity) async =>
-      await remoteDataSource.addToMyChat(chatEntity);
-
-  @override
-  Future<String> createOneToOneChatChannel(
-          EngageUserEntity engageUserEntity) async =>
-      remoteDataSource.createOneToOneChatChannel(engageUserEntity);
-
-  @override
   Future<void> forgotPassword(String email) async =>
       await remoteDataSource.forgotPassword(email);
 
   @override
   Stream<List<UserEntity>> getAllUsers() => remoteDataSource.getAllUsers();
-
-  @override
-  Future<String> getChannelId(EngageUserEntity engageUserEntity) async =>
-      remoteDataSource.getChannelId(engageUserEntity);
 
   @override
   Future<void> getCreateCurrentUser(UserEntity user) async =>
@@ -43,10 +30,6 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   @override
   Stream<List<TextMessageEntity>> getMessages(String channelId) =>
       remoteDataSource.getMessages(channelId);
-
-  @override
-  Stream<List<ChatEntity>> getMyChat(String uid) =>
-      remoteDataSource.getMyChat(uid);
 
   @override
   Future<void> getUpdateUser(UserEntity user) async =>
@@ -74,18 +57,8 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   Future<void> signUp(UserEntity user) async => remoteDataSource.signUp(user);
 
   @override
-  Future<void> createNewGroup(
-          ChatEntity myChatEntity, List<String> selectUserList) async =>
-      remoteDataSource.createNewGroup(myChatEntity, selectUserList);
-
-  @override
   Future<void> getCreateGroup(GroupEntity groupEntity) async =>
       remoteDataSource.getCreateGroup(groupEntity);
-
-  @override
-  Future<void> getCreateNewGroupChatRoom(
-          ChatEntity myChatEntity, List<String> selectUserList) async =>
-      remoteDataSource.createNewGroup(myChatEntity, selectUserList);
 
   @override
   Stream<List<GroupEntity>> getGroups() => remoteDataSource.getGroups();

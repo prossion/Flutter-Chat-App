@@ -83,7 +83,7 @@ class _MyChatPageState extends State<MyChatPage> {
                 if (message.content!.isNotEmpty) {
                   if (message.senderId == widget.arguments.uid) {
                     return _messageLayout(
-                      name: "Me",
+                      // name: "Me",
                       alignName: TextAlign.end,
                       color: Colors.white,
                       time:
@@ -97,7 +97,7 @@ class _MyChatPageState extends State<MyChatPage> {
                   } else {
                     return _messageLayout(
                       color: Colors.white,
-                      name: widget.arguments.peerNickname,
+                      // name: widget.arguments.peerNickname,
                       alignName: TextAlign.end,
                       time:
                           DateFormat('hh:mm a').format(message.time!.toDate()),
@@ -126,7 +126,7 @@ class _MyChatPageState extends State<MyChatPage> {
     boxAlign,
     nip,
     crossAlign,
-    String? name,
+    // String? name,
     alignName,
   }) {
     return Column(
@@ -146,17 +146,21 @@ class _MyChatPageState extends State<MyChatPage> {
                 crossAxisAlignment: crossAlign,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    "$name",
-                    textAlign: alignName,
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.bold),
+                  // Text(
+                  //   "$name",
+                  //   textAlign: alignName,
+                  //   style: const TextStyle(
+                  //       fontSize: 17, fontWeight: FontWeight.bold),
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      text,
+                      textAlign: align,
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   ),
-                  Text(
-                    text,
-                    textAlign: align,
-                    style: const TextStyle(fontSize: 16),
-                  ),
+
                   Text(
                     time,
                     textAlign: align,
@@ -284,8 +288,8 @@ class _MyChatPageState extends State<MyChatPage> {
               decoration: const BoxDecoration(
                   color: Colors.blueAccent,
                   borderRadius: BorderRadius.all(Radius.circular(50))),
-              child: Icon(
-                _messageController.text.isEmpty ? Icons.mic : Icons.send,
+              child: const Icon(
+                Icons.send,
                 color: Colors.white,
               ),
             ),

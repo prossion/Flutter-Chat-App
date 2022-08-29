@@ -203,72 +203,10 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   // USERS AND AUTHENTICATION
 
   @override
-  Future<String> getChannelId(EngageUserEntity engageUserEntity) {
-    final userCollectionRef = firestore.collection("users");
-    print(
-        "uid ${engageUserEntity.uid} - otherUid ${engageUserEntity.otherUid}");
-    return userCollectionRef
-        .doc(engageUserEntity.uid)
-        .collection('chatChannel')
-        .doc(engageUserEntity.otherUid)
-        .get()
-        .then((chatChannelId) {
-      if (chatChannelId.exists) {
-        return chatChannelId.get('channelId');
-      } else {
-        // ignore: null_argument_to_non_null_type
-        return Future.value(null);
-      }
-    });
-  }
-
-  @override
   Stream<List<UserEntity>> getAllUsers() {
     final userCollection = firestore.collection("users");
     return userCollection.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((e) => UserModel.fromSnapshot(e)).toList());
-  }
-
-  @override
-  Future<String> createOneToOneChatChannel(
-      EngageUserEntity engageUserEntity) async {
-    final userCollectionRef = firestore.collection("users");
-
-    final oneToOneChatChannelRef = firestore.collection("OneToOneChatChannel");
-
-    userCollectionRef
-        .doc(engageUserEntity.uid)
-        .collection("chatCollection")
-        .doc(engageUserEntity.otherUid)
-        .get()
-        .then((chatChannelDoc) {
-      if (chatChannelDoc.exists) {
-        return chatChannelDoc.get('channelId');
-      }
-
-      final chatChannelId = oneToOneChatChannelRef.doc().id;
-
-      var channel = {'channelId': chatChannelId};
-
-      oneToOneChatChannelRef.doc(chatChannelId).set(channel);
-
-      // currentUser
-      userCollectionRef
-          .doc(engageUserEntity.uid)
-          .collection("chatCollection")
-          .doc(engageUserEntity.otherUid)
-          .set(channel);
-
-      // otherUser
-      userCollectionRef
-          .doc(engageUserEntity.uid)
-          .collection("chatCollection")
-          .doc(engageUserEntity.otherUid)
-          .set(channel);
-
-      return chatChannelId;
-    });
-    return Future.value("");
   }
 
   @override
@@ -306,112 +244,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
         .toList());
   }
 
-  @override
-  Future<void> addToMyChat(ChatEntity myChatEntity) async {
-    final myChatRef = firestore
-        .collection("users")
-        .doc(myChatEntity.senderUid)
-        .collection("myChat");
-    final otherChatRef = firestore
-        .collection("users")
-        .doc(myChatEntity.recipientUid)
-        .collection("myChat");
-
-    final myNewChatCurrentUser = ChatModel(
-      channelId: myChatEntity.channelId,
-      senderName: myChatEntity.senderName,
-      time: myChatEntity.time,
-      recipientName: myChatEntity.recipientName,
-      recipientPhoneNumber: myChatEntity.recipientPhoneNumber,
-      recipientUid: myChatEntity.recipientUid,
-      senderPhoneNumber: myChatEntity.senderPhoneNumber,
-      senderUid: myChatEntity.senderUid,
-      profileUrl: myChatEntity.profileUrl,
-      isArchived: myChatEntity.isArchived,
-      isRead: myChatEntity.isRead,
-      recentTextMessage: myChatEntity.recentTextMessage,
-      subjectName: myChatEntity.subjectName,
-    ).toDocument();
-    final myNewChatOtherUser = ChatModel(
-      channelId: myChatEntity.channelId,
-      senderName: myChatEntity.recipientName,
-      time: myChatEntity.time,
-      recipientName: myChatEntity.senderName,
-      recipientPhoneNumber: myChatEntity.senderPhoneNumber,
-      recipientUid: myChatEntity.senderUid,
-      senderPhoneNumber: myChatEntity.recipientPhoneNumber,
-      senderUid: myChatEntity.recipientUid,
-      profileUrl: myChatEntity.profileUrl,
-      isArchived: myChatEntity.isArchived,
-      isRead: myChatEntity.isRead,
-      recentTextMessage: myChatEntity.recentTextMessage,
-      subjectName: myChatEntity.subjectName,
-    ).toDocument();
-    myChatRef.doc(myChatEntity.recipientUid).get().then((myChatDoc) {
-      if (!myChatDoc.exists) {
-        myChatRef.doc(myChatEntity.recipientUid).set(myNewChatCurrentUser);
-        otherChatRef.doc(myChatEntity.senderUid).set(myNewChatOtherUser);
-        return;
-      } else {
-        print("update");
-        myChatRef.doc(myChatEntity.recipientUid).update(myNewChatCurrentUser);
-        otherChatRef.doc(myChatEntity.senderUid).set(myNewChatOtherUser);
-
-        return;
-      }
-    });
-  }
-
-  @override
-  Stream<List<ChatEntity>> getMyChat(String uid) {
-    final myChatRef =
-        firestore.collection("users").doc(uid).collection("myChat");
-
-    return myChatRef.orderBy('time', descending: true).snapshots().map(
-      (querySnapshot) {
-        return querySnapshot.docs.map((queryDocumentSnapshot) {
-          return ChatModel.fromSnapshot(queryDocumentSnapshot);
-        }).toList();
-      },
-    );
-  }
-
   // GROUPS
-  @override
-  Future<void> createNewGroup(
-      ChatEntity chatEntity, List<String> selectUserList) async {
-    await _createGroup(chatEntity, selectUserList);
-    return;
-  }
-
-  _createGroup(ChatEntity chatEntity, List<String> selectUserList) async {
-    final myNewChatCurrentUser = ChatModel(
-      channelId: chatEntity.channelId,
-      senderName: chatEntity.senderName,
-      time: chatEntity.time,
-      recipientName: chatEntity.recipientName,
-      recipientPhoneNumber: chatEntity.recipientPhoneNumber,
-      recipientUid: chatEntity.recipientUid,
-      senderPhoneNumber: chatEntity.senderPhoneNumber,
-      senderUid: chatEntity.senderUid,
-      profileUrl: chatEntity.profileUrl,
-      isArchived: chatEntity.isArchived,
-      isRead: chatEntity.isRead,
-      recentTextMessage: chatEntity.recentTextMessage,
-      subjectName: chatEntity.subjectName,
-    ).toDocument();
-    print("sender Id ${chatEntity.senderUid}");
-    await firestore
-        .collection("users")
-        .doc(chatEntity.senderUid)
-        .collection("myChat")
-        .doc(chatEntity.channelId)
-        .set(myNewChatCurrentUser)
-        .then((value) => print("data created"))
-        .catchError((error) {
-      print("dataError $error");
-    });
-  }
 
   @override
   Future<void> getCreateGroup(GroupEntity groupEntity) async {

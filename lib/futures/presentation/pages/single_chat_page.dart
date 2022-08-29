@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:intl/intl.dart';
 
@@ -137,6 +138,8 @@ class _SingleChatPageState extends State<SingleChatPage> {
           InkWell(
             onTap: () {
               if (_messageController.text.isEmpty) {
+                Fluttertoast.showToast(
+                    msg: 'Nothing to send', backgroundColor: Colors.grey);
               } else {
                 BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
                     textMessageEntity: TextMessageEntity(
@@ -165,8 +168,8 @@ class _SingleChatPageState extends State<SingleChatPage> {
               decoration: const BoxDecoration(
                   color: blueAccentTextStyle,
                   borderRadius: BorderRadius.all(Radius.circular(50))),
-              child: Icon(
-                _messageController.text.isEmpty ? Icons.mic : Icons.send,
+              child: const Icon(
+                Icons.send,
                 color: whiteTextStyle,
               ),
             ),
@@ -255,10 +258,13 @@ class _SingleChatPageState extends State<SingleChatPage> {
                     style: const TextStyle(
                         fontSize: 17, fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    text,
-                    textAlign: align,
-                    style: const TextStyle(fontSize: 16),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      text,
+                      textAlign: align,
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   ),
                   Text(
                     time,

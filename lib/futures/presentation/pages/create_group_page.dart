@@ -181,51 +181,6 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
           const SizedBox(
             height: 12,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                'By clicking Create New Group, you agree to the ',
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: blackTextStyle),
-              ),
-              Text(
-                'Privacy Policy',
-                style: TextStyle(
-                    color: blueAccentTextStyle,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                'and ',
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: blackTextStyle),
-              ),
-              Text(
-                'terms ',
-                style: TextStyle(
-                    color: blueAccentTextStyle,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700),
-              ),
-              Text(
-                'of use',
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: blackTextStyle),
-              ),
-            ],
-          ),
         ],
       ),
     ));

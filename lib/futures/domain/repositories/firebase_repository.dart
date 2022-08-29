@@ -1,4 +1,3 @@
-import 'package:flutter_social_app/futures/data/model/chat_messages_model.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 
 abstract class FirebaseRepository {
@@ -18,17 +17,10 @@ abstract class FirebaseRepository {
   Future<void> getUpdateUser(UserEntity user);
   Future<String> getCurrentUId();
   Stream<List<UserEntity>> getAllUsers();
-  Future<String> createOneToOneChatChannel(EngageUserEntity engageUserEntity);
-  Future<String> getChannelId(EngageUserEntity engageUserEntity);
+
   Future<void> sendTextMessage(
       TextMessageEntity textMessageEntity, String channelId);
   Stream<List<TextMessageEntity>> getMessages(String channelId);
-  Future<void> addToMyChat(ChatEntity chatEntity);
-  Stream<List<ChatEntity>> getMyChat(String uid);
-  Future<void> createNewGroup(
-      ChatEntity myChatEntity, List<String> selectUserList);
-  Future<void> getCreateNewGroupChatRoom(
-      ChatEntity myChatEntity, List<String> selectUserList);
   Future<void> updateDataFirestore(String collectionPath, String docPath,
       Map<String, dynamic> dataNeedUpdate);
   Future<void> joinChatMessage(String groupChatId);

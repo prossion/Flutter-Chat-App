@@ -1,4 +1,3 @@
-import 'package:flutter_social_app/futures/data/model/chat_messages_model.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 
 abstract class FirebaseRemoteDataSource {
@@ -34,21 +33,10 @@ abstract class FirebaseRemoteDataSource {
 
   Stream<List<UserEntity>> getAllUsers();
 
-  Future<String> createOneToOneChatChannel(EngageUserEntity engageUserEntity);
-
-  Future<String> getChannelId(EngageUserEntity engageUserEntity);
-
   Future<void> sendTextMessage(
       TextMessageEntity textMessageEntity, String channelId);
 
   Stream<List<TextMessageEntity>> getMessages(String channelId);
-
-  Future<void> addToMyChat(ChatEntity myChatEntity);
-
-  Stream<List<ChatEntity>> getMyChat(String uid);
-
-  Future<void> createNewGroup(
-      ChatEntity myChatEntity, List<String> selectUserList);
 
   Future<void> updateDataFirestore(String collectionPath, String docPath,
       Map<String, dynamic> dataNeedUpdate);
