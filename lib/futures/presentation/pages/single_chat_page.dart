@@ -4,6 +4,7 @@ import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 
@@ -69,7 +70,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: whiteTextStyle,
                   borderRadius: const BorderRadius.all(Radius.circular(80)),
                   boxShadow: [
                     BoxShadow(
@@ -162,11 +163,11 @@ class _SingleChatPageState extends State<SingleChatPage> {
               width: 45,
               height: 45,
               decoration: const BoxDecoration(
-                  color: Colors.blueAccent,
+                  color: blueAccentTextStyle,
                   borderRadius: BorderRadius.all(Radius.circular(50))),
               child: Icon(
                 _messageController.text.isEmpty ? Icons.mic : Icons.send,
-                color: Colors.white,
+                color: whiteTextStyle,
               ),
             ),
           )
@@ -264,7 +265,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
                     textAlign: align,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.black.withOpacity(
+                      color: blackTextStyle.withOpacity(
                         .4,
                       ),
                     ),

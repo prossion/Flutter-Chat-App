@@ -104,17 +104,6 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
           collectionPath, docPath, dataNeedUpdate);
 
   @override
-  Stream<List<ChatMessagesModel>> getChatMessage(
-          String groupChatId, int limit) =>
-      remoteDataSource.getChatMessage(groupChatId, limit);
-
-  @override
-  Future<void> sendChatMessage(String content, int type, String groupChatId,
-          String currentUserId, String peerId) =>
-      remoteDataSource.sendChatMessage(
-          content, type, groupChatId, currentUserId, peerId);
-
-  @override
   Future<void> joinChatMessage(String groupChatId) async =>
       remoteDataSource.joinChatMessage(groupChatId);
 }

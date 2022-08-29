@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/pages/pages.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/custom_tab_bar.dart';
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> {
               child: const Icon(
                 Icons.arrow_back,
                 size: 25,
-                color: Colors.black,
+                color: blackTextStyle,
               )),
           hintStyle: const TextStyle(),
         ),
@@ -90,7 +91,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor:
-            _isSearch == false ? Colors.blueAccent : Colors.transparent,
+            _isSearch == false ? blueAccentTextStyle : Colors.transparent,
         title: _isSearch == false
             ? const Text("Flutter Chat")
             : const SizedBox(

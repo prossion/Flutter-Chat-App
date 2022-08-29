@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:flutter_social_app/page_const.dart';
@@ -36,7 +37,7 @@ class _ForgotPageState extends State<ForgotPage> {
                     style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black),
+                        color: blackTextStyle),
                   ),
                 ),
                 const SizedBox(
@@ -52,7 +53,7 @@ class _ForgotPageState extends State<ForgotPage> {
                   "Don't worry! Just fill in your email and Flutter Chat will send you a link to rest your password.",
                   style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black.withOpacity(.6),
+                      color: blackTextStyle.withOpacity(0.4),
                       fontStyle: FontStyle.italic),
                 ),
                 const SizedBox(
@@ -85,7 +86,7 @@ class _ForgotPageState extends State<ForgotPage> {
                       style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white),
+                          color: whiteTextStyle),
                     ),
                   ),
                 ),
@@ -110,7 +111,7 @@ class _ForgotPageState extends State<ForgotPage> {
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: Colors.blueAccent),
+                            color: blueAccentTextStyle),
                       ),
                     ),
                   ],

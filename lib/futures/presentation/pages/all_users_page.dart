@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/pages/my_chat_page.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
@@ -41,19 +42,16 @@ class _AllUsersPageState extends State<AllUsersPage> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.account_box,
-                                  size: 40,
-                                  color: Colors.black.withOpacity(.4),
-                                ),
+                                Icon(Icons.account_box,
+                                    size: 40,
+                                    color: blackTextStyle.withOpacity(.4)),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
                                   "No Users Found yet",
                                   style: TextStyle(
-                                    color: Colors.black.withOpacity(.2),
-                                  ),
+                                      color: blackTextStyle.withOpacity(.2)),
                                 )
                               ],
                             ),

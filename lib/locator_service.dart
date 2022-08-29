@@ -77,10 +77,6 @@ Future<void> init() async {
       () => JoinGroupUseCase(repository: sl.call()));
   sl.registerLazySingleton<UpdateGroupUseCase>(
       () => UpdateGroupUseCase(repository: sl.call()));
-  sl.registerLazySingleton<GetChatMessageUsecase>(
-      () => GetChatMessageUsecase(repository: sl.call()));
-  sl.registerLazySingleton<SendChatMessageUsecase>(
-      () => SendChatMessageUsecase(repository: sl.call()));
   sl.registerLazySingleton<UpdateDataFirestoreUseCase>(
       () => UpdateDataFirestoreUseCase(repository: sl.call()));
   sl.registerLazySingleton<JoinChatMessageUseCase>(

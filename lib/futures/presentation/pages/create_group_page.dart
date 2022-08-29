@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -116,7 +118,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
-                      color: Colors.blueAccent),
+                      color: blueAccentTextStyle),
                 ),
               ],
             ),
@@ -162,12 +164,12 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Colors.green,
+                color: blueAccentTextStyle,
               ),
               child: const Text(
                 'Create New Group',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: whiteTextStyle,
                     fontSize: 17,
                     fontWeight: FontWeight.w700),
               ),
@@ -187,12 +189,12 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black),
+                    color: blackTextStyle),
               ),
               Text(
                 'Privacy Policy',
                 style: TextStyle(
-                    color: Colors.blueAccent,
+                    color: blueAccentTextStyle,
                     fontSize: 12,
                     fontWeight: FontWeight.w700),
               ),
@@ -206,12 +208,12 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black),
+                    color: blackTextStyle),
               ),
               Text(
                 'terms ',
                 style: TextStyle(
-                    color: Colors.green,
+                    color: blueAccentTextStyle,
                     fontSize: 12,
                     fontWeight: FontWeight.w700),
               ),
@@ -220,7 +222,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black),
+                    color: blackTextStyle),
               ),
             ],
           ),
