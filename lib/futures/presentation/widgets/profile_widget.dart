@@ -4,11 +4,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 Widget profileWidget({String? imageUrl, File? image, String? name}) {
-  if (image == null) {
+  print("image value $image");
+  if (image != null) {
+    return Image.file(
+      image,
+      fit: BoxFit.cover,
+    );
+  } else {
     if (imageUrl == null) {
       return Image.asset(
         'assets/icons/profile_default.png',
         fit: BoxFit.cover,
+        width: 120,
+        height: 120,
       );
     } else {
       return CachedNetworkImage(
@@ -23,7 +31,7 @@ Widget profileWidget({String? imageUrl, File? image, String? name}) {
           ),
         ),
         errorWidget: (context, url, error) => Container(
-          color: Colors.black12,
+          color: Colors.blueGrey.shade200,
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -33,10 +41,5 @@ Widget profileWidget({String? imageUrl, File? image, String? name}) {
         ),
       );
     }
-  } else {
-    return Image.file(
-      image,
-      fit: BoxFit.cover,
-    );
   }
 }

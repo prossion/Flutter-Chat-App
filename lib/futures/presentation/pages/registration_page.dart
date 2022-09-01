@@ -26,8 +26,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _examTypeController = TextEditingController();
-  final TextEditingController _passwordAgainController =
-      TextEditingController();
   final TextEditingController _numberController = TextEditingController();
 
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
@@ -35,44 +33,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   bool _hidePass = true;
 
-  File? _image;
-  String? _profileUrl;
-
-  Future getImage() async {
-    try {
-      final pickedFile =
-          await ImagePicker.platform.getImage(source: ImageSource.gallery);
-
-      setState(
-        () {
-          if (pickedFile != null) {
-            _image = File(pickedFile.path);
-            StorageProviderRemoteDataSource.uploadFile(file: _image!)
-                .then((value) {
-              setState(() {
-                _profileUrl = value;
-              });
-            });
-          } else {
-            const photo = 'assets/icons/profile_default.png';
-            setState(() {
-              _profileUrl = photo;
-            });
-          }
-        },
-      );
-    } catch (e) {
-      Text("error $e");
-    }
-  }
-
   @override
   void dispose() {
     _examTypeController.dispose();
     _passwordController.dispose();
     _emailController.dispose();
     _numberController.dispose();
-    _passwordAgainController.dispose();
     _usernameController.dispose();
     super.dispose();
   }
@@ -121,7 +87,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Container(
                 alignment: Alignment.topLeft,
                 child: const Text(
-                  'Sign Up',
+                  'Create an Account',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -136,40 +102,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
               const SizedBox(
                 height: 10,
-              ),
-              GestureDetector(
-                onTap: () async {
-                  getImage();
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      height: 62,
-                      width: 62,
-                      decoration: const BoxDecoration(
-                        color: picturePhoto,
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                      ),
-                      child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(50)),
-                          child: profileWidget(image: _image)),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    const Text(
-                      'Add profile photo',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blueAccent),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 17,
               ),
               Center(
                 child: Form(
@@ -204,41 +136,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       const SizedBox(
                         height: 17,
                       ),
-                      const Divider(
-                        thickness: 2,
-                        indent: 120,
-                        endIndent: 120,
-                      ),
-                      const SizedBox(
-                        height: 17,
-                      ),
                       TextFormFieldWidget(
                         hintText: "Password",
                         controller: _passwordController,
-                        type: TextInputType.text,
-                        prefixIcon: Icons.password,
-                        obscureText: _hidePass,
-                        suffixIcon: IconButton(
-                          icon: Icon(_hidePass
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                          onPressed: () {
-                            setState(() {
-                              _hidePass = !_hidePass;
-                            });
-                          },
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          return value != null && value.length < 6
-                              ? 'Enter min. 6 characters'
-                              : null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormFieldWidget(
-                        hintText: "Password Again",
-                        controller: _passwordAgainController,
                         type: TextInputType.text,
                         prefixIcon: Icons.password,
                         obscureText: _hidePass,
@@ -318,7 +218,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
         email: _emailController.text,
         phoneNumber: _numberController.text,
         name: _usernameController.text,
-        photoUrl: _profileUrl!,
         password: _passwordController.text,
         isOnline: false,
         status: "Hi! there i'm using this app",
