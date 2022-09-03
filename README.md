@@ -32,7 +32,7 @@ Group communication apps using Flutter and Firebase-Firestore Database
 5. Firebase Storage
 6. intl
 7. get_it
-8. cached_netowrk_image
+8. cached_network_image
 
 ## Features :
 1. SignIn - SignUp - Logout - Remember password
