@@ -30,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController? _numController;
 
   File? _image;
-  String? _profileUrl;
+  late String _photoUrl;
   // ignore: unused_field
   String? _username;
   // ignore: unused_field
@@ -53,12 +53,17 @@ class _ProfilePageState extends State<ProfilePage> {
     _statusController = TextEditingController(text: "");
     _emailController = TextEditingController(text: "");
     _numController = TextEditingController(text: "");
+    _photoUrl = '';
     super.initState();
   }
 
   Future getImage() async {
     try {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      final pickedFile =
+          await picker.pickImage(source: ImageSource.gallery).catchError((err) {
+        Fluttertoast.showToast(
+            msg: err.toString(), backgroundColor: Colors.grey);
+      });
 
       setState(() {
         if (pickedFile != null) {
@@ -68,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
             print("profileUrl");
             _imageIsPicked = true;
             setState(() {
-              _profileUrl = value;
+              _photoUrl = value;
             });
           });
         } else {
@@ -303,24 +308,19 @@ class _ProfilePageState extends State<ProfilePage> {
     // }
     formKey.currentState?.save();
     if (formKey.currentState!.validate()) {
-      if (_imageIsPicked || _profileUrl == null) {
-        Fluttertoast.showToast(
-            msg: 'Error changing profile', backgroundColor: Colors.grey);
-      } else {
-        BlocProvider.of<UserBloc>(context).add(GetUpdateUserEvent(
-          user: UserEntity(
-            uid: widget.uid,
-            name: _nameController!.text,
-            status: _statusController!.text,
-            photoUrl: _profileUrl!,
-          ),
-        ));
-        Fluttertoast.showToast(
-            msg: 'Profile data has been changed', backgroundColor: Colors.grey);
-      }
-    } else {
+      BlocProvider.of<UserBloc>(context).add(GetUpdateUserEvent(
+        user: UserEntity(
+          uid: widget.uid,
+          name: _nameController!.text,
+          status: _statusController!.text,
+          photoUrl: _photoUrl,
+        ),
+      ));
       Fluttertoast.showToast(
-          msg: 'Nothing changed', backgroundColor: Colors.grey);
+          msg: 'Profile data has been changed', backgroundColor: Colors.grey);
     }
+
+    Fluttertoast.showToast(
+        msg: 'Nothing changed', backgroundColor: Colors.grey);
   }
 }

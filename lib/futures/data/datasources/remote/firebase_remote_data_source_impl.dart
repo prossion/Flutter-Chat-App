@@ -55,7 +55,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
     final userCollection = firestore.collection("users");
 
     if (user.photoUrl != "") {
-      userInformation['profileUrl'] = user.photoUrl;
+      userInformation['photoUrl'] = user.photoUrl;
     }
     if (user.status != "") {
       userInformation['status'] = user.status;
