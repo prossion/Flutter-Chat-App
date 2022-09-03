@@ -34,7 +34,7 @@ Group communication apps using Flutter and Firebase-Firestore Database
 7. get_it
 8. cached_netowrk_image
 
-## Features
+## Features :
 1. SignIn - SignUp - Logout - Remember password
 2. Google SignIn
 3. Search by user name and group name
