@@ -1,10 +1,7 @@
 import 'package:flutter_social_app/futures/data/datasources/remote/firebase_remote_data_source.dart';
-import 'package:flutter_social_app/futures/data/model/chat_messages_model.dart';
 import 'package:flutter_social_app/futures/domain/entites/group_entity.dart';
 import 'package:flutter_social_app/futures/domain/entites/user_entity.dart';
 import 'package:flutter_social_app/futures/domain/entites/text_message_entity.dart';
-import 'package:flutter_social_app/futures/domain/entites/engage_user_entity.dart';
-import 'package:flutter_social_app/futures/domain/entites/chat_entity.dart';
 import 'package:flutter_social_app/futures/domain/repositories/firebase_repository.dart';
 
 class FirebaseRepositoryImpl implements FirebaseRepository {

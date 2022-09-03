@@ -1,18 +1,11 @@
-// import 'dart:io';
-
-import 'dart:io';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_social_app/config/app_theme.dart';
-import 'package:flutter_social_app/futures/data/datasources/remote/storage_provider.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/pages/home_page.dart';
 import 'package:flutter_social_app/futures/presentation/pages/login_page.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
-import 'package:image_picker/image_picker.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);

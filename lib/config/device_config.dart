@@ -13,7 +13,7 @@ class DeviceData {
   }
 }
 
-enum DeviceType { Mobile, Tablet, Desktop }
+enum DeviceType { mobile, tablet, desktop }
 
 DeviceType _getDeviceType(BuildContext context) {
   Orientation orientation = MediaQuery.of(context).orientation;
@@ -25,12 +25,12 @@ DeviceType _getDeviceType(BuildContext context) {
     width = MediaQuery.of(context).size.width;
   }
   if (width >= 950) {
-    return DeviceType.Desktop;
+    return DeviceType.desktop;
   }
   if (width >= 600) {
-    return DeviceType.Tablet;
+    return DeviceType.tablet;
   }
-  return DeviceType.Mobile;
+  return DeviceType.mobile;
 }
 
 double _getWidth(BuildContext context) {

@@ -3,8 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_social_app/futures/data/datasources/remote/firebase_remote_data_source.dart';
-import 'package:flutter_social_app/futures/data/model/chat_messages_model.dart';
-import 'package:flutter_social_app/futures/data/model/chat_model.dart';
 import 'package:flutter_social_app/futures/data/model/group_model.dart';
 import 'package:flutter_social_app/futures/data/model/text_message_model.dart';
 import 'package:flutter_social_app/futures/data/model/user_model.dart';

@@ -88,14 +88,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(builder: (context, state) {
-      if (state is UserLoadedState) {
-        return _profileWidget(state.users);
-      }
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    });
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, state) {
+        if (state is UserLoadedState) {
+          return _profileWidget(state.users);
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 
   Widget _profileWidget(List<UserEntity> users) {
@@ -118,8 +120,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 getImage();
               },
               child: Container(
-                height: 82,
-                width: 82,
+                width: deviceData.screenHeight! * 0.12,
+                height: deviceData.screenHeight! * 0.12,
                 decoration: const BoxDecoration(
                   color: Colors.blueGrey,
                   borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -135,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 14,
             ),
             const Text(
-              'Remove profile photo',
+              'Change profile photo',
               style: TextStyle(
                   color: blueAccentTextStyle,
                   fontSize: 16,
@@ -240,7 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             InkWell(
               onTap: () {
-                _updateProfile(context);
+                _updateProfile(context, user.name, user.status, user.photoUrl);
               },
               child: Container(
                   margin: const EdgeInsets.only(left: 22, right: 22),
@@ -265,62 +267,27 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void _updateProfile(BuildContext context) {
-    // formKey.currentState?.save();
-    // if (formKey.currentState!.validate()) {
-    //   if (_imageIsPicked || _profileUrl != null) {
-    //     if (!_imageIsPicked) {
-    //       if (_image != null) {
-    //         BlocProvider.of<UserBloc>(context).add(GetUpdateUserEvent(
-    //           user: UserEntity(
-    //             uid: widget.uid,
-    //             name: _nameController!.text,
-    //             status: _statusController!.text,
-    //             photoUrl: _profileUrl!,
-    //           ),
-    //         ));
-    //         _profileUrl = null;
-    //       } else {
-    //         BlocProvider.of<UserBloc>(context).add(GetUpdateUserEvent(
-    //           user: UserEntity(
-    //             uid: widget.uid,
-    //             name: _nameController!.text,
-    //             status: _statusController!.text,
-    //             photoUrl: '',
-    //           ),
-    //         ));
-    //       }
-    //     } else if (_imageIsPicked) {
-    //       BlocProvider.of<UserBloc>(context).add(GetUpdateUserEvent(
-    //         user: UserEntity(
-    //           uid: widget.uid,
-    //           name: _nameController!.text,
-    //           status: _statusController!.text,
-    //           photoUrl: _profileUrl!,
-    //         ),
-    //       ));
-    //       _imageIsPicked = false;
-    //       Fluttertoast.showToast(
-    //           msg: 'Profile data has been changed',
-    //           backgroundColor: Colors.grey);
-    //     }
-    //   }
-    // }
+  void _updateProfile(
+      BuildContext context, String name, String status, String photo) {
     formKey.currentState?.save();
     if (formKey.currentState!.validate()) {
-      BlocProvider.of<UserBloc>(context).add(GetUpdateUserEvent(
-        user: UserEntity(
-          uid: widget.uid,
-          name: _nameController!.text,
-          status: _statusController!.text,
-          photoUrl: _photoUrl,
-        ),
-      ));
-      Fluttertoast.showToast(
-          msg: 'Profile data has been changed', backgroundColor: Colors.grey);
+      if (_nameController!.text != name ||
+          _statusController!.text != status ||
+          _imageIsPicked) {
+        BlocProvider.of<UserBloc>(context).add(GetUpdateUserEvent(
+          user: UserEntity(
+            uid: widget.uid,
+            name: _nameController!.text,
+            status: _statusController!.text,
+            photoUrl: _photoUrl,
+          ),
+        ));
+        Fluttertoast.showToast(
+            msg: 'Profile data has been changed', backgroundColor: Colors.grey);
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Nothing changed', backgroundColor: Colors.grey);
+      }
     }
-
-    Fluttertoast.showToast(
-        msg: 'Nothing changed', backgroundColor: Colors.grey);
   }
 }

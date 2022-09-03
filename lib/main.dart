@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,11 +15,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await di.init();
-  BlocOverrides.runZoned(
+  runZonedGuarded<void>(
     () {
+      Bloc.observer = SimpleBlocObserver();
       runApp(const MyApp());
     },
-    blocObserver: SimpleBlocObserver(),
+    (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }
 
