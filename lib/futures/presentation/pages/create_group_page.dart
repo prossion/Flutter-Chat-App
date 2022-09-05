@@ -10,6 +10,7 @@ import 'package:flutter_social_app/futures/data/datasources/remote/storage_provi
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateGroupPage extends StatefulWidget {
@@ -157,6 +158,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
           InkWell(
             onTap: () {
               _submit();
+              Navigator.pop(context);
             },
             child: Container(
               alignment: Alignment.center,
@@ -188,15 +190,18 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
   _submit() async {
     if (_image == null) {
-      const Text('Add profile photo');
+      Fluttertoast.showToast(
+          msg: 'Add a group photo', backgroundColor: Colors.grey);
       return;
     }
     if (_groupNameController.text.isEmpty) {
-      const Text('enter your surname');
+      Fluttertoast.showToast(
+          msg: 'Enter group name', backgroundColor: Colors.grey);
       return;
     }
     if (_numberUsersJoinController.text.isEmpty) {
-      const Text('enter your email');
+      Fluttertoast.showToast(
+          msg: 'Enter the amount of users', backgroundColor: Colors.grey);
       return;
     }
 
@@ -210,7 +215,9 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       joinUsers: "0",
       limitUsers: _numberUsersJoinController.text,
     )));
-    Text("${_groupNameController.text} created successfully");
+    Fluttertoast.showToast(
+        msg: "${_groupNameController.text} created successfully",
+        backgroundColor: Colors.grey);
     _clear();
   }
 
