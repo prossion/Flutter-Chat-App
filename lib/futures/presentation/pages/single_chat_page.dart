@@ -105,7 +105,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
 
   Widget _sendMessageTextField() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10, left: 4, right: 4),
+      margin: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
       child: Row(
         children: [
           Expanded(
