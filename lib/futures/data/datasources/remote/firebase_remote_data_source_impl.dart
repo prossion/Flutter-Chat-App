@@ -200,6 +200,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   }
   // USERS AND AUTHENTICATION
 
+  // CHAT
   @override
   Stream<List<UserEntity>> getAllUsers() {
     final userCollection = firestore.collection("users");
@@ -231,6 +232,19 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   }
 
   @override
+  Future<void> deleteTextMessage(String channelId) async {
+    final messagesRef = firestore
+        .collection("groupChatChannel")
+        .doc(channelId)
+        .collection("messages");
+
+    final messageId = messagesRef.doc().id;
+    print('id: $messageId');
+    messagesRef.doc(messageId).delete().then((doc) => print('Message delete'),
+        onError: (e) => print("Error updating document $e"));
+  }
+
+  @override
   Stream<List<TextMessageEntity>> getMessages(String channelId) {
     final oneToOneChatChannelRef = firestore.collection("groupChatChannel");
     final messagesRef =
@@ -241,9 +255,9 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
         .map((queryDoc) => TextMessageModel.fromSnapshot(queryDoc))
         .toList());
   }
+  // CHATS
 
   // GROUPS
-
   @override
   Future<void> getCreateGroup(GroupEntity groupEntity) async {
     final groupCollection = firestore.collection("groups");
@@ -320,7 +334,6 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
     userCollection.doc(groupEntity.groupId).update(groupInformation);
   }
 
-  // GROUPS
   @override
   Future<void> updateDataFirestore(String collectionPath, String docPath,
       Map<String, dynamic> dataNeedUpdate) {
@@ -343,4 +356,5 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
       return;
     });
   }
+  // GROUPS
 }

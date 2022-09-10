@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:intl/intl.dart';
@@ -49,7 +50,24 @@ class _SingleChatPageState extends State<SingleChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.singleChatEntity.groupName)),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            SizedBox(
+              height: 40,
+              width: 40,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                child: profileWidget(
+                  imageUrl: widget.singleChatEntity.groupProfileImage,
+                ),
+              ),
+            ),
+            const SizedBox(width: 15),
+            Text(widget.singleChatEntity.groupName),
+          ],
+        ),
+      ),
       body: BlocBuilder<ChatBloc, ChatState>(
         builder: (index, state) {
           if (state is ChatLoadedState) {
@@ -61,6 +79,28 @@ class _SingleChatPageState extends State<SingleChatPage> {
         },
       ),
     );
+  }
+
+  _showMenu(BuildContext context, Offset tapPos) {
+    final RenderBox overlay = context.findRenderObject() as RenderBox;
+    final RelativeRect position = RelativeRect.fromLTRB(
+      tapPos.dx,
+      tapPos.dy,
+      overlay.size.width - tapPos.dx,
+      overlay.size.height - tapPos.dy,
+    );
+    showMenu<String>(
+        context: context,
+        position: position,
+        items: <PopupMenuItem<String>>[
+          PopupMenuItem(
+            child: const Text('Delete Message'),
+            onTap: () {
+              BlocProvider.of<ChatBloc>(context).add(DeleteTextMessage(
+                  channelId: widget.singleChatEntity.groupId));
+            },
+          ),
+        ]);
   }
 
   Widget _sendMessageTextField() {
@@ -235,53 +275,62 @@ class _SingleChatPageState extends State<SingleChatPage> {
     String? name,
     alignName,
   }) {
-    return Column(
-      crossAxisAlignment: crossAlign,
-      children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.90,
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            margin: const EdgeInsets.all(3),
-            child: Bubble(
-              color: color,
-              nip: nip,
-              child: Column(
-                crossAxisAlignment: crossAlign,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "$name",
-                    textAlign: alignName,
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.bold),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Text(
-                      text,
-                      textAlign: align,
-                      style: const TextStyle(fontSize: 16),
+    var tapPos;
+    return InkWell(
+      onTapDown: (TapDownDetails details) {
+        tapPos = details.globalPosition;
+      },
+      onLongPress: () {
+        _showMenu(context, tapPos);
+      },
+      child: Column(
+        crossAxisAlignment: crossAlign,
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.90,
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.all(3),
+              child: Bubble(
+                color: color,
+                nip: nip,
+                child: Column(
+                  crossAxisAlignment: crossAlign,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "$name",
+                      textAlign: alignName,
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  Text(
-                    time,
-                    textAlign: align,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: blackTextStyle.withOpacity(
-                        .4,
+                    Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Text(
+                        text,
+                        textAlign: align,
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ),
-                  )
-                ],
+                    Text(
+                      time,
+                      textAlign: align,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: blackTextStyle.withOpacity(
+                          .4,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

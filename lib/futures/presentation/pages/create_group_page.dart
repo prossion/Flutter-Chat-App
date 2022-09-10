@@ -158,7 +158,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
           InkWell(
             onTap: () {
               _submit();
-              Navigator.pop(context);
+              Navigator.of(context).pop();
             },
             child: Container(
               alignment: Alignment.center,

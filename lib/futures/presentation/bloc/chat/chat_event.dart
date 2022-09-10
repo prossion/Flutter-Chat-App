@@ -22,3 +22,11 @@ class SendTextMessageEvent extends ChatEvent {
   @override
   List<Object?> get props => [textMessageEntity, channelId];
 }
+
+class DeleteTextMessage extends ChatEvent {
+  final String channelId;
+
+  const DeleteTextMessage({required this.channelId});
+  @override
+  List<Object?> get props => [channelId];
+}

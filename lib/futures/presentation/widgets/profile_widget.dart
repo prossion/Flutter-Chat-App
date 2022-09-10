@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 Widget profileWidget({String? imageUrl, File? image, String? name}) {
-  print("image value $image");
+  // print("image value $image");
   if (image != null) {
     return Image.file(
       image,

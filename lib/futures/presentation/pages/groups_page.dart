@@ -83,12 +83,16 @@ class _GroupsPageState extends State<GroupsPage> {
                                         context,
                                         PageConst.singleChatPage,
                                         arguments: SingleChatEntity(
-                                            groupId:
-                                                filteredGroups[index].groupId,
-                                            groupName:
-                                                filteredGroups[index].groupName,
-                                            uid: widget.uid,
-                                            username: user.name),
+                                          groupId:
+                                              filteredGroups[index].groupId,
+                                          groupName:
+                                              filteredGroups[index].groupName,
+                                          uid: widget.uid,
+                                          username: user.name,
+                                          groupProfileImage:
+                                              filteredGroups[index]
+                                                  .groupProfileImage,
+                                        ),
                                       );
                                     },
                                   );

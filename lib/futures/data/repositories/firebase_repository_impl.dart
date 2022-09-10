@@ -44,6 +44,10 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
       await remoteDataSource.sendTextMessage(textMessageEntity, channelId);
 
   @override
+  Future<void> deleteTextMessage(String channelId) async =>
+      await remoteDataSource.deleteTextMessage(channelId);
+
+  @override
   Future<void> signIn(UserEntity user) async =>
       await remoteDataSource.signIn(user);
 
