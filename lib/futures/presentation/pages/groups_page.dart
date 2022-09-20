@@ -9,19 +9,76 @@ import 'package:flutter_social_app/page_const.dart';
 
 class GroupsPage extends StatefulWidget {
   final String uid;
-  final String query;
-  const GroupsPage({Key? key, required this.uid, required this.query})
-      : super(key: key);
+
+  const GroupsPage({Key? key, required this.uid}) : super(key: key);
 
   @override
   State<GroupsPage> createState() => _GroupsPageState();
 }
 
 class _GroupsPageState extends State<GroupsPage> {
+  final TextEditingController _searchTextController = TextEditingController();
+
+  bool _isSearch = false;
+
+  @override
+  void dispose() {
+    _searchTextController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _searchTextController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  isSearch() {
+    setState(() {
+      _isSearch = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: _isSearch == false
+            ? Theme.of(context).primaryColor
+            : Colors.transparent,
+        title: _isSearch == false
+            ? const Text("Flutter Chat")
+            : const SizedBox(
+                height: 0.0,
+                width: 0.0,
+              ),
+        flexibleSpace: _isSearch == true
+            ? BuildSearchField(
+                controller: _searchTextController, isSearch: isSearch)
+            : const SizedBox(
+                height: 0.0,
+                width: 0.0,
+              ),
+        actions: _isSearch == false
+            ? [
+                InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isSearch = true;
+                      });
+                    },
+                    child: const Icon(Icons.search)),
+                const SizedBox(
+                  width: 11,
+                ),
+              ]
+            : [],
+      ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
           Navigator.pushNamed(context, PageConst.createGroupPage,
               arguments: widget.uid);
@@ -39,9 +96,10 @@ class _GroupsPageState extends State<GroupsPage> {
                 if (state is GroupLoadedState) {
                   final filteredGroups = state.groups
                       .where((group) =>
-                          group.groupName.startsWith(widget.query) ||
                           group.groupName
-                              .startsWith(widget.query.toLowerCase()))
+                              .startsWith(_searchTextController.text) ||
+                          group.groupName.startsWith(
+                              _searchTextController.text.toLowerCase()))
                       .toList();
                   return Column(
                     children: [
@@ -102,11 +160,17 @@ class _GroupsPageState extends State<GroupsPage> {
                     ],
                   );
                 }
-                return const Center(child: CircularProgressIndicator());
+                return Center(
+                    child: CircularProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                ));
               },
             );
           }
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ));
         },
       ),
     );

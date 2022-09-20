@@ -51,6 +51,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         title: Row(
           children: [
             SizedBox(
@@ -75,7 +76,10 @@ class _SingleChatPageState extends State<SingleChatPage> {
               children: [_messagesListWidget(state), _sendMessageTextField()],
             );
           }
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ));
         },
       ),
     );
@@ -111,7 +115,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  color: whiteTextStyle,
+                  color: Theme.of(context).cardColor,
                   borderRadius: const BorderRadius.all(Radius.circular(80)),
                   boxShadow: [
                     BoxShadow(
@@ -127,8 +131,8 @@ class _SingleChatPageState extends State<SingleChatPage> {
                     width: 10,
                   ),
                   Icon(
-                    Icons.insert_emoticon,
-                    color: Colors.grey[500],
+                    Icons.link,
+                    color: Theme.of(context).bottomAppBarColor,
                   ),
                   const SizedBox(
                     width: 10,
@@ -205,9 +209,9 @@ class _SingleChatPageState extends State<SingleChatPage> {
             child: Container(
               width: 45,
               height: 45,
-              decoration: const BoxDecoration(
-                  color: blueAccentTextStyle,
-                  borderRadius: BorderRadius.all(Radius.circular(50))),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(50))),
               child: const Icon(
                 Icons.send,
                 color: whiteTextStyle,
@@ -238,7 +242,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
             return _messageLayout(
               name: "Me",
               alignName: TextAlign.end,
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               time: DateFormat('hh:mm a').format(message.time!.toDate()),
               align: TextAlign.left,
               boxAlign: CrossAxisAlignment.start,
@@ -248,7 +252,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
             );
           } else {
             return _messageLayout(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               name: "${message.senderName}",
               alignName: TextAlign.end,
               time: DateFormat('hh:mm a').format(message.time!.toDate()),
@@ -317,13 +321,11 @@ class _SingleChatPageState extends State<SingleChatPage> {
                     Text(
                       time,
                       textAlign: align,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: blackTextStyle.withOpacity(
-                          .4,
-                        ),
+                        // color: greyTextStyle,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

@@ -45,6 +45,7 @@ class _MyChatPageState extends State<MyChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         title: Row(
           children: [
             SizedBox(
@@ -123,7 +124,7 @@ class _MyChatPageState extends State<MyChatPage> {
                   if (message.senderId == widget.arguments.uid) {
                     return _messageLayout(
                       alignName: TextAlign.end,
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       time:
                           DateFormat('hh:mm a').format(message.time!.toDate()),
                       align: TextAlign.left,
@@ -134,7 +135,7 @@ class _MyChatPageState extends State<MyChatPage> {
                     );
                   } else {
                     return _messageLayout(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       alignName: TextAlign.end,
                       time:
                           DateFormat('hh:mm a').format(message.time!.toDate()),
@@ -202,13 +203,11 @@ class _MyChatPageState extends State<MyChatPage> {
                     Text(
                       time,
                       textAlign: align,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: blackTextStyle.withOpacity(
-                          .4,
-                        ),
+                        // color: greyTextStyle,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -227,7 +226,7 @@ class _MyChatPageState extends State<MyChatPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius: const BorderRadius.all(Radius.circular(80)),
                   boxShadow: [
                     BoxShadow(
@@ -243,8 +242,8 @@ class _MyChatPageState extends State<MyChatPage> {
                     width: 10,
                   ),
                   Icon(
-                    Icons.insert_emoticon,
-                    color: Colors.grey[500],
+                    Icons.link,
+                    color: Theme.of(context).bottomAppBarColor,
                   ),
                   const SizedBox(
                     width: 10,
@@ -266,26 +265,26 @@ class _MyChatPageState extends State<MyChatPage> {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.link,
-                        color: Colors.grey[500],
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      _messageController.text.isEmpty
-                          ? Icon(
-                              Icons.camera_alt,
-                              color: Colors.grey[500],
-                            )
-                          : const Text(""),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
+                  // Row(
+                  //   children: [
+                  //     Icon(
+                  //       Icons.link,
+                  //       color: Theme.of(context).bottomAppBarColor,
+                  //     ),
+                  //     const SizedBox(
+                  //       width: 10,
+                  //     ),
+                  //     _messageController.text.isEmpty
+                  //         ? Icon(
+                  //             Icons.camera_alt,
+                  //             color: Theme.of(context).bottomAppBarColor,
+                  //           )
+                  //         : const Text(""),
+                  //   ],
+                  // ),
+                  // const SizedBox(
+                  //   width: 15,
+                  // ),
                 ],
               ),
             ),
@@ -324,12 +323,13 @@ class _MyChatPageState extends State<MyChatPage> {
             child: Container(
               width: 45,
               height: 45,
-              decoration: const BoxDecoration(
-                  color: Colors.blueAccent,
-                  borderRadius: BorderRadius.all(Radius.circular(50))),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
+              ),
               child: const Icon(
                 Icons.send,
-                color: Colors.white,
+                color: whiteTextStyle,
               ),
             ),
           )

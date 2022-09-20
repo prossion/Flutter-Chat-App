@@ -16,3 +16,4 @@ export 'user/user_event.dart';
 export 'my_group_bloc/my_group_bloc.dart';
 export 'my_group_bloc/my_group_event.dart';
 export 'my_group_bloc/my_group_state.dart';
+export 'theme/theme_cubit.dart';

@@ -8,3 +8,4 @@ export 'profile_page.dart';
 export 'registration_page.dart';
 export 'single_chat_page.dart';
 export 'my_chat_page.dart';
+export 'no_internet_page.dart';

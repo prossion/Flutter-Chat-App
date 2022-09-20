@@ -27,7 +27,9 @@ Widget profileWidget({String? imageUrl, File? image, String? name}) {
           width: 50,
           child: Container(
             margin: const EdgeInsets.all(20),
-            child: const CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            ),
           ),
         ),
         errorWidget: (context, url, error) => Container(

@@ -83,6 +83,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       key: _scaffoldState,
       appBar: AppBar(
         title: const Text("Create group"),
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: _bodyWidget(),
     );
@@ -117,9 +118,9 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                 const Text(
                   'Add Group Image',
                   style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: blueAccentTextStyle),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ],
             ),
@@ -164,9 +165,9 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
               alignment: Alignment.center,
               height: 44,
               width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: blueAccentTextStyle,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                color: Theme.of(context).primaryColor,
               ),
               child: const Text(
                 'Create New Group',

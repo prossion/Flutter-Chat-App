@@ -50,6 +50,7 @@ dependencies:
   email_validator: ^2.0.1
   delayed_display: ^2.0.0
   fluttertoast: ^8.0.9
+  connectivity_plus: ^2.3.6+1
   
 dev_dependencies:
   flutter_test:

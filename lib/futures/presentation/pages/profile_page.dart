@@ -88,19 +88,56 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(
-      builder: (context, state) {
-        if (state is UserLoadedState) {
-          return _profileWidget(state.users);
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        title: const Text("Flutter Chat"),
+        backgroundColor: Theme.of(context).primaryColor,
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  enabled: true,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      BlocProvider.of<AuthBloc>(context).add(LoggetOutEvent());
+                    },
+                    child: Row(
+                      children: const [
+                        Text('LogOut'),
+                        Icon(Icons.logout, color: Colors.black)
+                      ],
+                    ),
+                  ),
+                ),
+              ];
+            },
+          ),
+        ],
+      ),
+      body: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          if (state is UserLoadedState) {
+            return _profileWidget(state.users);
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
     );
   }
 
   Widget _profileWidget(List<UserEntity> users) {
+    void toggleSwitch(bool value) {
+      setState(() {
+        context.read<ThemeCubit>().switchTheme();
+      });
+    }
+
     final user = users.firstWhere((user) => user.uid == widget.uid,
         orElse: () => const UserModel());
     _nameController!.value = TextEditingValue(text: user.name);
@@ -138,10 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const Text(
               'Change profile photo',
-              style: TextStyle(
-                  color: blueAccentTextStyle,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
             ),
             const SizedBox(
               height: 28,
@@ -229,14 +263,6 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(
               height: 14,
             ),
-            const Divider(
-              thickness: 1,
-              endIndent: 15,
-              indent: 15,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
             const SizedBox(
               height: 20,
             ),
@@ -249,9 +275,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   alignment: Alignment.center,
                   height: 44,
                   width: MediaQuery.of(context).size.width,
-                  decoration: const BoxDecoration(
-                    color: blueAccentTextStyle,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
                   child: const Text(
                     'Update',
@@ -260,7 +286,49 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontWeight: FontWeight.w700,
                         color: whiteTextStyle),
                   )),
-            )
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Divider(
+              thickness: 1,
+              endIndent: 15,
+              indent: 15,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Settings:',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 23,
+                      color: Colors.grey.shade700),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              child: Row(
+                children: [
+                  const Text('Change theme mode',
+                      style: TextStyle(fontSize: 20)),
+                  const Spacer(),
+                  Switch.adaptive(
+                      activeColor: Colors.grey,
+                      value: context.read<ThemeCubit>().state ==
+                              AppThemes.lightTheme
+                          ? true
+                          : false,
+                      onChanged: toggleSwitch),
+                ],
+              ),
+            ),
           ],
         ),
       ),

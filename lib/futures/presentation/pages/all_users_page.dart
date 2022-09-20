@@ -8,19 +8,77 @@ import 'package:flutter_social_app/page_const.dart';
 
 class AllUsersPage extends StatefulWidget {
   final String uid;
-  final String? query;
-  const AllUsersPage({Key? key, required this.uid, this.query})
-      : super(key: key);
+  const AllUsersPage({Key? key, required this.uid}) : super(key: key);
 
   @override
   State<AllUsersPage> createState() => _AllUsersPageState();
 }
 
 class _AllUsersPageState extends State<AllUsersPage> {
+  final TextEditingController _searchTextController = TextEditingController();
+
+  bool _isSearch = false;
+
+  @override
+  void dispose() {
+    _searchTextController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _searchTextController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  isSearch() {
+    setState(() {
+      _isSearch = false;
+    });
+  }
+
   String groupChatId = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: _isSearch == false
+            ? Theme.of(context).primaryColor
+            : Colors.transparent,
+        title: _isSearch == false
+            ? const Text("Flutter Chat")
+            : const SizedBox(
+                height: 0.0,
+                width: 0.0,
+              ),
+        flexibleSpace: _isSearch == true
+            ? BuildSearchField(
+                controller: _searchTextController, isSearch: isSearch)
+            : const SizedBox(
+                height: 0.0,
+                width: 0.0,
+              ),
+        actions: _isSearch == false
+            ? [
+                InkWell(
+                  onTap: () {
+                    setState(
+                      () {
+                        _isSearch = true;
+                      },
+                    );
+                  },
+                  child: const Icon(Icons.search),
+                ),
+                const SizedBox(
+                  width: 11,
+                ),
+              ]
+            : [],
+      ),
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
           if (state is UserLoadedState) {
@@ -29,8 +87,9 @@ class _AllUsersPageState extends State<AllUsersPage> {
                 .toList();
             final filteredUsers = users
                 .where((user) =>
-                    user.name.startsWith(widget.query!) ||
-                    user.name.startsWith(widget.query!.toLowerCase()))
+                    user.name.startsWith(_searchTextController.text) ||
+                    user.name
+                        .startsWith(_searchTextController.text.toLowerCase()))
                 .toList();
             return BlocBuilder<MyGroupBloc, MyGroupState>(
                 builder: (context, state) {
@@ -103,7 +162,10 @@ class _AllUsersPageState extends State<AllUsersPage> {
               );
             });
           }
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ));
         },
       ),
     );

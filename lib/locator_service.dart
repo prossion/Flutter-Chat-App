@@ -45,6 +45,9 @@ Future<void> init() async {
         updateDataFirestoreUseCase: sl.call(),
         joinChatMessageUseCase: sl.call(),
       ));
+  sl.registerFactory<ThemeCubit>(
+    () => ThemeCubit(initialTheme: sl.call()),
+  );
 
   // UseCases
   sl.registerLazySingleton<GoogleSignInUseCase>(
