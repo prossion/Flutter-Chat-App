@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_social_app/config/app_theme.dart';
+import 'package:flutter_social_app/futures/data/datasources/remote/storage_provider.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class MyChatPage extends StatefulWidget {
@@ -24,6 +26,10 @@ class _MyChatPageState extends State<MyChatPage> {
   final TextEditingController _messageController = TextEditingController();
   ScrollController _scrollController = ScrollController();
 
+  File? _image;
+  final picker = ImagePicker();
+  bool _imageIsPicked = false;
+  late String _photoUrl;
   @override
   void initState() {
     _messageController.addListener(() {
@@ -39,6 +45,61 @@ class _MyChatPageState extends State<MyChatPage> {
     _messageController.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  // * Future function whose uploads pictures from system gallery
+  // TODO: This function using in the few widgets, so its need to fix
+  Future getImage() async {
+    try {
+      final pickedFile =
+          await picker.pickImage(source: ImageSource.gallery).catchError((err) {
+        Fluttertoast.showToast(
+            msg: err.toString(), backgroundColor: Colors.grey);
+      });
+
+      setState(() {
+        if (pickedFile != null) {
+          _image = File(pickedFile.path);
+          StorageProviderRemoteDataSource.uploadFile(file: _image!)
+              .then((value) {
+            print("photoUrl");
+            _imageIsPicked = true;
+            setState(() {
+              _photoUrl = value;
+            });
+          });
+        } else {
+          Fluttertoast.showToast(
+              msg: "No image selected", backgroundColor: Colors.grey);
+        }
+      });
+    } catch (e) {
+      Fluttertoast.showToast(msg: "error $e", backgroundColor: Colors.grey);
+      rethrow;
+    }
+  }
+
+  // Send and update the group chat in a separate function
+  // that we have the option to provide in the sendTextMessage widget
+  // * It may need to be fixed for better appearance and performance
+  void messageFunc() {
+    BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
+        textMessageEntity: TextMessageEntity(
+            time: Timestamp.now(),
+            senderId: widget.arguments.uid,
+            content: _messageController.text,
+            senderName: widget.arguments.uid,
+            recipientId: widget.arguments.peerId,
+            receiverName: widget.arguments.peerNickname,
+            type: "TEXT"),
+        channelId: widget.arguments.groupChatId));
+    BlocProvider.of<MyGroupBloc>(context).add(
+      UpdateDataFirestoreEvent(
+        collectionPath: "groupChatChannel",
+        docPath: widget.arguments.groupChatId,
+        dataNeedUpdate: {"content": _messageController.text},
+      ),
+    );
   }
 
   @override
@@ -67,35 +128,19 @@ class _MyChatPageState extends State<MyChatPage> {
         builder: (index, state) {
           if (state is ChatLoadedState) {
             return Column(
-              children: [_messagesListWidget(state), _sendMessageTextField()],
+              children: [
+                _messagesListWidget(state),
+                SendMessageTextWidget(
+                    getImage: getImage,
+                    messageFunc: messageFunc,
+                    controller: _messageController)
+              ],
             );
           }
           return const Center(child: CircularProgressIndicator());
         },
       ),
     );
-  }
-
-  _showMenu(BuildContext context, Offset tapPos) {
-    final RenderBox overlay = context.findRenderObject() as RenderBox;
-    final RelativeRect position = RelativeRect.fromLTRB(
-      tapPos.dx,
-      tapPos.dy,
-      overlay.size.width - tapPos.dx,
-      overlay.size.height - tapPos.dy,
-    );
-    showMenu<String>(
-        context: context,
-        position: position,
-        items: <PopupMenuItem<String>>[
-          PopupMenuItem(
-            child: const Text('Delete Message'),
-            onTap: () {
-              BlocProvider.of<ChatBloc>(context).add(
-                  DeleteTextMessage(channelId: widget.arguments.groupChatId));
-            },
-          ),
-        ]);
   }
 
   Widget _messagesListWidget(ChatLoadedState messages) {
@@ -122,28 +167,32 @@ class _MyChatPageState extends State<MyChatPage> {
 
                 if (message.content!.isNotEmpty) {
                   if (message.senderId == widget.arguments.uid) {
-                    return _messageLayout(
-                      alignName: TextAlign.end,
-                      color: Theme.of(context).cardColor,
+                    return MessageLayout(
+                      text: message.content,
                       time:
                           DateFormat('hh:mm a').format(message.time!.toDate()),
+                      color: Theme.of(context).cardColor,
                       align: TextAlign.left,
                       boxAlign: CrossAxisAlignment.start,
-                      crossAlign: CrossAxisAlignment.end,
                       nip: BubbleNip.rightTop,
-                      text: message.content,
+                      crossAlign: CrossAxisAlignment.end,
+                      alignName: TextAlign.end,
+                      groupId: widget.arguments.groupChatId,
+                      name: 'Me',
                     );
                   } else {
-                    return _messageLayout(
-                      color: Theme.of(context).cardColor,
-                      alignName: TextAlign.end,
+                    return MessageLayout(
+                      text: message.content,
                       time:
                           DateFormat('hh:mm a').format(message.time!.toDate()),
+                      color: Theme.of(context).cardColor,
                       align: TextAlign.left,
                       boxAlign: CrossAxisAlignment.start,
-                      crossAlign: CrossAxisAlignment.start,
                       nip: BubbleNip.leftTop,
-                      text: message.content,
+                      crossAlign: CrossAxisAlignment.start,
+                      alignName: TextAlign.end,
+                      groupId: widget.arguments.groupChatId,
+                      name: widget.arguments.peerNickname,
                     );
                   }
                 } else {
@@ -153,188 +202,6 @@ class _MyChatPageState extends State<MyChatPage> {
             )
           : const ErrorDisplay(
               title: 'Error', text: 'Error loading chat. Try again'),
-    );
-  }
-
-  Widget _messageLayout({
-    text,
-    time,
-    color,
-    align,
-    boxAlign,
-    nip,
-    crossAlign,
-    // String? name,
-    alignName,
-  }) {
-    var tapPos;
-    return InkWell(
-      onTapDown: (TapDownDetails details) {
-        tapPos = details.globalPosition;
-      },
-      onLongPress: () {
-        _showMenu(context, tapPos);
-      },
-      child: Column(
-        crossAxisAlignment: crossAlign,
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.80,
-            ),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.all(3),
-              child: Bubble(
-                color: color,
-                nip: nip,
-                child: Column(
-                  crossAxisAlignment: crossAlign,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(
-                        text,
-                        textAlign: align,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Text(
-                      time,
-                      textAlign: align,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        // color: greyTextStyle,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _sendMessageTextField() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(80)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(.2),
-                      offset: const Offset(0.0, 0.50),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                    )
-                  ]),
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Icon(
-                    Icons.link,
-                    color: Theme.of(context).bottomAppBarColor,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxHeight: 60),
-                      child: Scrollbar(
-                        child: TextField(
-                          style: const TextStyle(fontSize: 14),
-                          controller: _messageController,
-                          maxLines: null,
-                          // autofocus: true,
-                          autocorrect: true,
-                          decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Type a message"),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Row(
-                  //   children: [
-                  //     Icon(
-                  //       Icons.link,
-                  //       color: Theme.of(context).bottomAppBarColor,
-                  //     ),
-                  //     const SizedBox(
-                  //       width: 10,
-                  //     ),
-                  //     _messageController.text.isEmpty
-                  //         ? Icon(
-                  //             Icons.camera_alt,
-                  //             color: Theme.of(context).bottomAppBarColor,
-                  //           )
-                  //         : const Text(""),
-                  //   ],
-                  // ),
-                  // const SizedBox(
-                  //   width: 15,
-                  // ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 5,
-          ),
-          InkWell(
-            onTap: () {
-              if (_messageController.text.isEmpty) {
-                Fluttertoast.showToast(
-                    msg: 'Nothing to send', backgroundColor: Colors.grey);
-              } else {
-                BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
-                    textMessageEntity: TextMessageEntity(
-                        time: Timestamp.now(),
-                        senderId: widget.arguments.uid,
-                        content: _messageController.text,
-                        senderName: widget.arguments.uid,
-                        recipientId: widget.arguments.peerId,
-                        receiverName: widget.arguments.peerNickname,
-                        type: "TEXT"),
-                    channelId: widget.arguments.groupChatId));
-                BlocProvider.of<MyGroupBloc>(context).add(
-                  UpdateDataFirestoreEvent(
-                    collectionPath: "groupChatChannel",
-                    docPath: widget.arguments.groupChatId,
-                    dataNeedUpdate: {"content": _messageController.text},
-                  ),
-                );
-                setState(() {
-                  _messageController.clear();
-                });
-              }
-            },
-            child: Container(
-              width: 45,
-              height: 45,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: const BorderRadius.all(Radius.circular(50)),
-              ),
-              child: const Icon(
-                Icons.send,
-                color: whiteTextStyle,
-              ),
-            ),
-          )
-        ],
-      ),
     );
   }
 }

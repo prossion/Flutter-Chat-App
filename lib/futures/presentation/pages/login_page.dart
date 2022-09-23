@@ -151,10 +151,10 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.pushNamed(
                                       context, PageConst.forgotPage);
                                 },
-                                child: const Text(
+                                child: Text(
                                   'Forgot password?',
                                   style: TextStyle(
-                                      color: blueAccentTextStyle,
+                                      color: Theme.of(context).primaryColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700),
                                 ),
@@ -167,6 +167,11 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: () {
                                   _submitLogin();
                                 },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStatePropertyAll<Color>(
+                                          Theme.of(context).primaryColor),
+                                ),
                                 child: const Text('Sign In'),
                               ),
                             ),
@@ -186,6 +191,9 @@ class _LoginPageState extends State<LoginPage> {
                             const Text("Don't have an account?",
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.w500)),
+                            const SizedBox(
+                              width: 10,
+                            ),
                             TextButton(
                               onPressed: () {
                                 Navigator.pushNamed(
@@ -193,17 +201,25 @@ class _LoginPageState extends State<LoginPage> {
                                   PageConst.registrationPage,
                                 );
                               },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStatePropertyAll<Color>(
+                                        Theme.of(context).primaryColor),
+                              ),
                               child: const Text(
                                 'Sign Up',
                                 style: TextStyle(
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: blueAccentTextStyle),
+                                    fontWeight: FontWeight.w500,
+                                    color: whiteTextStyle),
                               ),
                             ),
                           ],
                         ),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     InkWell(
                       onTap: () {
@@ -211,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
                             .add(GoogleAuthEvent());
                       },
                       child: Ink(
-                        color: const Color(0xFF397AF3),
+                        color: Theme.of(context).primaryColor,
                         child: Padding(
                           padding: const EdgeInsets.all(8),
                           child: Wrap(

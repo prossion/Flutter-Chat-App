@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/pages/home_page.dart';
@@ -159,6 +160,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           onPressed: () {
                             _submitSignUp();
                           },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll<Color>(
+                                Theme.of(context).primaryColor),
+                          ),
                           child: const Text('Sign Up'),
                         ),
                       ),
@@ -178,6 +183,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       const Text("Already have an account?",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w500)),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
@@ -186,12 +194,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   builder: (context) => const LoginPage()),
                               (route) => false);
                         },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll<Color>(
+                              Theme.of(context).primaryColor),
+                        ),
                         child: const Text(
                           'Sign In',
                           style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.blueAccent),
+                              fontWeight: FontWeight.w600,
+                              color: whiteTextStyle),
                         ),
                       ),
                     ],

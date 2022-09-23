@@ -35,9 +35,10 @@ class _ForgotPageState extends State<ForgotPage> {
                   child: const Text(
                     'Forgot Password',
                     style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w700,
-                        color: blackTextStyle),
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      // color: blackTextStyle),
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -77,9 +78,9 @@ class _ForgotPageState extends State<ForgotPage> {
                     alignment: Alignment.center,
                     height: 44,
                     width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
-                      color: Colors.blueAccent,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: const Text(
                       'Send Password Reset Email',
@@ -106,12 +107,13 @@ class _ForgotPageState extends State<ForgotPage> {
                         Navigator.pushNamedAndRemoveUntil(
                             context, PageConst.loginPage, (route) => false);
                       },
-                      child: const Text(
+                      child: Text(
                         'Login',
                         style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: blueAccentTextStyle),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ),
                   ],
