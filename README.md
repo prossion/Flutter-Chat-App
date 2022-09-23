@@ -2,24 +2,20 @@
 Group communication apps using Flutter and Firebase-Firestore Database
 
 <p align="center">
-    <img src="screenshots/1-android.png" alt="Image" height="500" />
-    <img src="screenshots/1-ios.jpg" alt="Image" height="500" />
-    <img src="screenshots/2-android.png" alt="Image" height="500" />
-    <img src="screenshots/2-ios.jpg" alt="Image" height="500" />
-    <img src="screenshots/3-android.png" alt="Image" height="500" />
-    <img src="screenshots/3-ios.jpg" alt="Image" height="500" /> 
-    <img src="screenshots/4-android.png" alt="Image" height="500" />
-    <img src="screenshots/4-ios.jpg" alt="Image" height="500" /> 
-    <img src="screenshots/5-android.png" alt="Image" height="500" />
-    <img src="screenshots/5-ios.jpg" alt="Image" height="500" /> 
-    <img src="screenshots/6-andoird.jpg" alt="Image" height="500" />
-    <img src="screenshots/6-ios.jpg" alt="Image" height="500" /> 
-    <img src="screenshots/7-android.png" alt="Image" height="500" />
-    <img src="screenshots/7-ios.jpg" alt="Image" height="500" /> 
-    <img src="screenshots/8-android.jpg" alt="Image" height="500" />
-    <img src="screenshots/8-ios.jpg" alt="Image" height="500" /> 
-    <img src="screenshots/9-android.jpg" alt="Image" height="500" />
-    <img src="screenshots/9-ios.jpg" alt="Image" height="500" /> 
+    <img src="screenshots/android1.png" alt="Image" height="500" />
+    <img src="screenshots/ios1.jpg" alt="Image" height="500" />
+    <img src="screenshots/android2.png" alt="Image" height="500" />
+    <img src="screenshots/ios2.jpg" alt="Image" height="500" />
+    <img src="screenshots/android3.png" alt="Image" height="500" />
+    <img src="screenshots/ios3.jpg" alt="Image" height="500" /> 
+    <img src="screenshots/android4.png" alt="Image" height="500" />
+    <img src="screenshots/ios4.jpg" alt="Image" height="500" /> 
+    <img src="screenshots/android5.png" alt="Image" height="500" />
+    <img src="screenshots/ios5.jpg" alt="Image" height="500" /> 
+    <img src="screenshots/android6.png" alt="Image" height="500" />
+    <img src="screenshots/ios6.jpg" alt="Image" height="500" /> 
+    <img src="screenshots/android7.png" alt="Image" height="500" />
+    <img src="screenshots/ios7.jpg" alt="Image" height="500" /> 
   
   
 </p>
