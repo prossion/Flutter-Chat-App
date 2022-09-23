@@ -11,7 +11,7 @@ Group communication apps using Flutter and Firebase-Firestore Database
     <img src="screenshots/android4.jpg" alt="Image" height="500" />
     <img src="screenshots/ios4.png" alt="Image" height="500" /> 
     <img src="screenshots/android5.jpg" alt="Image" height="500" />
-    <img src="screenshots/ios5.png" alt="Image" height="500" /> 
+    <img src="screenshots/ios5.jpg" alt="Image" height="500" /> 
     <img src="screenshots/android6.jpg" alt="Image" height="500" />
     <img src="screenshots/ios6.png" alt="Image" height="500" /> 
     <img src="screenshots/android7.jpg" alt="Image" height="500" />
