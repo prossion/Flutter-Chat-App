@@ -57,8 +57,8 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<MyGroupBloc>(
           create: (_) => di.sl<MyGroupBloc>(),
         ),
-        // If Android/IOS theme of the device is light, start app with light theme,
-        // else start app with dark theme
+        // * If Android/IOS theme of the device is light, start app with light theme,
+        // * else start app with dark theme
         osThemeIsLight
             ? BlocProvider(
                 create: (context) =>
