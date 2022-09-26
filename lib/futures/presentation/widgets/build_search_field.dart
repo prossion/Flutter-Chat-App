@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_social_app/config/app_theme.dart';
 
 class BuildSearchField extends StatefulWidget {
   const BuildSearchField({
@@ -17,34 +18,35 @@ class BuildSearchField extends StatefulWidget {
 class _BuildSearchFieldState extends State<BuildSearchField> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 65),
-      height: 40,
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(.3),
-              spreadRadius: 1,
-              offset: const Offset(0, 0.50))
-        ],
-      ),
-      child: TextField(
-        controller: widget.controller,
-        decoration: InputDecoration(
-          hintText: "Search...",
-          border: InputBorder.none,
-          prefixIcon: InkWell(
-              onTap: () {
-                widget.isSearch();
-              },
-              child: const Icon(
+    return TextField(
+      controller: widget.controller,
+      cursorColor: whiteTextStyle,
+      autofocus: true,
+      decoration: InputDecoration(
+        hintText: "Search...",
+        hintStyle: const TextStyle(color: whiteTextStyle),
+        border: InputBorder.none,
+        prefixIcon: InkWell(
+            onTap: () {
+              widget.isSearch();
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 30.0),
+              child: Icon(
                 Icons.arrow_back,
                 size: 25,
-              )),
-        ),
-        style: const TextStyle(fontSize: 16.0),
+                color: whiteTextStyle,
+              ),
+            )),
+        // enabledBorder: const UnderlineInputBorder(
+        //     //Default TextField border
+        //     borderSide: BorderSide(color: Colors.white)),
+        // focusedBorder: const UnderlineInputBorder(
+        //     //Borders when a TextField is in focus
+        //     borderSide: BorderSide(color: Colors.white)),
       ),
+      textInputAction: TextInputAction.search,
+      style: const TextStyle(fontSize: 20.0, color: whiteTextStyle),
     );
   }
 }

@@ -46,22 +46,10 @@ class _GroupsPageState extends State<GroupsPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: _isSearch == false
-            ? Theme.of(context).primaryColor
-            : Colors.transparent,
         title: _isSearch == false
             ? const Text("Flutter Chat")
-            : const SizedBox(
-                height: 0.0,
-                width: 0.0,
-              ),
-        flexibleSpace: _isSearch == true
-            ? BuildSearchField(
-                controller: _searchTextController, isSearch: isSearch)
-            : const SizedBox(
-                height: 0.0,
-                width: 0.0,
-              ),
+            : BuildSearchField(
+                controller: _searchTextController, isSearch: isSearch),
         actions: _isSearch == false
             ? [
                 InkWell(
@@ -75,7 +63,17 @@ class _GroupsPageState extends State<GroupsPage> {
                   width: 11,
                 ),
               ]
-            : [],
+            : [
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _searchTextController.clear();
+                      _isSearch = false;
+                    });
+                  },
+                  icon: const Icon(Icons.clear),
+                ),
+              ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
