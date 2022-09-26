@@ -167,7 +167,7 @@ class _MyChatPageState extends State<MyChatPage> {
 
                 if (message.content!.isNotEmpty) {
                   if (message.senderId == widget.arguments.uid) {
-                    return MessageLayout(
+                    return TextMessageLayout(
                       text: message.content,
                       time:
                           DateFormat('hh:mm a').format(message.time!.toDate()),
@@ -181,7 +181,7 @@ class _MyChatPageState extends State<MyChatPage> {
                       name: 'Me',
                     );
                   } else {
-                    return MessageLayout(
+                    return TextMessageLayout(
                       text: message.content,
                       time:
                           DateFormat('hh:mm a').format(message.time!.toDate()),

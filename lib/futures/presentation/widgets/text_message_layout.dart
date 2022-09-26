@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 
-class MessageLayout extends StatelessWidget {
-  const MessageLayout(
+class TextMessageLayout extends StatelessWidget {
+  const TextMessageLayout(
       {Key? key,
       required this.text,
       required this.time,

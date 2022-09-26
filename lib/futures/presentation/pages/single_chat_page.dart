@@ -165,7 +165,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
           final message = messages.messages[index];
 
           if (message.senderId == widget.singleChatEntity.uid) {
-            return MessageLayout(
+            return TextMessageLayout(
               text: message.content,
               time: DateFormat('hh:mm a').format(message.time!.toDate()),
               color: Theme.of(context).cardColor,
@@ -178,7 +178,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
               groupId: widget.singleChatEntity.groupId,
             );
           } else {
-            return MessageLayout(
+            return TextMessageLayout(
                 text: message.content,
                 time: DateFormat('hh:mm a').format(message.time!.toDate()),
                 color: Theme.of(context).cardColor,

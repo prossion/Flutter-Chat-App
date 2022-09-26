@@ -35,6 +35,8 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
+  final formKey = GlobalKey<FormState>();
+
   File? _image;
   // ignore: unused_field
   String? _profileUrl;
@@ -60,7 +62,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
         }
       });
     } catch (e) {
-      const Text('Error');
+      Fluttertoast.showToast(msg: "error $e", backgroundColor: Colors.grey);
     }
   }
 
@@ -90,136 +92,151 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
   }
 
   Widget _bodyWidget() {
-    return SingleChildScrollView(
-        child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: () async {
-              getImage();
-            },
-            child: Column(
-              children: [
-                Container(
-                  height: 62,
-                  width: 62,
-                  decoration: const BoxDecoration(
-                    color: picturePhoto,
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
+    return Form(
+      key: formKey,
+      child: SingleChildScrollView(
+          child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () async {
+                getImage();
+              },
+              child: Column(
+                children: [
+                  Container(
+                    height: 62,
+                    width: 62,
+                    decoration: const BoxDecoration(
+                      color: picturePhoto,
+                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                    ),
+                    child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(50)),
+                        child: profileWidget(image: _image)),
                   ),
-                  child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      child: profileWidget(image: _image)),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  const Text(
+                    'Add Group Image',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 17,
+            ),
+            TextFormFieldWidget(
+              controller: _groupNameController,
+              type: TextInputType.text,
+              hintText: 'group name',
+              prefixIcon: Icons.change_circle,
+              obscureText: false,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormFieldWidget(
+              controller: _numberUsersJoinController,
+              type: TextInputType.emailAddress,
+              hintText: 'number of users join group',
+              prefixIcon: Icons.format_list_numbered,
+              obscureText: false,
+            ),
+            const SizedBox(
+              height: 17,
+            ),
+            const Divider(
+              thickness: 2,
+              indent: 120,
+              endIndent: 120,
+            ),
+            const SizedBox(
+              height: 17,
+            ),
+            InkWell(
+              onTap: () {
+                _submit();
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                height: 44,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: Theme.of(context).primaryColor,
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
-                const Text(
-                  'Add Group Image',
+                child: const Text(
+                  'Create New Group',
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
+                      color: whiteTextStyle,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700),
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 17,
-          ),
-          TextFormFieldWidget(
-            controller: _groupNameController,
-            type: TextInputType.text,
-            hintText: 'group name',
-            prefixIcon: Icons.change_circle,
-            obscureText: false,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          TextFormFieldWidget(
-            controller: _numberUsersJoinController,
-            type: TextInputType.emailAddress,
-            hintText: 'number of users join group',
-            prefixIcon: Icons.format_list_numbered,
-            obscureText: false,
-          ),
-          const SizedBox(
-            height: 17,
-          ),
-          const Divider(
-            thickness: 2,
-            indent: 120,
-            endIndent: 120,
-          ),
-          const SizedBox(
-            height: 17,
-          ),
-          InkWell(
-            onTap: () {
-              _submit();
-              Navigator.of(context).pop();
-            },
-            child: Container(
-              alignment: Alignment.center,
-              height: 44,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                color: Theme.of(context).primaryColor,
-              ),
-              child: const Text(
-                'Create New Group',
-                style: TextStyle(
-                    color: whiteTextStyle,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-        ],
-      ),
-    ));
+            const SizedBox(
+              height: 12,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+          ],
+        ),
+      )),
+    );
   }
 
   _submit() async {
-    if (_image == null) {
-      Fluttertoast.showToast(
-          msg: 'Add a group photo', backgroundColor: Colors.grey);
-      return;
-    }
-    if (_groupNameController.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: 'Enter group name', backgroundColor: Colors.grey);
-      return;
-    }
-    if (_numberUsersJoinController.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: 'Enter the amount of users', backgroundColor: Colors.grey);
-      return;
+    formKey.currentState?.save();
+
+    if (formKey.currentState!.validate()) {
+      if (_image != null ||
+          _groupNameController.text.isNotEmpty ||
+          _numberUsersJoinController.text.isNotEmpty) {
+        BlocProvider.of<GroupBloc>(context).add(GetCreateGroupEvent(
+            groupEntity: GroupEntity(
+          lastMessage: "",
+          uid: widget.uid,
+          groupName: _groupNameController.text,
+          creationTime: Timestamp.now(),
+          groupProfileImage: _profileUrl!,
+          joinUsers: "0",
+          limitUsers: _numberUsersJoinController.text,
+        )));
+        Fluttertoast.showToast(
+            msg: "${_groupNameController.text} created successfully",
+            backgroundColor: Colors.grey);
+        _clear();
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Group has not been created', backgroundColor: Colors.grey);
+      }
     }
 
-    BlocProvider.of<GroupBloc>(context).add(GetCreateGroupEvent(
-        groupEntity: GroupEntity(
-      lastMessage: "",
-      uid: widget.uid,
-      groupName: _groupNameController.text,
-      creationTime: Timestamp.now(),
-      groupProfileImage: _profileUrl!,
-      joinUsers: "0",
-      limitUsers: _numberUsersJoinController.text,
-    )));
-    Fluttertoast.showToast(
-        msg: "${_groupNameController.text} created successfully",
-        backgroundColor: Colors.grey);
-    _clear();
+    //   if (_image == null) {
+    //     Fluttertoast.showToast(
+    //         msg: 'Add a group photo', backgroundColor: Colors.grey);
+    //     return;
+    //   }
+    //   if (_groupNameController.text.isEmpty) {
+    //     Fluttertoast.showToast(
+    //         msg: 'Enter group name', backgroundColor: Colors.grey);
+    //     return;
+    //   }
+    //   if (_numberUsersJoinController.text.isEmpty) {
+    //     Fluttertoast.showToast(
+    //         msg: 'Enter the amount of users', backgroundColor: Colors.grey);
+    //     return;
+    //   }
   }
 
   void _clear() {
