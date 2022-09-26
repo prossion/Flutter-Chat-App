@@ -1,4 +1,4 @@
-# Flutter News App
+# Flutter Chat App
 Group communication apps using Flutter and Firebase-Firestore Database
 
 <p align="center">
