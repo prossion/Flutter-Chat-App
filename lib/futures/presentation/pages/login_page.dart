@@ -169,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStatePropertyAll<Color>(
+                                      MaterialStateProperty.all<Color>(
                                           Theme.of(context).primaryColor),
                                 ),
                                 child: const Text('Sign In'),
@@ -203,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStatePropertyAll<Color>(
+                                    MaterialStateProperty.all<Color>(
                                         Theme.of(context).primaryColor),
                               ),
                               child: const Text(

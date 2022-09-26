@@ -161,7 +161,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             _submitSignUp();
                           },
                           style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll<Color>(
+                            backgroundColor: MaterialStateProperty.all<Color>(
                                 Theme.of(context).primaryColor),
                           ),
                           child: const Text('Sign Up'),
@@ -195,9 +195,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               (route) => false);
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll<Color>(
-                              Theme.of(context).primaryColor),
-                        ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Theme.of(context).primaryColor)),
                         child: const Text(
                           'Sign In',
                           style: TextStyle(
