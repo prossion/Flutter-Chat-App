@@ -22,6 +22,7 @@ class _BuildSearchFieldState extends State<BuildSearchField> {
       controller: widget.controller,
       cursorColor: whiteTextStyle,
       autofocus: true,
+      keyboardAppearance: Theme.of(context).brightness,
       decoration: InputDecoration(
         hintText: "Search...",
         hintStyle: const TextStyle(color: whiteTextStyle),
@@ -31,13 +32,14 @@ class _BuildSearchFieldState extends State<BuildSearchField> {
               widget.isSearch();
             },
             child: const Padding(
-              padding: EdgeInsets.only(right: 30.0),
+              padding: EdgeInsets.only(right: 20.0),
               child: Icon(
                 Icons.arrow_back,
                 size: 25,
                 color: whiteTextStyle,
               ),
             )),
+
         // enabledBorder: const UnderlineInputBorder(
         //     //Default TextField border
         //     borderSide: BorderSide(color: Colors.white)),

@@ -44,6 +44,7 @@ class _AllUsersPageState extends State<AllUsersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         title: _isSearch == false
             ? const Text("Flutter Chat")
             : BuildSearchField(

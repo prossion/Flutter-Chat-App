@@ -45,7 +45,7 @@ class _GroupsPageState extends State<GroupsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
+        backgroundColor: Theme.of(context).primaryColor,
         title: _isSearch == false
             ? const Text("Flutter Chat")
             : BuildSearchField(

@@ -25,6 +25,7 @@ class TextFormFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       keyboardType: type,
+      keyboardAppearance: Theme.of(context).brightness,
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
