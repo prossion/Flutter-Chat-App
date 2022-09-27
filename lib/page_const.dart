@@ -6,4 +6,5 @@ class PageConst {
   static const String phoneRegistrationPage = "phoneRegistrationPage";
   static const String singleChatPage = "singleChatPage";
   static const String myChatPage = "myChatPage";
+  static const String fullPhotoPage = "fullPhotoPage";
 }

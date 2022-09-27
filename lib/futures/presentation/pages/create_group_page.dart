@@ -52,7 +52,6 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 
           StorageProviderRemoteDataSource.uploadFile(file: _image!)
               .then((value) {
-            print("profileUrl");
             setState(() {
               _profileUrl = value;
             });

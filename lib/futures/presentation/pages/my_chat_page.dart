@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/futures/data/datasources/remote/storage_provider.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/image_message_layout.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,6 +38,7 @@ class _MyChatPageState extends State<MyChatPage> {
     });
     BlocProvider.of<ChatBloc>(context)
         .add(GetMessagesEvent(channelId: widget.arguments.groupChatId));
+    _photoUrl = '';
     super.initState();
   }
 
@@ -66,6 +68,16 @@ class _MyChatPageState extends State<MyChatPage> {
             _imageIsPicked = true;
             setState(() {
               _photoUrl = value;
+              BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
+                  textMessageEntity: TextMessageEntity(
+                      time: Timestamp.now(),
+                      senderId: widget.arguments.uid,
+                      content: _photoUrl,
+                      senderName: widget.arguments.peerNickname,
+                      receiverName: '',
+                      recipientId: '',
+                      type: "IMAGE"),
+                  channelId: widget.arguments.groupChatId));
             });
           });
         } else {
@@ -167,33 +179,61 @@ class _MyChatPageState extends State<MyChatPage> {
 
                 if (message.content!.isNotEmpty) {
                   if (message.senderId == widget.arguments.uid) {
-                    return TextMessageLayout(
-                      text: message.content,
-                      time:
-                          DateFormat('hh:mm a').format(message.time!.toDate()),
-                      color: Theme.of(context).cardColor,
-                      align: TextAlign.left,
-                      boxAlign: CrossAxisAlignment.start,
-                      nip: BubbleNip.rightTop,
-                      crossAlign: CrossAxisAlignment.end,
-                      alignName: TextAlign.end,
-                      groupId: widget.arguments.groupChatId,
-                      name: 'Me',
-                    );
+                    return message.type == "TEXT"
+                        ? TextMessageLayout(
+                            text: message.content,
+                            time: DateFormat('hh:mm a')
+                                .format(message.time!.toDate()),
+                            color: Theme.of(context).cardColor,
+                            align: TextAlign.left,
+                            boxAlign: CrossAxisAlignment.start,
+                            nip: BubbleNip.rightTop,
+                            crossAlign: CrossAxisAlignment.end,
+                            alignName: TextAlign.end,
+                            groupId: widget.arguments.groupChatId,
+                            name: 'Me',
+                          )
+                        : ImageMessageLayout(
+                            imageUrl: message.content!,
+                            align: TextAlign.left,
+                            alignName: TextAlign.end,
+                            boxAlign: CrossAxisAlignment.start,
+                            color: Theme.of(context).cardColor,
+                            crossAlign: CrossAxisAlignment.end,
+                            nip: BubbleNip.rightTop,
+                            time: DateFormat('hh:mm a')
+                                .format(message.time!.toDate()),
+                            name: "Me",
+                            image: _image,
+                          );
                   } else {
-                    return TextMessageLayout(
-                      text: message.content,
-                      time:
-                          DateFormat('hh:mm a').format(message.time!.toDate()),
-                      color: Theme.of(context).cardColor,
-                      align: TextAlign.left,
-                      boxAlign: CrossAxisAlignment.start,
-                      nip: BubbleNip.leftTop,
-                      crossAlign: CrossAxisAlignment.start,
-                      alignName: TextAlign.end,
-                      groupId: widget.arguments.groupChatId,
-                      name: widget.arguments.peerNickname,
-                    );
+                    return message.type == "TEXT"
+                        ? TextMessageLayout(
+                            text: message.content,
+                            time: DateFormat('hh:mm a')
+                                .format(message.time!.toDate()),
+                            color: Theme.of(context).cardColor,
+                            align: TextAlign.left,
+                            boxAlign: CrossAxisAlignment.start,
+                            nip: BubbleNip.leftTop,
+                            crossAlign: CrossAxisAlignment.start,
+                            alignName: TextAlign.end,
+                            groupId: widget.arguments.groupChatId,
+                            name: widget.arguments.peerNickname,
+                          )
+                        : ImageMessageLayout(
+                            imageUrl: message.content!,
+                            align: TextAlign.left,
+                            alignName: TextAlign.end,
+                            boxAlign: CrossAxisAlignment.start,
+                            color: Theme.of(context).cardColor,
+                            crossAlign: CrossAxisAlignment.start,
+                            nip: BubbleNip.leftTop,
+                            time: DateFormat('hh:mm a')
+                                .format(message.time!.toDate()),
+                            name: "${message.senderName}",
+                            image: _image,
+                          );
                   }
                 } else {
                   return const Center(child: Text("No message here yet..."));

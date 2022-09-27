@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/futures/data/datasources/remote/storage_provider.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/image_message_layout.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,6 +41,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
     });
     BlocProvider.of<ChatBloc>(context)
         .add(GetMessagesEvent(channelId: widget.singleChatEntity.groupId));
+    _photoUrl = '';
     super.initState();
   }
 
@@ -69,6 +71,16 @@ class _SingleChatPageState extends State<SingleChatPage> {
             _imageIsPicked = true;
             setState(() {
               _photoUrl = value;
+              BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
+                  textMessageEntity: TextMessageEntity(
+                      time: Timestamp.now(),
+                      senderId: widget.singleChatEntity.uid,
+                      content: _photoUrl,
+                      senderName: widget.singleChatEntity.username,
+                      receiverName: '',
+                      recipientId: '',
+                      type: "IMAGE"),
+                  channelId: widget.singleChatEntity.groupId));
             });
           });
         } else {
@@ -165,30 +177,57 @@ class _SingleChatPageState extends State<SingleChatPage> {
           final message = messages.messages[index];
 
           if (message.senderId == widget.singleChatEntity.uid) {
-            return TextMessageLayout(
-              text: message.content,
-              time: DateFormat('hh:mm a').format(message.time!.toDate()),
-              color: Theme.of(context).cardColor,
-              align: TextAlign.left,
-              boxAlign: CrossAxisAlignment.start,
-              nip: BubbleNip.rightTop,
-              crossAlign: CrossAxisAlignment.end,
-              name: "Me",
-              alignName: TextAlign.end,
-              groupId: widget.singleChatEntity.groupId,
-            );
+            return message.type == "TEXT"
+                ? TextMessageLayout(
+                    text: message.content,
+                    time: DateFormat('hh:mm a').format(message.time!.toDate()),
+                    color: Theme.of(context).cardColor,
+                    align: TextAlign.left,
+                    boxAlign: CrossAxisAlignment.start,
+                    nip: BubbleNip.rightTop,
+                    crossAlign: CrossAxisAlignment.end,
+                    name: "Me",
+                    alignName: TextAlign.end,
+                    groupId: widget.singleChatEntity.groupId,
+                  )
+                : ImageMessageLayout(
+                    imageUrl: message.content!,
+                    align: TextAlign.left,
+                    alignName: TextAlign.end,
+                    boxAlign: CrossAxisAlignment.start,
+                    color: Theme.of(context).cardColor,
+                    crossAlign: CrossAxisAlignment.end,
+                    nip: BubbleNip.rightTop,
+                    time: DateFormat('hh:mm a').format(message.time!.toDate()),
+                    name: "Me",
+                    image: _image,
+                  );
           } else {
-            return TextMessageLayout(
-                text: message.content,
-                time: DateFormat('hh:mm a').format(message.time!.toDate()),
-                color: Theme.of(context).cardColor,
-                align: TextAlign.left,
-                boxAlign: CrossAxisAlignment.start,
-                nip: BubbleNip.leftTop,
-                crossAlign: CrossAxisAlignment.start,
-                name: "${message.senderName}",
-                alignName: TextAlign.end,
-                groupId: widget.singleChatEntity.groupId);
+            return message.type == "TEXT"
+                ? TextMessageLayout(
+                    text: message.content,
+                    time: DateFormat('hh:mm a').format(message.time!.toDate()),
+                    color: Theme.of(context).cardColor,
+                    align: TextAlign.left,
+                    boxAlign: CrossAxisAlignment.start,
+                    nip: BubbleNip.leftTop,
+                    crossAlign: CrossAxisAlignment.start,
+                    name: "${message.senderName}",
+                    alignName: TextAlign.end,
+                    groupId: widget.singleChatEntity.groupId,
+                  )
+                : ImageMessageLayout(
+                    imageUrl: message.content!,
+                    align: TextAlign.left,
+                    alignName: TextAlign.end,
+                    boxAlign: CrossAxisAlignment.start,
+                    color: Theme.of(context).cardColor,
+                    crossAlign: CrossAxisAlignment.start,
+                    nip: BubbleNip.leftTop,
+                    time: DateFormat('hh:mm a').format(message.time!.toDate()),
+                    name: "${message.senderName}",
+                    image: _image,
+                  );
           }
         },
       ),

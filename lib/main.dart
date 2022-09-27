@@ -8,7 +8,7 @@ import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/pages/pages.dart';
 import 'package:flutter_social_app/generate_route.dart';
-import 'package:flutter_social_app/simple_bloc_observer.dart';
+import 'package:flutter_social_app/futures/presentation/bloc/simple_bloc_observer.dart';
 import 'locator_service.dart' as di;
 
 Future<void> main() async {
