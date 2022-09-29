@@ -15,6 +15,8 @@ class AppThemes {
     primaryColor: Colors.blueAccent,
     cardColor: Colors.white,
     bottomAppBarColor: Colors.grey.shade700,
+    // colorScheme:
+    //     ColorScheme.fromSwatch().copyWith(secondary: Colors.blueAccent),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.blueAccent,
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 23),
@@ -27,6 +29,7 @@ class AppThemes {
     cardColor: Colors.grey,
     backgroundColor: Colors.white,
     bottomAppBarColor: Colors.white,
+    // colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.grey),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.blueGrey,
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 23),

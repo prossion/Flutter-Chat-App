@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/futures/data/datasources/remote/storage_provider.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/image_message_layout.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,7 +30,6 @@ class _SingleChatPageState extends State<SingleChatPage> {
 
   File? _image;
   final picker = ImagePicker();
-  bool _imageIsPicked = false;
   late String _photoUrl;
 
   @override
@@ -53,7 +51,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
   }
 
   // * Future function whose uploads pictures from system gallery
-  // TODO: This function using in the few widgets, so its need to fix
+  // TODO: This function using in the both widgets, so its need to fix
   Future getImage() async {
     try {
       final pickedFile =
@@ -67,8 +65,6 @@ class _SingleChatPageState extends State<SingleChatPage> {
           _image = File(pickedFile.path);
           StorageProviderRemoteDataSource.uploadFile(file: _image!)
               .then((value) {
-            print("photoUrl");
-            _imageIsPicked = true;
             setState(() {
               _photoUrl = value;
               BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
