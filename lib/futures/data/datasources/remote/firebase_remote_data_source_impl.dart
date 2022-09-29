@@ -219,14 +219,15 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
     final messageId = messagesRef.doc().id;
 
     final newMessage = TextMessageModel(
-      content: textMessageEntity.content,
-      receiverName: textMessageEntity.receiverName,
-      recipientId: textMessageEntity.recipientId,
-      senderId: textMessageEntity.senderId,
-      senderName: textMessageEntity.senderName,
-      time: textMessageEntity.time,
-      type: textMessageEntity.type,
-    ).toDocument();
+            content: textMessageEntity.content,
+            receiverName: textMessageEntity.receiverName,
+            recipientId: textMessageEntity.recipientId,
+            senderId: textMessageEntity.senderId,
+            senderName: textMessageEntity.senderName,
+            time: textMessageEntity.time,
+            type: textMessageEntity.type,
+            replyingMessage: textMessageEntity.replyingMessage)
+        .toDocument();
 
     messagesRef.doc(messageId).set(newMessage);
   }

@@ -10,7 +10,7 @@ class TextMessageModel extends TextMessageEntity {
     Timestamp? time,
     String? content,
     String? receiverName,
-    // String? messageId,
+    String? replyingMessage,
   }) : super(
           recipientId: recipientId,
           senderId: senderId,
@@ -19,7 +19,7 @@ class TextMessageModel extends TextMessageEntity {
           time: time,
           content: content,
           receiverName: receiverName,
-          // messageId: messageId,
+          replyingMessage: replyingMessage,
         );
 
   factory TextMessageModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -46,6 +46,9 @@ class TextMessageModel extends TextMessageEntity {
           ? snapshot.get('receiverName')
           : '',
       // messageId: snapshot.get('messageId'),
+      replyingMessage: snapshot.data().toString().contains('replyingMessage')
+          ? snapshot.get('replyingMessage')
+          : '',
     );
   }
 
@@ -58,7 +61,7 @@ class TextMessageModel extends TextMessageEntity {
       "time": time,
       "content": content,
       "receiverName": receiverName,
-      // "messageId": messageId,
+      "replyingMessage": replyingMessage,
     };
   }
 }
