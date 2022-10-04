@@ -14,27 +14,40 @@ class ReplyMessageWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+  Widget build(BuildContext context) => IntrinsicHeight(
+        child: Row(
           children: [
-            Expanded(
-              child: Text(
-                name,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            if (onCancelReply != null)
-              GestureDetector(
-                child: const Icon(Icons.close, size: 16),
-                onTap: onCancelReply,
-              )
+            const SizedBox(width: 8),
+            Expanded(child: buildReplyMessage()),
           ],
         ),
-        const SizedBox(height: 8),
-      ],
-    );
-  }
+      );
+
+  Widget buildReplyMessage() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.white,
+                  ),
+                ),
+              ),
+              if (onCancelReply != null)
+                GestureDetector(
+                  onTap: onCancelReply,
+                  child: const Icon(Icons.close, size: 16),
+                )
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '${replyMessage.content}',
+          ),
+        ],
+      );
 }

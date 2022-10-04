@@ -26,22 +26,24 @@ class SendMessageTextWidget extends StatefulWidget {
 }
 
 class _SendMessageTextWidgetState extends State<SendMessageTextWidget> {
+  static const inputTopRadius = Radius.circular(12);
+  static const inputBottomRadius = Radius.circular(24);
   @override
   Widget build(BuildContext context) {
     final isReplying = widget.replyMessage != null;
     return Container(
-      margin: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
+      margin: const EdgeInsets.only(bottom: 20, left: 7, right: 8),
       child: Row(
         children: [
           Expanded(
             child: Container(
               decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(80)),
+                  borderRadius: const BorderRadius.all(Radius.circular(30)),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(.2),
-                      offset: const Offset(0.0, 0.50),
+                      offset: const Offset(0.0, 0.60),
                       spreadRadius: 1,
                       blurRadius: 1,
                     )
@@ -73,9 +75,22 @@ class _SendMessageTextWidgetState extends State<SendMessageTextWidget> {
                               style: const TextStyle(fontSize: 14),
                               controller: widget.controller,
                               maxLines: null,
-                              decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Type a message"),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: isReplying
+                                        ? Radius.zero
+                                        : inputBottomRadius,
+                                    topRight: isReplying
+                                        ? Radius.zero
+                                        : inputBottomRadius,
+                                    bottomLeft: inputBottomRadius,
+                                    bottomRight: inputBottomRadius,
+                                  ),
+                                ),
+                                hintText: "Type a message",
+                              ),
                             ),
                           ),
                         ),
@@ -142,15 +157,17 @@ class _SendMessageTextWidgetState extends State<SendMessageTextWidget> {
 
   Widget buildReply() => Container(
         padding: const EdgeInsets.all(8),
-        decoration: const BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(35), topRight: Radius.circular(35)),
+        decoration: BoxDecoration(
+          color: Theme.of(context).bottomAppBarColor.withOpacity(0.040),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
         ),
         child: ReplyMessageWidget(
           replyMessage: widget.replyMessage!,
-          onCancelReply: widget.onCancelReply,
           name: widget.name,
+          onCancelReply: widget.onCancelReply,
         ),
       );
 }

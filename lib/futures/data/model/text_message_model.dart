@@ -60,7 +60,7 @@ class TextMessageModel extends TextMessageEntity {
       "time": time,
       "content": content,
       "receiverName": receiverName,
-      "replyingMessage": replyingMessage == null ? null : replyingMessage,
+      "replyingMessage": replyingMessage,
     };
   }
 }
