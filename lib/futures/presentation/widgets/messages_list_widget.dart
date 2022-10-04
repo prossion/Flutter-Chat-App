@@ -61,6 +61,7 @@ class MessagesListWidget extends StatelessWidget {
                       alignName: TextAlign.end,
                       groupId: groupId,
                       replyingMessage: message.replyingMessage,
+                      messageId: message.messageId,
                     ),
                   )
                 : ImageMessageLayout(
@@ -91,6 +92,7 @@ class MessagesListWidget extends StatelessWidget {
                       alignName: TextAlign.end,
                       groupId: groupId,
                       replyingMessage: message.replyingMessage,
+                      messageId: message.messageId,
                     ),
                   )
                 : ImageMessageLayout(

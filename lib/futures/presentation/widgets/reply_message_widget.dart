@@ -18,36 +18,36 @@ class ReplyMessageWidget extends StatelessWidget {
         child: Row(
           children: [
             const SizedBox(width: 8),
-            Expanded(child: buildReplyMessage()),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            // color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      if (onCancelReply != null)
+                        GestureDetector(
+                          onTap: onCancelReply,
+                          child: const Icon(Icons.close, size: 16),
+                        )
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${replyMessage.content}',
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-      );
-
-  Widget buildReplyMessage() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    // color: Colors.white,
-                  ),
-                ),
-              ),
-              if (onCancelReply != null)
-                GestureDetector(
-                  onTap: onCancelReply,
-                  child: const Icon(Icons.close, size: 16),
-                )
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '${replyMessage.content}',
-          ),
-        ],
       );
 }

@@ -22,7 +22,6 @@ class SingleChatPage extends StatefulWidget {
 }
 
 class _SingleChatPageState extends State<SingleChatPage> {
-  String messageContent = "";
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 

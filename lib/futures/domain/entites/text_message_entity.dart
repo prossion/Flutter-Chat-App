@@ -10,6 +10,7 @@ class TextMessageEntity extends Equatable {
   final String? content;
   final String? receiverName;
   final TextMessageEntity? replyingMessage;
+  final String? messageId;
 
   const TextMessageEntity({
     this.recipientId,
@@ -20,6 +21,7 @@ class TextMessageEntity extends Equatable {
     this.content,
     this.receiverName,
     this.replyingMessage,
+    this.messageId,
   });
 
   @override
@@ -32,5 +34,6 @@ class TextMessageEntity extends Equatable {
         content!,
         receiverName!,
         replyingMessage,
+        messageId!,
       ];
 }

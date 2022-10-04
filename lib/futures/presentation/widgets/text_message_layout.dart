@@ -4,22 +4,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/futures/domain/entites/text_message_entity.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/reply_message_widget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class TextMessageLayout extends StatelessWidget {
-  const TextMessageLayout(
-      {Key? key,
-      required this.text,
-      required this.time,
-      required this.color,
-      required this.align,
-      required this.boxAlign,
-      required this.nip,
-      required this.crossAlign,
-      required this.name,
-      required this.alignName,
-      required this.groupId,
-      required this.replyingMessage})
-      : super(key: key);
+  const TextMessageLayout({
+    Key? key,
+    required this.text,
+    required this.time,
+    required this.color,
+    required this.align,
+    required this.boxAlign,
+    required this.nip,
+    required this.crossAlign,
+    required this.name,
+    required this.alignName,
+    required this.groupId,
+    required this.replyingMessage,
+    required this.messageId,
+  }) : super(key: key);
   final String? text;
   final String time;
   final Color color;
@@ -31,129 +33,134 @@ class TextMessageLayout extends StatelessWidget {
   final TextAlign alignName;
   final String groupId;
   final TextMessageEntity? replyingMessage;
+  final String? messageId;
 
   @override
   Widget build(BuildContext context) {
     Offset? tapPos;
-    return replyingMessage == null
-        ? InkWell(
-            onTapDown: (TapDownDetails details) {
-              tapPos = details.globalPosition;
-            },
-            onLongPress: () {
-              _showMenu(context, tapPos!);
-            },
-            child: Column(
-              crossAxisAlignment: crossAlign,
-              children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.90,
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    margin: const EdgeInsets.all(3),
-                    child: Bubble(
-                      color: color,
-                      nip: nip,
-                      child: Column(
-                        crossAxisAlignment: crossAlign,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "$name",
-                            textAlign: alignName,
-                            style: const TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Text(
-                              text!,
-                              textAlign: align,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ),
-                          Text(
-                            time,
-                            textAlign: align,
-                            style: const TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
+    final replyMessage = replyingMessage?.replyingMessage != null;
+    // return replyingMessage?.replyingMessage == null
+    //     ?
+    return InkWell(
+      onTapDown: (TapDownDetails details) {
+        tapPos = details.globalPosition;
+      },
+      onLongPress: () {
+        _showMenu(context, tapPos!);
+      },
+      child: Column(
+        crossAxisAlignment: crossAlign,
+        children: [
+          if (replyMessage) buildReplyMessage(),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.90,
             ),
-          )
-        : Column(
-            children: [
-              buildReplyMessage(),
-              InkWell(
-                onTapDown: (TapDownDetails details) {
-                  tapPos = details.globalPosition;
-                },
-                onLongPress: () {
-                  _showMenu(context, tapPos!);
-                },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.all(3),
+              child: Bubble(
+                color: color,
+                nip: nip,
                 child: Column(
                   crossAxisAlignment: crossAlign,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.90,
+                    Text(
+                      "$name",
+                      textAlign: alignName,
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Text(
+                        text!,
+                        textAlign: align,
+                        style: const TextStyle(fontSize: 16),
                       ),
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        margin: const EdgeInsets.all(3),
-                        child: Bubble(
-                          color: color,
-                          nip: nip,
-                          child: Column(
-                            crossAxisAlignment: crossAlign,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "$name",
-                                textAlign: alignName,
-                                style: const TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Text(
-                                  text!,
-                                  textAlign: align,
-                                  style: const TextStyle(fontSize: 16),
-                                ),
-                              ),
-                              Text(
-                                time,
-                                textAlign: align,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                    ),
+                    Text(
+                      time,
+                      textAlign: align,
+                      style: const TextStyle(
+                        fontSize: 12,
                       ),
-                    )
+                    ),
                   ],
                 ),
-              )
-            ],
-          );
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+    // : Column(
+    //     children: [
+    //       buildReplyMessage(),
+    //       InkWell(
+    //         onTapDown: (TapDownDetails details) {
+    //           tapPos = details.globalPosition;
+    //         },
+    //         onLongPress: () {
+    //           _showMenu(context, tapPos!);
+    //         },
+    //         child: Column(
+    //           crossAxisAlignment: crossAlign,
+    //           children: [
+    //             ConstrainedBox(
+    //               constraints: BoxConstraints(
+    //                 maxWidth: MediaQuery.of(context).size.width * 0.90,
+    //               ),
+    //               child: Container(
+    //                 padding: const EdgeInsets.all(8),
+    //                 margin: const EdgeInsets.all(3),
+    //                 child: Bubble(
+    //                   color: color,
+    //                   nip: nip,
+    //                   child: Column(
+    //                     crossAxisAlignment: crossAlign,
+    //                     mainAxisSize: MainAxisSize.min,
+    //                     children: [
+    //                       Text(
+    //                         "$name",
+    //                         textAlign: alignName,
+    //                         style: const TextStyle(
+    //                             fontSize: 17, fontWeight: FontWeight.bold),
+    //                       ),
+    //                       Padding(
+    //                         padding: const EdgeInsets.all(2.0),
+    //                         child: Text(
+    //                           text!,
+    //                           textAlign: align,
+    //                           style: const TextStyle(fontSize: 16),
+    //                         ),
+    //                       ),
+    //                       Text(
+    //                         time,
+    //                         textAlign: align,
+    //                         style: const TextStyle(
+    //                           fontSize: 12,
+    //                         ),
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ),
+    //             )
+    //           ],
+    //         ),
+    //       )
+    //     ],
+    //   );
   }
 
   Widget buildReplyMessage() {
-    final replyMessage = replyingMessage;
+    final replyMessage = replyingMessage?.replyingMessage;
     final isReplying = replyMessage != null;
 
     if (!isReplying) {
+      print('no reply');
       return Container();
     } else {
       return ReplyMessageWidget(
@@ -178,8 +185,10 @@ class TextMessageLayout extends StatelessWidget {
         PopupMenuItem(
           child: const Text('Delete Message'),
           onTap: () {
-            BlocProvider.of<ChatBloc>(context)
-                .add(DeleteTextMessage(channelId: groupId));
+            BlocProvider.of<ChatBloc>(context).add(
+                DeleteTextMessage(channelId: groupId, messageId: messageId!));
+            Fluttertoast.showToast(
+                msg: "Message has been deleted", backgroundColor: Colors.grey);
           },
         ),
       ],

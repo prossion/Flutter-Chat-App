@@ -5,7 +5,7 @@ class DeleteTextMessageUseCase {
 
   DeleteTextMessageUseCase({required this.repository});
 
-  Future<void> call(String channelId) async {
-    return await repository.deleteTextMessage(channelId);
+  Future<void> call(String channelId, String messageId) async {
+    return await repository.deleteTextMessage(channelId, messageId);
   }
 }

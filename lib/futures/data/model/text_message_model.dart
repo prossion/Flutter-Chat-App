@@ -11,6 +11,7 @@ class TextMessageModel extends TextMessageEntity {
     String? content,
     String? receiverName,
     TextMessageEntity? replyingMessage,
+    String? messageId,
   }) : super(
           recipientId: recipientId,
           senderId: senderId,
@@ -20,6 +21,7 @@ class TextMessageModel extends TextMessageEntity {
           content: content,
           receiverName: receiverName,
           replyingMessage: replyingMessage,
+          messageId: messageId,
         );
 
   factory TextMessageModel.fromSnapshot(DocumentSnapshot snapshot) {
@@ -48,6 +50,9 @@ class TextMessageModel extends TextMessageEntity {
       replyingMessage: snapshot.data().toString().contains('replyingMessage')
           ? snapshot.get('replyingMessage')
           : null,
+      messageId: snapshot.data().toString().contains('messageId')
+          ? snapshot.get('messageId')
+          : '',
     );
   }
 
@@ -61,6 +66,7 @@ class TextMessageModel extends TextMessageEntity {
       "content": content,
       "receiverName": receiverName,
       "replyingMessage": replyingMessage,
+      "messageId": messageId,
     };
   }
 }
