@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +11,6 @@ import 'package:flutter_social_app/futures/presentation/widgets/messages_list_wi
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'package:intl/intl.dart';
 
 class SingleChatPage extends StatefulWidget {
   final SingleChatEntity singleChatEntity;
@@ -143,7 +140,6 @@ class _SingleChatPageState extends State<SingleChatPage> {
           if (state is ChatLoadedState) {
             return Column(
               children: [
-                // _messagesListWidget(state),
                 MessagesListWidget(
                   messages: state,
                   controller: _scrollController,
@@ -159,6 +155,9 @@ class _SingleChatPageState extends State<SingleChatPage> {
                   getImage: getImage,
                   messageFunc: messagesFunc,
                   controller: _messageController,
+                  replyMessage: replyMessage,
+                  name: widget.singleChatEntity.username,
+                  onCancelReply: cancelReply,
                 )
               ],
             );
@@ -172,9 +171,15 @@ class _SingleChatPageState extends State<SingleChatPage> {
     );
   }
 
-  void replyToMessage(TextMessageEntity message) {
+  void replyToMessage(TextMessageEntity content) {
     setState(() {
-      replyMessage = message;
+      replyMessage = content;
+    });
+  }
+
+  void cancelReply() {
+    setState(() {
+      replyMessage = null;
     });
   }
 }

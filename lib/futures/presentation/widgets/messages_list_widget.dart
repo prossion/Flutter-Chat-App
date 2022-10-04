@@ -5,6 +5,7 @@ import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_social_app/futures/domain/entites/text_message_entity.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/reply_message_widget.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -17,7 +18,8 @@ class MessagesListWidget extends StatelessWidget {
       required this.image,
       required this.userId,
       required this.groupId,
-      required this.onSwipedMessage})
+      required this.onSwipedMessage,
+      this.name})
       : super(key: key);
   final ChatLoadedState messages;
   final ScrollController controller;
@@ -25,6 +27,7 @@ class MessagesListWidget extends StatelessWidget {
   final String userId;
   final String groupId;
   final ValueChanged<TextMessageEntity> onSwipedMessage;
+  final String? name;
 
   @override
   Widget build(BuildContext context) {
@@ -44,22 +47,25 @@ class MessagesListWidget extends StatelessWidget {
 
           if (message.senderId == userId) {
             return message.type == "TEXT"
-                ? SwipeTo(
-                    onLeftSwipe: () => onSwipedMessage(message),
-                    child: TextMessageLayout(
-                      text: message.content,
-                      time:
-                          DateFormat('hh:mm a').format(message.time!.toDate()),
-                      color: Theme.of(context).cardColor,
-                      align: TextAlign.left,
-                      boxAlign: CrossAxisAlignment.start,
-                      nip: BubbleNip.rightTop,
-                      crossAlign: CrossAxisAlignment.end,
-                      name: "Me",
-                      alignName: TextAlign.end,
-                      groupId: groupId,
-                    ),
-                  )
+                ? message.replyingMessage == null
+                    ? SwipeTo(
+                        onLeftSwipe: () => onSwipedMessage(message),
+                        child: TextMessageLayout(
+                          text: message.content,
+                          time: DateFormat('hh:mm a')
+                              .format(message.time!.toDate()),
+                          color: Theme.of(context).cardColor,
+                          align: TextAlign.left,
+                          boxAlign: CrossAxisAlignment.start,
+                          nip: BubbleNip.rightTop,
+                          crossAlign: CrossAxisAlignment.end,
+                          name: "Me",
+                          alignName: TextAlign.end,
+                          groupId: groupId,
+                          replyingMessage: message.replyingMessage,
+                        ),
+                      )
+                    : Container()
                 : ImageMessageLayout(
                     imageUrl: message.content!,
                     align: TextAlign.left,
@@ -76,17 +82,19 @@ class MessagesListWidget extends StatelessWidget {
                 ? SwipeTo(
                     onLeftSwipe: () => onSwipedMessage(message),
                     child: TextMessageLayout(
-                        text: message.content,
-                        time: DateFormat('hh:mm a')
-                            .format(message.time!.toDate()),
-                        color: Theme.of(context).cardColor,
-                        align: TextAlign.left,
-                        boxAlign: CrossAxisAlignment.start,
-                        nip: BubbleNip.leftTop,
-                        crossAlign: CrossAxisAlignment.start,
-                        name: "${message.senderName}",
-                        alignName: TextAlign.end,
-                        groupId: groupId),
+                      text: message.content,
+                      time:
+                          DateFormat('hh:mm a').format(message.time!.toDate()),
+                      color: Theme.of(context).cardColor,
+                      align: TextAlign.left,
+                      boxAlign: CrossAxisAlignment.start,
+                      nip: BubbleNip.leftTop,
+                      crossAlign: CrossAxisAlignment.start,
+                      name: name ?? "${message.senderName}",
+                      alignName: TextAlign.end,
+                      groupId: groupId,
+                      replyingMessage: message.replyingMessage,
+                    ),
                   )
                 : ImageMessageLayout(
                     imageUrl: message.content!,
@@ -97,7 +105,7 @@ class MessagesListWidget extends StatelessWidget {
                     crossAlign: CrossAxisAlignment.start,
                     nip: BubbleNip.leftTop,
                     time: DateFormat('hh:mm a').format(message.time!.toDate()),
-                    name: "${message.senderName}",
+                    name: name ?? "${message.senderName}",
                     image: image,
                   );
           }

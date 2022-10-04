@@ -1,7 +1,9 @@
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/futures/domain/entites/text_message_entity.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/reply_message_widget.dart';
 
 class TextMessageLayout extends StatelessWidget {
   const TextMessageLayout(
@@ -15,7 +17,8 @@ class TextMessageLayout extends StatelessWidget {
       required this.crossAlign,
       required this.name,
       required this.alignName,
-      required this.groupId})
+      required this.groupId,
+      required this.replyingMessage})
       : super(key: key);
   final String? text;
   final String time;
@@ -27,63 +30,137 @@ class TextMessageLayout extends StatelessWidget {
   final String? name;
   final TextAlign alignName;
   final String groupId;
+  final TextMessageEntity? replyingMessage;
 
   @override
   Widget build(BuildContext context) {
     Offset? tapPos;
-    return InkWell(
-      onTapDown: (TapDownDetails details) {
-        tapPos = details.globalPosition;
-      },
-      onLongPress: () {
-        _showMenu(context, tapPos!);
-      },
-      child: Column(
-        crossAxisAlignment: crossAlign,
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.90,
-            ),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.all(3),
-              child: Bubble(
-                color: color,
-                nip: nip,
-                child: Column(
-                  crossAxisAlignment: crossAlign,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "$name",
-                      textAlign: alignName,
-                      style: const TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.bold),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(
-                        text!,
-                        textAlign: align,
-                        style: const TextStyle(fontSize: 16),
+    return replyingMessage == null
+        ? InkWell(
+            onTapDown: (TapDownDetails details) {
+              tapPos = details.globalPosition;
+            },
+            onLongPress: () {
+              _showMenu(context, tapPos!);
+            },
+            child: Column(
+              crossAxisAlignment: crossAlign,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.90,
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.all(3),
+                    child: Bubble(
+                      color: color,
+                      nip: nip,
+                      child: Column(
+                        crossAxisAlignment: crossAlign,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "$name",
+                            textAlign: alignName,
+                            style: const TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text(
+                              text!,
+                              textAlign: align,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          Text(
+                            time,
+                            textAlign: align,
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Text(
-                      time,
-                      textAlign: align,
-                      style: const TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                )
+              ],
             ),
           )
-        ],
-      ),
-    );
+        : Column(
+            children: [
+              buildReplyMessage(),
+              InkWell(
+                onTapDown: (TapDownDetails details) {
+                  tapPos = details.globalPosition;
+                },
+                onLongPress: () {
+                  _showMenu(context, tapPos!);
+                },
+                child: Column(
+                  crossAxisAlignment: crossAlign,
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.90,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(3),
+                        child: Bubble(
+                          color: color,
+                          nip: nip,
+                          child: Column(
+                            crossAxisAlignment: crossAlign,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "$name",
+                                textAlign: alignName,
+                                style: const TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Text(
+                                  text!,
+                                  textAlign: align,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ),
+                              Text(
+                                time,
+                                textAlign: align,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          );
+  }
+
+  Widget buildReplyMessage() {
+    final replyMessage = replyingMessage;
+    final isReplying = replyMessage != null;
+
+    if (!isReplying) {
+      return Container();
+    } else {
+      return ReplyMessageWidget(
+        replyMessage: replyMessage,
+        name: name!,
+      );
+    }
   }
 
   _showMenu(BuildContext context, Offset tapPos) {
