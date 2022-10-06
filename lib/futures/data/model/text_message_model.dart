@@ -10,7 +10,7 @@ class TextMessageModel extends TextMessageEntity {
     Timestamp? time,
     String? content,
     String? receiverName,
-    TextMessageEntity? replyingMessage,
+    String? replyingMessage,
     String? messageId,
   }) : super(
           recipientId: recipientId,

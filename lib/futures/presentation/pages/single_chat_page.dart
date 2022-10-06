@@ -30,7 +30,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
   late String _photoUrl;
 
   final focusNode = FocusNode();
-  TextMessageEntity? replyMessage;
+  String? replyMessage;
 
   @override
   void initState() {
@@ -68,15 +68,17 @@ class _SingleChatPageState extends State<SingleChatPage> {
             setState(() {
               _photoUrl = value;
               BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
-                  textMessageEntity: TextMessageEntity(
-                      time: Timestamp.now(),
-                      senderId: widget.singleChatEntity.uid,
-                      content: _photoUrl,
-                      senderName: widget.singleChatEntity.username,
-                      receiverName: '',
-                      recipientId: '',
-                      type: "IMAGE"),
-                  channelId: widget.singleChatEntity.groupId));
+                textMessageEntity: TextMessageEntity(
+                    time: Timestamp.now(),
+                    senderId: widget.singleChatEntity.uid,
+                    content: _photoUrl,
+                    senderName: widget.singleChatEntity.username,
+                    receiverName: '',
+                    recipientId: '',
+                    type: "IMAGE",
+                    replyingMessage: replyMessage),
+                channelId: widget.singleChatEntity.groupId,
+              ));
             });
           });
         } else {
@@ -90,20 +92,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
     }
   }
 
-// Send and update the group chat in a separate function
-// that we have the option to provide in the sendTextMessage widget
-// * It may need to be fixed for better appearance and performance
-  messagesFunc() {
-    BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
-        textMessageEntity: TextMessageEntity(
-            time: Timestamp.now(),
-            senderId: widget.singleChatEntity.uid,
-            content: _messageController.text,
-            senderName: widget.singleChatEntity.username,
-            receiverName: '',
-            recipientId: '',
-            type: "TEXT"),
-        channelId: widget.singleChatEntity.groupId));
+  void updateFunc() {
     BlocProvider.of<GroupBloc>(context).add(UpdateGroupEvent(
         groupEntity: GroupEntity(
       groupId: widget.singleChatEntity.groupId,
@@ -152,11 +141,16 @@ class _SingleChatPageState extends State<SingleChatPage> {
                 ),
                 SendMessageTextWidget(
                   getImage: getImage,
-                  messageFunc: messagesFunc,
+                  messageFunc: updateFunc,
                   controller: _messageController,
                   replyMessage: replyMessage,
                   name: widget.singleChatEntity.username,
                   onCancelReply: cancelReply,
+                  channelId: widget.singleChatEntity.groupId,
+                  content: _messageController.text,
+                  senderId: widget.singleChatEntity.uid,
+                  receiverId: '',
+                  receiverName: '',
                 )
               ],
             );
@@ -170,7 +164,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
     );
   }
 
-  void replyToMessage(TextMessageEntity content) {
+  void replyToMessage(String content) {
     setState(() {
       replyMessage = content;
     });

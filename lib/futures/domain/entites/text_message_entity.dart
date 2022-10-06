@@ -9,7 +9,7 @@ class TextMessageEntity extends Equatable {
   final Timestamp? time;
   final String? content;
   final String? receiverName;
-  final TextMessageEntity? replyingMessage;
+  final String? replyingMessage;
   final String? messageId;
 
   const TextMessageEntity({

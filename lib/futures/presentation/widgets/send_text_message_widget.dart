@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/domain/entites/text_message_entity.dart';
+import 'package:flutter_social_app/futures/presentation/bloc/chat/chat_bloc.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/reply_message_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import '../bloc/chat/chat_event.dart';
 
 class SendMessageTextWidget extends StatefulWidget {
   const SendMessageTextWidget(
@@ -12,22 +17,32 @@ class SendMessageTextWidget extends StatefulWidget {
       required this.controller,
       required this.replyMessage,
       required this.name,
-      required this.onCancelReply})
+      required this.onCancelReply,
+      required this.content,
+      required this.senderId,
+      required this.channelId,
+      required this.receiverName,
+      required this.receiverId})
       : super(key: key);
   final Function getImage;
   final Function messageFunc;
   final TextEditingController controller;
-  final TextMessageEntity? replyMessage;
+  final String? replyMessage;
   final String name;
   final VoidCallback onCancelReply;
+  final String content;
+  final String senderId;
+  final String channelId;
+  final String receiverName;
+  final String receiverId;
 
   @override
   State<SendMessageTextWidget> createState() => _SendMessageTextWidgetState();
 }
 
 class _SendMessageTextWidgetState extends State<SendMessageTextWidget> {
-  static const inputTopRadius = Radius.circular(12);
   static const inputBottomRadius = Radius.circular(24);
+
   @override
   Widget build(BuildContext context) {
     final isReplying = widget.replyMessage != null;
@@ -39,7 +54,7 @@ class _SendMessageTextWidgetState extends State<SendMessageTextWidget> {
             child: Container(
               decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(30)),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(.2),
@@ -132,6 +147,20 @@ class _SendMessageTextWidgetState extends State<SendMessageTextWidget> {
               } else {
                 FocusScope.of(context).unfocus();
                 widget.onCancelReply();
+
+                BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
+                  textMessageEntity: TextMessageEntity(
+                    time: Timestamp.now(),
+                    senderId: widget.senderId,
+                    content: widget.content,
+                    senderName: widget.name,
+                    receiverName: widget.receiverName,
+                    recipientId: widget.receiverId,
+                    type: "TEXT",
+                    replyingMessage: widget.replyMessage,
+                  ),
+                  channelId: widget.channelId,
+                ));
                 widget.messageFunc();
                 setState(() {
                   widget.controller.clear();
@@ -158,16 +187,19 @@ class _SendMessageTextWidgetState extends State<SendMessageTextWidget> {
   Widget buildReply() => Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Theme.of(context).bottomAppBarColor.withOpacity(0.040),
+          color: Theme.of(context).bottomAppBarColor.withOpacity(0.10),
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
           ),
         ),
         child: ReplyMessageWidget(
           replyMessage: widget.replyMessage!,
           name: widget.name,
           onCancelReply: widget.onCancelReply,
+          textAlign: TextAlign.start,
+          align: TextAlign.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
         ),
       );
 }

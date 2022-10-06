@@ -31,7 +31,7 @@ class _MyChatPageState extends State<MyChatPage> {
 
   final focusNode = FocusNode();
 
-  TextMessageEntity? replyMessage;
+  String? replyMessage;
 
   @override
   void initState() {
@@ -69,15 +69,18 @@ class _MyChatPageState extends State<MyChatPage> {
             setState(() {
               _photoUrl = value;
               BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
-                  textMessageEntity: TextMessageEntity(
-                      time: Timestamp.now(),
-                      senderId: widget.arguments.uid,
-                      content: _photoUrl,
-                      senderName: widget.arguments.peerNickname,
-                      receiverName: '',
-                      recipientId: '',
-                      type: "IMAGE"),
-                  channelId: widget.arguments.groupChatId));
+                textMessageEntity: TextMessageEntity(
+                  time: Timestamp.now(),
+                  senderId: widget.arguments.uid,
+                  content: _photoUrl,
+                  senderName: widget.arguments.peerNickname,
+                  receiverName: '',
+                  recipientId: '',
+                  type: "IMAGE",
+                  // replyingMessage: replyMessage!,
+                ),
+                channelId: widget.arguments.groupChatId,
+              ));
             });
           });
         } else {
@@ -91,20 +94,7 @@ class _MyChatPageState extends State<MyChatPage> {
     }
   }
 
-  // Send and update the group chat in a separate function
-  // that we have the option to provide in the sendTextMessage widget
-  // * It may need to be fixed for better appearance and performance
-  void messageFunc() {
-    BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
-        textMessageEntity: TextMessageEntity(
-            time: Timestamp.now(),
-            senderId: widget.arguments.uid,
-            content: _messageController.text,
-            senderName: widget.arguments.uid,
-            recipientId: widget.arguments.peerId,
-            receiverName: widget.arguments.peerNickname,
-            type: "TEXT"),
-        channelId: widget.arguments.groupChatId));
+  void updateFunc() {
     BlocProvider.of<MyGroupBloc>(context).add(
       UpdateDataFirestoreEvent(
         collectionPath: "groupChatChannel",
@@ -155,11 +145,16 @@ class _MyChatPageState extends State<MyChatPage> {
                 ),
                 SendMessageTextWidget(
                   getImage: getImage,
-                  messageFunc: messageFunc,
+                  messageFunc: updateFunc,
                   controller: _messageController,
                   replyMessage: replyMessage,
                   name: widget.arguments.peerNickname,
                   onCancelReply: cancelReply,
+                  channelId: widget.arguments.groupChatId,
+                  content: _messageController.text,
+                  senderId: widget.arguments.uid,
+                  receiverId: widget.arguments.peerId,
+                  receiverName: widget.arguments.peerNickname,
                 )
               ],
             );
@@ -173,7 +168,7 @@ class _MyChatPageState extends State<MyChatPage> {
     );
   }
 
-  void replyToMessage(TextMessageEntity content) {
+  void replyToMessage(String content) {
     setState(() {
       replyMessage = content;
     });

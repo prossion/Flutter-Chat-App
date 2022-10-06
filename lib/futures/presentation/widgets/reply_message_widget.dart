@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_social_app/futures/domain/entites/text_message_entity.dart';
 
 class ReplyMessageWidget extends StatelessWidget {
-  final TextMessageEntity replyMessage;
+  final String replyMessage;
   final VoidCallback? onCancelReply;
   final String name;
+  final TextAlign textAlign;
+  final TextAlign align;
+  final CrossAxisAlignment crossAxisAlignment;
 
-  const ReplyMessageWidget({
-    Key? key,
-    required this.replyMessage,
-    this.onCancelReply,
-    required this.name,
-  }) : super(key: key);
+  const ReplyMessageWidget(
+      {Key? key,
+      required this.replyMessage,
+      this.onCancelReply,
+      required this.name,
+      required this.textAlign,
+      required this.align,
+      required this.crossAxisAlignment})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) => IntrinsicHeight(
         child: Row(
           children: [
+            Container(
+              width: 4,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
             const SizedBox(width: 8),
             Expanded(
               child: Column(
@@ -27,6 +39,7 @@ class ReplyMessageWidget extends StatelessWidget {
                       Expanded(
                         child: Text(
                           name,
+                          // textAlign: textAlign,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             // color: Colors.white,
@@ -42,7 +55,8 @@ class ReplyMessageWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${replyMessage.content}',
+                    replyMessage,
+                    textAlign: align,
                   ),
                 ],
               ),

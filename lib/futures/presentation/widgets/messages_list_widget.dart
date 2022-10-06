@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_social_app/futures/domain/entites/text_message_entity.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:intl/intl.dart';
@@ -25,7 +24,7 @@ class MessagesListWidget extends StatelessWidget {
   final File? image;
   final String userId;
   final String groupId;
-  final ValueChanged<TextMessageEntity> onSwipedMessage;
+  final ValueChanged<String> onSwipedMessage;
   final String? name;
 
   @override
@@ -47,7 +46,7 @@ class MessagesListWidget extends StatelessWidget {
           if (message.senderId == userId) {
             return message.type == "TEXT"
                 ? SwipeTo(
-                    onLeftSwipe: () => onSwipedMessage(message),
+                    onLeftSwipe: () => onSwipedMessage(message.content!),
                     child: TextMessageLayout(
                       text: message.content,
                       time:
@@ -78,7 +77,7 @@ class MessagesListWidget extends StatelessWidget {
           } else {
             return message.type == "TEXT"
                 ? SwipeTo(
-                    onLeftSwipe: () => onSwipedMessage(message),
+                    onLeftSwipe: () => onSwipedMessage(message.content!),
                     child: TextMessageLayout(
                       text: message.content,
                       time:
