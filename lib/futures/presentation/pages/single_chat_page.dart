@@ -1,19 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/futures/data/datasources/remote/storage_provider.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/image_message_layout.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/messages_list_widget.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'package:intl/intl.dart';
 
 class SingleChatPage extends StatefulWidget {
   final SingleChatEntity singleChatEntity;
@@ -25,14 +22,15 @@ class SingleChatPage extends StatefulWidget {
 }
 
 class _SingleChatPageState extends State<SingleChatPage> {
-  String messageContent = "";
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
   File? _image;
   final picker = ImagePicker();
-  bool _imageIsPicked = false;
   late String _photoUrl;
+
+  final focusNode = FocusNode();
+  String? replyMessage;
 
   @override
   void initState() {
@@ -53,7 +51,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
   }
 
   // * Future function whose uploads pictures from system gallery
-  // TODO: This function using in the few widgets, so its need to fix
+  // TODO: This function using in the both widgets, so its need to fix
   Future getImage() async {
     try {
       final pickedFile =
@@ -67,20 +65,20 @@ class _SingleChatPageState extends State<SingleChatPage> {
           _image = File(pickedFile.path);
           StorageProviderRemoteDataSource.uploadFile(file: _image!)
               .then((value) {
-            print("photoUrl");
-            _imageIsPicked = true;
             setState(() {
               _photoUrl = value;
               BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
-                  textMessageEntity: TextMessageEntity(
-                      time: Timestamp.now(),
-                      senderId: widget.singleChatEntity.uid,
-                      content: _photoUrl,
-                      senderName: widget.singleChatEntity.username,
-                      receiverName: '',
-                      recipientId: '',
-                      type: "IMAGE"),
-                  channelId: widget.singleChatEntity.groupId));
+                textMessageEntity: TextMessageEntity(
+                    time: Timestamp.now(),
+                    senderId: widget.singleChatEntity.uid,
+                    content: _photoUrl,
+                    senderName: widget.singleChatEntity.username,
+                    receiverName: '',
+                    recipientId: '',
+                    type: "IMAGE",
+                    replyingMessage: replyMessage),
+                channelId: widget.singleChatEntity.groupId,
+              ));
             });
           });
         } else {
@@ -94,20 +92,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
     }
   }
 
-// Send and update the group chat in a separate function
-// that we have the option to provide in the sendTextMessage widget
-// * It may need to be fixed for better appearance and performance
-  messagesFunc() {
-    BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
-        textMessageEntity: TextMessageEntity(
-            time: Timestamp.now(),
-            senderId: widget.singleChatEntity.uid,
-            content: _messageController.text,
-            senderName: widget.singleChatEntity.username,
-            receiverName: '',
-            recipientId: '',
-            type: "TEXT"),
-        channelId: widget.singleChatEntity.groupId));
+  void updateFunc() {
     BlocProvider.of<GroupBloc>(context).add(UpdateGroupEvent(
         groupEntity: GroupEntity(
       groupId: widget.singleChatEntity.groupId,
@@ -143,11 +128,30 @@ class _SingleChatPageState extends State<SingleChatPage> {
           if (state is ChatLoadedState) {
             return Column(
               children: [
-                _messagesListWidget(state),
+                MessagesListWidget(
+                  messages: state,
+                  controller: _scrollController,
+                  image: _image,
+                  userId: widget.singleChatEntity.uid,
+                  groupId: widget.singleChatEntity.groupId,
+                  onSwipedMessage: (message) {
+                    replyToMessage(message);
+                    focusNode.requestFocus();
+                  },
+                ),
                 SendMessageTextWidget(
                   getImage: getImage,
-                  messageFunc: messagesFunc,
+                  messageFunc: updateFunc,
                   controller: _messageController,
+                  replyMessage: replyMessage,
+                  name: widget.singleChatEntity.username,
+                  onCancelReply: cancelReply,
+                  channelId: widget.singleChatEntity.groupId,
+                  content: _messageController.text,
+                  senderId: widget.singleChatEntity.uid,
+                  receiverId: '',
+                  receiverName: '',
+                  replyName: widget.singleChatEntity.username,
                 )
               ],
             );
@@ -161,76 +165,15 @@ class _SingleChatPageState extends State<SingleChatPage> {
     );
   }
 
-  Widget _messagesListWidget(ChatLoadedState messages) {
-    Timer(const Duration(milliseconds: 100), () {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInQuad,
-      );
+  void replyToMessage(String content) {
+    setState(() {
+      replyMessage = content;
     });
-    return Expanded(
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount: messages.messages.length,
-        itemBuilder: (_, index) {
-          final message = messages.messages[index];
+  }
 
-          if (message.senderId == widget.singleChatEntity.uid) {
-            return message.type == "TEXT"
-                ? TextMessageLayout(
-                    text: message.content,
-                    time: DateFormat('hh:mm a').format(message.time!.toDate()),
-                    color: Theme.of(context).cardColor,
-                    align: TextAlign.left,
-                    boxAlign: CrossAxisAlignment.start,
-                    nip: BubbleNip.rightTop,
-                    crossAlign: CrossAxisAlignment.end,
-                    name: "Me",
-                    alignName: TextAlign.end,
-                    groupId: widget.singleChatEntity.groupId,
-                  )
-                : ImageMessageLayout(
-                    imageUrl: message.content!,
-                    align: TextAlign.left,
-                    alignName: TextAlign.end,
-                    boxAlign: CrossAxisAlignment.start,
-                    color: Theme.of(context).cardColor,
-                    crossAlign: CrossAxisAlignment.end,
-                    nip: BubbleNip.rightTop,
-                    time: DateFormat('hh:mm a').format(message.time!.toDate()),
-                    name: "Me",
-                    image: _image,
-                  );
-          } else {
-            return message.type == "TEXT"
-                ? TextMessageLayout(
-                    text: message.content,
-                    time: DateFormat('hh:mm a').format(message.time!.toDate()),
-                    color: Theme.of(context).cardColor,
-                    align: TextAlign.left,
-                    boxAlign: CrossAxisAlignment.start,
-                    nip: BubbleNip.leftTop,
-                    crossAlign: CrossAxisAlignment.start,
-                    name: "${message.senderName}",
-                    alignName: TextAlign.end,
-                    groupId: widget.singleChatEntity.groupId,
-                  )
-                : ImageMessageLayout(
-                    imageUrl: message.content!,
-                    align: TextAlign.left,
-                    alignName: TextAlign.end,
-                    boxAlign: CrossAxisAlignment.start,
-                    color: Theme.of(context).cardColor,
-                    crossAlign: CrossAxisAlignment.start,
-                    nip: BubbleNip.leftTop,
-                    time: DateFormat('hh:mm a').format(message.time!.toDate()),
-                    name: "${message.senderName}",
-                    image: _image,
-                  );
-          }
-        },
-      ),
-    );
+  void cancelReply() {
+    setState(() {
+      replyMessage = null;
+    });
   }
 }

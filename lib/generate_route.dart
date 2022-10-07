@@ -6,7 +6,6 @@ import 'package:flutter_social_app/futures/presentation/pages/login_page.dart';
 import 'package:flutter_social_app/futures/presentation/pages/my_chat_page.dart';
 import 'package:flutter_social_app/futures/presentation/pages/registration_page.dart';
 import 'package:flutter_social_app/futures/presentation/pages/single_chat_page.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/full_photo_widget.dart';
 import 'package:flutter_social_app/page_const.dart';
 
 class OnGenerateRoute {

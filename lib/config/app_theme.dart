@@ -27,6 +27,7 @@ class AppThemes {
     cardColor: Colors.grey,
     backgroundColor: Colors.white,
     bottomAppBarColor: Colors.white,
+    // dividerColor: Colors.white,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.blueGrey,
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 23),

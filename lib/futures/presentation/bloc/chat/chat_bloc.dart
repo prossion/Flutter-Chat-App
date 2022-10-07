@@ -37,7 +37,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
     on<DeleteTextMessage>(((event, emit) async {
       try {
-        await deleteTextMessageUseCase.call(event.channelId);
+        await deleteTextMessageUseCase.call(event.channelId, event.messageId);
       } on SocketException catch (_) {
         emit(ChatErrorState());
       } catch (_) {

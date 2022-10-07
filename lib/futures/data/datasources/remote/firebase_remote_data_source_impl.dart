@@ -226,19 +226,22 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
       senderName: textMessageEntity.senderName,
       time: textMessageEntity.time,
       type: textMessageEntity.type,
+      replyingMessage: textMessageEntity.replyingMessage,
+      messageId: messageId,
     ).toDocument();
 
     messagesRef.doc(messageId).set(newMessage);
+    print('messageId: $messageId');
   }
 
   @override
-  Future<void> deleteTextMessage(String channelId) async {
+  Future<void> deleteTextMessage(String channelId, String messageId) async {
     final messagesRef = firestore
         .collection("groupChatChannel")
         .doc(channelId)
         .collection("messages");
 
-    final messageId = messagesRef.doc().id;
+    // final messageId = messagesRef.doc(messageId);
     print('id: $messageId');
     messagesRef.doc(messageId).delete().then((doc) => print('Message delete'),
         onError: (e) => print("Error updating document $e"));

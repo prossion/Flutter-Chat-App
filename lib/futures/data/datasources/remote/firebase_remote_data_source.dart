@@ -36,7 +36,7 @@ abstract class FirebaseRemoteDataSource {
   Future<void> sendTextMessage(
       TextMessageEntity textMessageEntity, String channelId);
 
-  Future<void> deleteTextMessage(String channelId);
+  Future<void> deleteTextMessage(String channelId, String messageId);
 
   Stream<List<TextMessageEntity>> getMessages(String channelId);
 

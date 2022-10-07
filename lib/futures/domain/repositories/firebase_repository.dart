@@ -21,7 +21,7 @@ abstract class FirebaseRepository {
   Future<void> sendTextMessage(
       TextMessageEntity textMessageEntity, String channelId);
   Stream<List<TextMessageEntity>> getMessages(String channelId);
-  Future<void> deleteTextMessage(String channelId);
+  Future<void> deleteTextMessage(String channelId, String messageId);
   Future<void> updateDataFirestore(String collectionPath, String docPath,
       Map<String, dynamic> dataNeedUpdate);
   Future<void> joinChatMessage(String groupChatId);

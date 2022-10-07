@@ -39,13 +39,6 @@ class _BuildSearchFieldState extends State<BuildSearchField> {
                 color: whiteTextStyle,
               ),
             )),
-
-        // enabledBorder: const UnderlineInputBorder(
-        //     //Default TextField border
-        //     borderSide: BorderSide(color: Colors.white)),
-        // focusedBorder: const UnderlineInputBorder(
-        //     //Borders when a TextField is in focus
-        //     borderSide: BorderSide(color: Colors.white)),
       ),
       textInputAction: TextInputAction.search,
       style: const TextStyle(fontSize: 20.0, color: whiteTextStyle),

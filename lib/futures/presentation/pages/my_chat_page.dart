@@ -1,18 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/futures/data/datasources/remote/storage_provider.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/image_message_layout.dart';
+import 'package:flutter_social_app/futures/presentation/widgets/messages_list_widget.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 
 class MyChatPage extends StatefulWidget {
   final MyChatPageArguments arguments;
@@ -25,12 +23,16 @@ class MyChatPage extends StatefulWidget {
 class _MyChatPageState extends State<MyChatPage> {
   String messageContent = "";
   final TextEditingController _messageController = TextEditingController();
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   File? _image;
   final picker = ImagePicker();
-  bool _imageIsPicked = false;
   late String _photoUrl;
+
+  final focusNode = FocusNode();
+
+  String? replyMessage;
+
   @override
   void initState() {
     _messageController.addListener(() {
@@ -64,20 +66,21 @@ class _MyChatPageState extends State<MyChatPage> {
           _image = File(pickedFile.path);
           StorageProviderRemoteDataSource.uploadFile(file: _image!)
               .then((value) {
-            print("photoUrl");
-            _imageIsPicked = true;
             setState(() {
               _photoUrl = value;
               BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
-                  textMessageEntity: TextMessageEntity(
-                      time: Timestamp.now(),
-                      senderId: widget.arguments.uid,
-                      content: _photoUrl,
-                      senderName: widget.arguments.peerNickname,
-                      receiverName: '',
-                      recipientId: '',
-                      type: "IMAGE"),
-                  channelId: widget.arguments.groupChatId));
+                textMessageEntity: TextMessageEntity(
+                  time: Timestamp.now(),
+                  senderId: widget.arguments.uid,
+                  content: _photoUrl,
+                  senderName: widget.arguments.peerNickname,
+                  receiverName: '',
+                  recipientId: '',
+                  type: "IMAGE",
+                  // replyingMessage: replyMessage!,
+                ),
+                channelId: widget.arguments.groupChatId,
+              ));
             });
           });
         } else {
@@ -91,20 +94,7 @@ class _MyChatPageState extends State<MyChatPage> {
     }
   }
 
-  // Send and update the group chat in a separate function
-  // that we have the option to provide in the sendTextMessage widget
-  // * It may need to be fixed for better appearance and performance
-  void messageFunc() {
-    BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
-        textMessageEntity: TextMessageEntity(
-            time: Timestamp.now(),
-            senderId: widget.arguments.uid,
-            content: _messageController.text,
-            senderName: widget.arguments.uid,
-            recipientId: widget.arguments.peerId,
-            receiverName: widget.arguments.peerNickname,
-            type: "TEXT"),
-        channelId: widget.arguments.groupChatId));
+  void updateFunc() {
     BlocProvider.of<MyGroupBloc>(context).add(
       UpdateDataFirestoreEvent(
         collectionPath: "groupChatChannel",
@@ -141,108 +131,56 @@ class _MyChatPageState extends State<MyChatPage> {
           if (state is ChatLoadedState) {
             return Column(
               children: [
-                _messagesListWidget(state),
+                MessagesListWidget(
+                  messages: state,
+                  controller: _scrollController,
+                  image: _image,
+                  userId: widget.arguments.uid,
+                  groupId: widget.arguments.groupChatId,
+                  name: widget.arguments.peerNickname,
+                  onSwipedMessage: (message) {
+                    replyToMessage(message);
+                    focusNode.requestFocus();
+                  },
+                ),
                 SendMessageTextWidget(
-                    getImage: getImage,
-                    messageFunc: messageFunc,
-                    controller: _messageController)
+                  getImage: getImage,
+                  messageFunc: updateFunc,
+                  controller: _messageController,
+                  replyMessage: replyMessage,
+                  name: widget.arguments.peerNickname,
+                  onCancelReply: cancelReply,
+                  channelId: widget.arguments.groupChatId,
+                  content: _messageController.text,
+                  senderId: widget.arguments.uid,
+                  receiverId: widget.arguments.peerId,
+                  receiverName: widget.arguments.peerNickname,
+                  replyName: widget.arguments.peerId == widget.arguments.uid
+                      ? "Me"
+                      : widget.arguments.peerNickname,
+                )
               ],
             );
           }
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ));
         },
       ),
     );
   }
 
-  Widget _messagesListWidget(ChatLoadedState messages) {
-    _scrollController = ScrollController(initialScrollOffset: 50.0);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        Timer(const Duration(milliseconds: 100), () {
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInQuad,
-          );
-        });
-      }
+  void replyToMessage(String content) {
+    setState(() {
+      replyMessage = content;
     });
+  }
 
-    return Expanded(
-      child: widget.arguments.groupChatId.isNotEmpty
-          ? ListView.builder(
-              controller: _scrollController,
-              itemCount: messages.messages.length,
-              itemBuilder: (context, index) {
-                final message = messages.messages[index];
-
-                if (message.content!.isNotEmpty) {
-                  if (message.senderId == widget.arguments.uid) {
-                    return message.type == "TEXT"
-                        ? TextMessageLayout(
-                            text: message.content,
-                            time: DateFormat('hh:mm a')
-                                .format(message.time!.toDate()),
-                            color: Theme.of(context).cardColor,
-                            align: TextAlign.left,
-                            boxAlign: CrossAxisAlignment.start,
-                            nip: BubbleNip.rightTop,
-                            crossAlign: CrossAxisAlignment.end,
-                            alignName: TextAlign.end,
-                            groupId: widget.arguments.groupChatId,
-                            name: 'Me',
-                          )
-                        : ImageMessageLayout(
-                            imageUrl: message.content!,
-                            align: TextAlign.left,
-                            alignName: TextAlign.end,
-                            boxAlign: CrossAxisAlignment.start,
-                            color: Theme.of(context).cardColor,
-                            crossAlign: CrossAxisAlignment.end,
-                            nip: BubbleNip.rightTop,
-                            time: DateFormat('hh:mm a')
-                                .format(message.time!.toDate()),
-                            name: "Me",
-                            image: _image,
-                          );
-                  } else {
-                    return message.type == "TEXT"
-                        ? TextMessageLayout(
-                            text: message.content,
-                            time: DateFormat('hh:mm a')
-                                .format(message.time!.toDate()),
-                            color: Theme.of(context).cardColor,
-                            align: TextAlign.left,
-                            boxAlign: CrossAxisAlignment.start,
-                            nip: BubbleNip.leftTop,
-                            crossAlign: CrossAxisAlignment.start,
-                            alignName: TextAlign.end,
-                            groupId: widget.arguments.groupChatId,
-                            name: widget.arguments.peerNickname,
-                          )
-                        : ImageMessageLayout(
-                            imageUrl: message.content!,
-                            align: TextAlign.left,
-                            alignName: TextAlign.end,
-                            boxAlign: CrossAxisAlignment.start,
-                            color: Theme.of(context).cardColor,
-                            crossAlign: CrossAxisAlignment.start,
-                            nip: BubbleNip.leftTop,
-                            time: DateFormat('hh:mm a')
-                                .format(message.time!.toDate()),
-                            name: "${message.senderName}",
-                            image: _image,
-                          );
-                  }
-                } else {
-                  return const Center(child: Text("No message here yet..."));
-                }
-              },
-            )
-          : const ErrorDisplay(
-              title: 'Error', text: 'Error loading chat. Try again'),
-    );
+  void cancelReply() {
+    setState(() {
+      replyMessage = null;
+    });
   }
 }
 

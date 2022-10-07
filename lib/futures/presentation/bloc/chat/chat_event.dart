@@ -25,8 +25,9 @@ class SendTextMessageEvent extends ChatEvent {
 
 class DeleteTextMessage extends ChatEvent {
   final String channelId;
+  final String messageId;
 
-  const DeleteTextMessage({required this.channelId});
+  const DeleteTextMessage({required this.channelId, required this.messageId});
   @override
-  List<Object?> get props => [channelId];
+  List<Object?> get props => [channelId, messageId];
 }
