@@ -151,6 +151,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
                   senderId: widget.singleChatEntity.uid,
                   receiverId: '',
                   receiverName: '',
+                  replyName: widget.singleChatEntity.username,
                 )
               ],
             );

@@ -22,7 +22,8 @@ class SendMessageTextWidget extends StatefulWidget {
       required this.senderId,
       required this.channelId,
       required this.receiverName,
-      required this.receiverId})
+      required this.receiverId,
+      required this.replyName})
       : super(key: key);
   final Function getImage;
   final Function messageFunc;
@@ -35,7 +36,7 @@ class SendMessageTextWidget extends StatefulWidget {
   final String channelId;
   final String receiverName;
   final String receiverId;
-
+  final String replyName;
   @override
   State<SendMessageTextWidget> createState() => _SendMessageTextWidgetState();
 }
@@ -195,7 +196,7 @@ class _SendMessageTextWidgetState extends State<SendMessageTextWidget> {
         ),
         child: ReplyMessageWidget(
           replyMessage: widget.replyMessage!,
-          name: widget.name,
+          name: widget.replyName,
           onCancelReply: widget.onCancelReply,
           textAlign: TextAlign.start,
           align: TextAlign.center,

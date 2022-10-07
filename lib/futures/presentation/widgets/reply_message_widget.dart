@@ -25,7 +25,7 @@ class ReplyMessageWidget extends StatelessWidget {
             Container(
               width: 4,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).bottomAppBarColor,
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -36,11 +36,10 @@ class ReplyMessageWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: Text(
-                          name,
-                          // textAlign: textAlign,
-                          style: const TextStyle(
+                          'User',
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
                             // color: Colors.white,
                           ),
@@ -55,7 +54,9 @@ class ReplyMessageWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    replyMessage,
+                    replyMessage.length > 20
+                        ? '${replyMessage.substring(0, 20)}...'
+                        : replyMessage,
                     textAlign: align,
                   ),
                 ],

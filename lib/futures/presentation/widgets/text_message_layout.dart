@@ -37,8 +37,7 @@ class TextMessageLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     Offset? tapPos;
     final replyMessage = replyingMessage != null;
-    // return replyingMessage?.replyingMessage == null
-    //     ?
+
     return InkWell(
       onTapDown: (TapDownDetails details) {
         tapPos = details.globalPosition;
@@ -51,7 +50,7 @@ class TextMessageLayout extends StatelessWidget {
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.30,
+              maxWidth: MediaQuery.of(context).size.width * 0.50,
             ),
             child: Container(
               padding: const EdgeInsets.all(8),
@@ -106,7 +105,7 @@ class TextMessageLayout extends StatelessWidget {
         children: [
           ReplyMessageWidget(
             replyMessage: replyMessage,
-            name: name!,
+            name: 'Text',
             textAlign: alignName,
             align: align,
             crossAxisAlignment: crossAlign,

@@ -155,6 +155,9 @@ class _MyChatPageState extends State<MyChatPage> {
                   senderId: widget.arguments.uid,
                   receiverId: widget.arguments.peerId,
                   receiverName: widget.arguments.peerNickname,
+                  replyName: widget.arguments.peerId == widget.arguments.uid
+                      ? "Me"
+                      : widget.arguments.peerNickname,
                 )
               ],
             );
