@@ -5,6 +5,7 @@ import 'package:flutter_social_app/futures/data/datasources/remote/firebase_remo
 import 'package:flutter_social_app/futures/data/repositories/firebase_repository_impl.dart';
 import 'package:flutter_social_app/futures/domain/repositories/firebase_repository.dart';
 import 'package:flutter_social_app/futures/domain/usecases/delete_text_message_usecase.dart';
+import 'package:flutter_social_app/futures/domain/usecases/delete_user_usecase.dart';
 import 'package:flutter_social_app/futures/domain/usecases/join_chat_message_usecase.dart';
 import 'package:flutter_social_app/futures/domain/usecases/usecase.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
@@ -35,6 +36,7 @@ Future<void> init() async {
   sl.registerFactory<UserBloc>(() => UserBloc(
         getAllUsersUsecase: sl.call(),
         getUpdateUserUseCase: sl.call(),
+        getDeleteUserUseCase: sl.call(),
       ));
   sl.registerFactory<ChatBloc>(() => ChatBloc(
         sendTextMessageUseCase: sl.call(),
@@ -88,6 +90,8 @@ Future<void> init() async {
       () => JoinChatMessageUseCase(repository: sl.call()));
   sl.registerLazySingleton<DeleteTextMessageUseCase>(
       () => DeleteTextMessageUseCase(repository: sl.call()));
+  sl.registerLazySingleton<DeleteUserUseCase>(
+      () => DeleteUserUseCase(repository: sl.call()));
 
   // Repository
   sl.registerLazySingleton<FirebaseRepository>(
