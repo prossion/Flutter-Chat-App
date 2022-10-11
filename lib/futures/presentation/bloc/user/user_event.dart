@@ -18,3 +18,12 @@ class GetUpdateUserEvent extends UserEvent {
   @override
   List<Object?> get props => [user];
 }
+
+class GetDeleteUserEvent extends UserEvent {
+  final String uid;
+
+  const GetDeleteUserEvent({required this.uid});
+
+  @override
+  List<Object?> get props => [uid];
+}
