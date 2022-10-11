@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/config/app_theme.dart';
@@ -328,6 +329,53 @@ class _ProfilePageState extends State<ProfilePage> {
                       onChanged: toggleSwitch),
                 ],
               ),
+            ),
+            const Divider(
+              thickness: 1,
+              endIndent: 20,
+              indent: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, top: 8.0, bottom: 8.0),
+              child: InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text("Are you sure to delete your account?"),
+                      content: const Text(
+                          "If you delete your account, you will delete your data and messages. Also, you will not be able to restore your account, only register a new account."),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            BlocProvider.of<UserBloc>(context)
+                                .add(GetDeleteUserEvent(uid: widget.uid));
+                            BlocProvider.of<AuthBloc>(context)
+                                .add(LoggetOutEvent());
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(14),
+                            child: const Text("Okay"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Delete Account',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+            ),
+            const Divider(
+              thickness: 1,
+              endIndent: 20,
+              indent: 20,
             ),
           ],
         ),

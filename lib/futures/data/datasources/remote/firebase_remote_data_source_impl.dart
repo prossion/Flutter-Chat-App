@@ -250,10 +250,13 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   @override
   Future<void> deleteUser(String userId) async {
     final userRef = firestore.collection("users").doc(userId);
+    final userAuthRef = auth.currentUser;
 
     print('id: $userId');
-    userRef.delete().then((doc) => print('User has been deleting'),
+    userRef.delete().then((doc) => print('User doc has been deleting'),
         onError: (e) => print("Error delete User $e"));
+    userAuthRef?.delete().then((doc) => print('User auth has been deleting'),
+        onError: (e) => print("Error delete auth User $e"));
   }
 
   @override
