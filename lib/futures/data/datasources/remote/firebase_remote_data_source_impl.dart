@@ -248,6 +248,15 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   }
 
   @override
+  Future<void> deleteUser(String userId) async {
+    final userRef = firestore.collection("users").doc(userId);
+
+    print('id: $userId');
+    userRef.delete().then((doc) => print('User has been deleting'),
+        onError: (e) => print("Error delete User $e"));
+  }
+
+  @override
   Stream<List<TextMessageEntity>> getMessages(String channelId) {
     final oneToOneChatChannelRef = firestore.collection("groupChatChannel");
     final messagesRef =
