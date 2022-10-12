@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/config/app_theme.dart';
@@ -346,6 +345,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       content: const Text(
                           "If you delete your account, you will delete your data and messages. Also, you will not be able to restore your account, only register a new account."),
                       actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(14),
+                            child: const Text("Cancel"),
+                          ),
+                        ),
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context);

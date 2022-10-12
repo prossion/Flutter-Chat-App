@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bubble/bubble.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/full_photo_widget.dart';
+import 'package:flutter_social_app/common/full_photo_widget.dart';
 
 class ImageMessageLayout extends StatelessWidget {
   const ImageMessageLayout({

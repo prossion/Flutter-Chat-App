@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_social_app/common/text_form_field_widget.dart';
 import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
-import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:flutter_social_app/page_const.dart';
 
 class ForgotPage extends StatefulWidget {
