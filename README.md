@@ -34,8 +34,8 @@ Group communication apps using Flutter and Firebase-Firestore Database
 1. SignIn - SignUp - Logout - Remember password
 2. Google SignIn
 3. Search by user name and group name
-4. Real-time receive and send messages in groups or user chats
-5. Viewing profile page and able to edit info and upload images
+4. Real-time receive, send, and delete text messages and images in groups or user chats
+5. Viewing profile page and able to edit info, upload images and delete account
 
 ### # The Clean Architecture [proposed by our friendly Uncle Bob](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
