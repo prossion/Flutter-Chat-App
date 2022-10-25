@@ -202,7 +202,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       if (_image != null ||
           _groupNameController.text.isNotEmpty ||
           _numberUsersJoinController.text.isNotEmpty) {
-        BlocProvider.of<GroupBloc>(context).add(GetCreateGroupEvent(
+        BlocProvider.of<GroupBloc>(context).add(GroupEvent.getCreateEvent(
             groupEntity: GroupEntity(
           lastMessage: "",
           uid: widget.uid,

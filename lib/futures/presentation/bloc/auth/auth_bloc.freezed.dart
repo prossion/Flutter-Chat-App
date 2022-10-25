@@ -412,24 +412,24 @@ mixin _$AuthState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String uid) loaded,
-    required TResult Function() error,
+    required TResult Function(String uid) auth,
+    required TResult Function() unAuth,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String uid)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String uid)? auth,
+    TResult? Function()? unAuth,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String uid)? loaded,
-    TResult Function()? error,
+    TResult Function(String uid)? auth,
+    TResult Function()? unAuth,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -437,24 +437,24 @@ mixin _$AuthState {
   TResult map<TResult extends Object?>({
     required TResult Function(_AuthInitialState value) initial,
     required TResult Function(_AuthLoadingState value) loading,
-    required TResult Function(_AuthLoadedState value) loaded,
-    required TResult Function(_AuthErrorState value) error,
+    required TResult Function(_AuthLoadedState value) auth,
+    required TResult Function(_AuthErrorState value) unAuth,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_AuthInitialState value)? initial,
     TResult? Function(_AuthLoadingState value)? loading,
-    TResult? Function(_AuthLoadedState value)? loaded,
-    TResult? Function(_AuthErrorState value)? error,
+    TResult? Function(_AuthLoadedState value)? auth,
+    TResult? Function(_AuthErrorState value)? unAuth,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_AuthInitialState value)? initial,
     TResult Function(_AuthLoadingState value)? loading,
-    TResult Function(_AuthLoadedState value)? loaded,
-    TResult Function(_AuthErrorState value)? error,
+    TResult Function(_AuthLoadedState value)? auth,
+    TResult Function(_AuthErrorState value)? unAuth,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -517,8 +517,8 @@ class _$_AuthInitialState extends _AuthInitialState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String uid) loaded,
-    required TResult Function() error,
+    required TResult Function(String uid) auth,
+    required TResult Function() unAuth,
   }) {
     return initial();
   }
@@ -528,8 +528,8 @@ class _$_AuthInitialState extends _AuthInitialState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String uid)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String uid)? auth,
+    TResult? Function()? unAuth,
   }) {
     return initial?.call();
   }
@@ -539,8 +539,8 @@ class _$_AuthInitialState extends _AuthInitialState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String uid)? loaded,
-    TResult Function()? error,
+    TResult Function(String uid)? auth,
+    TResult Function()? unAuth,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -554,8 +554,8 @@ class _$_AuthInitialState extends _AuthInitialState {
   TResult map<TResult extends Object?>({
     required TResult Function(_AuthInitialState value) initial,
     required TResult Function(_AuthLoadingState value) loading,
-    required TResult Function(_AuthLoadedState value) loaded,
-    required TResult Function(_AuthErrorState value) error,
+    required TResult Function(_AuthLoadedState value) auth,
+    required TResult Function(_AuthErrorState value) unAuth,
   }) {
     return initial(this);
   }
@@ -565,8 +565,8 @@ class _$_AuthInitialState extends _AuthInitialState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_AuthInitialState value)? initial,
     TResult? Function(_AuthLoadingState value)? loading,
-    TResult? Function(_AuthLoadedState value)? loaded,
-    TResult? Function(_AuthErrorState value)? error,
+    TResult? Function(_AuthLoadedState value)? auth,
+    TResult? Function(_AuthErrorState value)? unAuth,
   }) {
     return initial?.call(this);
   }
@@ -576,8 +576,8 @@ class _$_AuthInitialState extends _AuthInitialState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_AuthInitialState value)? initial,
     TResult Function(_AuthLoadingState value)? loading,
-    TResult Function(_AuthLoadedState value)? loaded,
-    TResult Function(_AuthErrorState value)? error,
+    TResult Function(_AuthLoadedState value)? auth,
+    TResult Function(_AuthErrorState value)? unAuth,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -632,8 +632,8 @@ class _$_AuthLoadingState extends _AuthLoadingState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String uid) loaded,
-    required TResult Function() error,
+    required TResult Function(String uid) auth,
+    required TResult Function() unAuth,
   }) {
     return loading();
   }
@@ -643,8 +643,8 @@ class _$_AuthLoadingState extends _AuthLoadingState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String uid)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String uid)? auth,
+    TResult? Function()? unAuth,
   }) {
     return loading?.call();
   }
@@ -654,8 +654,8 @@ class _$_AuthLoadingState extends _AuthLoadingState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String uid)? loaded,
-    TResult Function()? error,
+    TResult Function(String uid)? auth,
+    TResult Function()? unAuth,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -669,8 +669,8 @@ class _$_AuthLoadingState extends _AuthLoadingState {
   TResult map<TResult extends Object?>({
     required TResult Function(_AuthInitialState value) initial,
     required TResult Function(_AuthLoadingState value) loading,
-    required TResult Function(_AuthLoadedState value) loaded,
-    required TResult Function(_AuthErrorState value) error,
+    required TResult Function(_AuthLoadedState value) auth,
+    required TResult Function(_AuthErrorState value) unAuth,
   }) {
     return loading(this);
   }
@@ -680,8 +680,8 @@ class _$_AuthLoadingState extends _AuthLoadingState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_AuthInitialState value)? initial,
     TResult? Function(_AuthLoadingState value)? loading,
-    TResult? Function(_AuthLoadedState value)? loaded,
-    TResult? Function(_AuthErrorState value)? error,
+    TResult? Function(_AuthLoadedState value)? auth,
+    TResult? Function(_AuthErrorState value)? unAuth,
   }) {
     return loading?.call(this);
   }
@@ -691,8 +691,8 @@ class _$_AuthLoadingState extends _AuthLoadingState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_AuthInitialState value)? initial,
     TResult Function(_AuthLoadingState value)? loading,
-    TResult Function(_AuthLoadedState value)? loaded,
-    TResult Function(_AuthErrorState value)? error,
+    TResult Function(_AuthLoadedState value)? auth,
+    TResult Function(_AuthErrorState value)? unAuth,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -748,7 +748,7 @@ class _$_AuthLoadedState extends _AuthLoadedState {
 
   @override
   String toString() {
-    return 'AuthState.loaded(uid: $uid)';
+    return 'AuthState.auth(uid: $uid)';
   }
 
   @override
@@ -773,10 +773,10 @@ class _$_AuthLoadedState extends _AuthLoadedState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String uid) loaded,
-    required TResult Function() error,
+    required TResult Function(String uid) auth,
+    required TResult Function() unAuth,
   }) {
-    return loaded(uid);
+    return auth(uid);
   }
 
   @override
@@ -784,10 +784,10 @@ class _$_AuthLoadedState extends _AuthLoadedState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String uid)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String uid)? auth,
+    TResult? Function()? unAuth,
   }) {
-    return loaded?.call(uid);
+    return auth?.call(uid);
   }
 
   @override
@@ -795,12 +795,12 @@ class _$_AuthLoadedState extends _AuthLoadedState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String uid)? loaded,
-    TResult Function()? error,
+    TResult Function(String uid)? auth,
+    TResult Function()? unAuth,
     required TResult orElse(),
   }) {
-    if (loaded != null) {
-      return loaded(uid);
+    if (auth != null) {
+      return auth(uid);
     }
     return orElse();
   }
@@ -810,10 +810,10 @@ class _$_AuthLoadedState extends _AuthLoadedState {
   TResult map<TResult extends Object?>({
     required TResult Function(_AuthInitialState value) initial,
     required TResult Function(_AuthLoadingState value) loading,
-    required TResult Function(_AuthLoadedState value) loaded,
-    required TResult Function(_AuthErrorState value) error,
+    required TResult Function(_AuthLoadedState value) auth,
+    required TResult Function(_AuthErrorState value) unAuth,
   }) {
-    return loaded(this);
+    return auth(this);
   }
 
   @override
@@ -821,10 +821,10 @@ class _$_AuthLoadedState extends _AuthLoadedState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_AuthInitialState value)? initial,
     TResult? Function(_AuthLoadingState value)? loading,
-    TResult? Function(_AuthLoadedState value)? loaded,
-    TResult? Function(_AuthErrorState value)? error,
+    TResult? Function(_AuthLoadedState value)? auth,
+    TResult? Function(_AuthErrorState value)? unAuth,
   }) {
-    return loaded?.call(this);
+    return auth?.call(this);
   }
 
   @override
@@ -832,12 +832,12 @@ class _$_AuthLoadedState extends _AuthLoadedState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_AuthInitialState value)? initial,
     TResult Function(_AuthLoadingState value)? loading,
-    TResult Function(_AuthLoadedState value)? loaded,
-    TResult Function(_AuthErrorState value)? error,
+    TResult Function(_AuthLoadedState value)? auth,
+    TResult Function(_AuthErrorState value)? unAuth,
     required TResult orElse(),
   }) {
-    if (loaded != null) {
-      return loaded(this);
+    if (auth != null) {
+      return auth(this);
     }
     return orElse();
   }
@@ -877,7 +877,7 @@ class _$_AuthErrorState extends _AuthErrorState {
 
   @override
   String toString() {
-    return 'AuthState.error()';
+    return 'AuthState.unAuth()';
   }
 
   @override
@@ -894,10 +894,10 @@ class _$_AuthErrorState extends _AuthErrorState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(String uid) loaded,
-    required TResult Function() error,
+    required TResult Function(String uid) auth,
+    required TResult Function() unAuth,
   }) {
-    return error();
+    return unAuth();
   }
 
   @override
@@ -905,10 +905,10 @@ class _$_AuthErrorState extends _AuthErrorState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(String uid)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String uid)? auth,
+    TResult? Function()? unAuth,
   }) {
-    return error?.call();
+    return unAuth?.call();
   }
 
   @override
@@ -916,12 +916,12 @@ class _$_AuthErrorState extends _AuthErrorState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(String uid)? loaded,
-    TResult Function()? error,
+    TResult Function(String uid)? auth,
+    TResult Function()? unAuth,
     required TResult orElse(),
   }) {
-    if (error != null) {
-      return error();
+    if (unAuth != null) {
+      return unAuth();
     }
     return orElse();
   }
@@ -931,10 +931,10 @@ class _$_AuthErrorState extends _AuthErrorState {
   TResult map<TResult extends Object?>({
     required TResult Function(_AuthInitialState value) initial,
     required TResult Function(_AuthLoadingState value) loading,
-    required TResult Function(_AuthLoadedState value) loaded,
-    required TResult Function(_AuthErrorState value) error,
+    required TResult Function(_AuthLoadedState value) auth,
+    required TResult Function(_AuthErrorState value) unAuth,
   }) {
-    return error(this);
+    return unAuth(this);
   }
 
   @override
@@ -942,10 +942,10 @@ class _$_AuthErrorState extends _AuthErrorState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_AuthInitialState value)? initial,
     TResult? Function(_AuthLoadingState value)? loading,
-    TResult? Function(_AuthLoadedState value)? loaded,
-    TResult? Function(_AuthErrorState value)? error,
+    TResult? Function(_AuthLoadedState value)? auth,
+    TResult? Function(_AuthErrorState value)? unAuth,
   }) {
-    return error?.call(this);
+    return unAuth?.call(this);
   }
 
   @override
@@ -953,12 +953,12 @@ class _$_AuthErrorState extends _AuthErrorState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_AuthInitialState value)? initial,
     TResult Function(_AuthLoadingState value)? loading,
-    TResult Function(_AuthLoadedState value)? loaded,
-    TResult Function(_AuthErrorState value)? error,
+    TResult Function(_AuthLoadedState value)? auth,
+    TResult Function(_AuthErrorState value)? unAuth,
     required TResult orElse(),
   }) {
-    if (error != null) {
-      return error(this);
+    if (unAuth != null) {
+      return unAuth(this);
     }
     return orElse();
   }

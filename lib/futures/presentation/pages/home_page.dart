@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<GroupBloc>(context).add(GetGroupsEvent());
+    BlocProvider.of<GroupBloc>(context).add(const GroupEvent.getGroupsEvent());
     BlocProvider.of<UserBloc>(context).add(GetUsersEvent());
   }
 

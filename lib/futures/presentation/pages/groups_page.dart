@@ -91,9 +91,18 @@ class _GroupsPageState extends State<GroupsPage> {
                 (element) => element.uid == widget.uid,
                 orElse: () => const UserModel());
             return BlocBuilder<GroupBloc, GroupState>(
-              builder: (context, state) {
-                if (state is GroupLoadedState) {
-                  final filteredGroups = state.groups
+                builder: (context, state) {
+              state.when(
+                initial: () => Center(
+                    child: CircularProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                )),
+                loading: () => Center(
+                    child: CircularProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                )),
+                loaded: ((groups) {
+                  final filteredGroups = groups
                       .where((group) =>
                           group.groupName
                               .startsWith(_searchTextController.text) ||
@@ -130,7 +139,7 @@ class _GroupsPageState extends State<GroupsPage> {
                                     group: filteredGroups[index],
                                     onTap: () {
                                       BlocProvider.of<GroupBloc>(context).add(
-                                        JoinGroupEvent(
+                                        GroupEvent.joinGroupEvent(
                                           groupEntity: GroupEntity(
                                               groupId: filteredGroups[index]
                                                   .groupId),
@@ -158,13 +167,18 @@ class _GroupsPageState extends State<GroupsPage> {
                       ),
                     ],
                   );
-                }
-                return Center(
-                    child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor,
-                ));
-              },
-            );
+                }),
+                error: () => Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              );
+              return Center(
+                  child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ));
+            });
           }
           return Center(
               child: CircularProgressIndicator(

@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (_) => di.sl<AuthBloc>()..add(AuthEvent.appStarted()),
+          create: (_) => di.sl<AuthBloc>()..add(const AuthEvent.appStarted()),
         ),
         BlocProvider<CredentialBloc>(
           create: (_) => di.sl<CredentialBloc>(),
@@ -48,7 +48,8 @@ class _MyAppState extends State<MyApp> {
           create: (_) => di.sl<UserBloc>()..add(GetUsersEvent()),
         ),
         BlocProvider<GroupBloc>(
-          create: (_) => di.sl<GroupBloc>()..add(GetGroupsEvent()),
+          create: (_) =>
+              di.sl<GroupBloc>()..add(const GroupEvent.getGroupsEvent()),
         ),
         BlocProvider<ChatBloc>(
           create: (_) => di.sl<ChatBloc>(),
@@ -85,8 +86,8 @@ class _MyAppState extends State<MyApp> {
                         child: CircularProgressIndicator(
                       color: Theme.of(context).primaryColor,
                     )),
-                    loaded: (uid) => HomePage(uid: uid),
-                    error: () => const LoginPage(),
+                    auth: (uid) => HomePage(uid: uid),
+                    unAuth: () => const LoginPage(),
                   );
                 },
               );

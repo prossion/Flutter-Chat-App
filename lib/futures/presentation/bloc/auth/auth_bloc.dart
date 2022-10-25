@@ -45,7 +45,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         loggedIn: (event) => _loggedIn(event, emitter),
         loggedOut: (event) => _loggedOut(event, emitter),
       ),
-      transformer: bloc_concurrency.droppable(),
+      // transformer: bloc_concurrency.droppable(),
     );
   }
 

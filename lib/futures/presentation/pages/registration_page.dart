@@ -43,34 +43,53 @@ class _RegistrationPageState extends State<RegistrationPage> {
       key: _scaffoldState,
       body: BlocConsumer<CredentialBloc, CredentialState>(
         listener: (context, state) {
-          if (state is CredentialSuccessState) {
-            BlocProvider.of<AuthBloc>(context).add(const AuthEvent.loggedIn());
-          }
+          state.when(
+            initial: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loading: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            success: () {
+              BlocProvider.of<AuthBloc>(context)
+                  .add(const AuthEvent.loggedIn());
+            },
+            error: (e) => {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Ooops...'),
+                    content: Text(e),
+                  );
+                },
+              )
+            },
+          );
         },
         builder: (context, state) {
-          if (state is CredentialLoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (state is CredentialSuccessState) {
-            return BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
-                return state.when(
-                  initial: () => Center(
-                      child: CircularProgressIndicator(
-                    color: Theme.of(context).primaryColor,
-                  )),
-                  loading: () => Center(
-                      child: CircularProgressIndicator(
-                    color: Theme.of(context).primaryColor,
-                  )),
-                  loaded: (uid) => HomePage(uid: uid),
-                  error: _bodyWidget,
+          state.when(
+            initial: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loading: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            success: () => _bodyWidget(),
+            error: (e) => showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Ooops...'),
+                  content: Text(e),
                 );
               },
-            );
-          }
+            ),
+          );
           return _bodyWidget();
         },
       ),
@@ -224,7 +243,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   _submitSignUp() {
-    BlocProvider.of<CredentialBloc>(context).add(SignUpEvent(
+    BlocProvider.of<CredentialBloc>(context).add(CredentialEvent.signUpEvent(
       user: UserEntity(
         email: _emailController.text,
         phoneNumber: _numberController.text,

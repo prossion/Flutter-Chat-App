@@ -34,30 +34,53 @@ class _LoginPageState extends State<LoginPage> {
       key: _scaffoldState,
       body: BlocConsumer<CredentialBloc, CredentialState>(
         listener: (context, state) {
-          if (state is CredentialSuccessState) {
-            BlocProvider.of<AuthBloc>(context).add(const AuthEvent.loggedIn());
-          }
-          if (state is CredentialErrorState) {
-            showDialog(
+          state.when(
+            initial: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loading: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            success: () {
+              BlocProvider.of<AuthBloc>(context)
+                  .add(const AuthEvent.loggedIn());
+            },
+            error: (e) => {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Ooops...'),
+                    content: Text(e),
+                  );
+                },
+              )
+            },
+          );
+        },
+        builder: (context, state) {
+          state.when(
+            initial: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loading: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            success: () => _widgetBuild(),
+            error: (e) => showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
                   title: const Text('Ooops...'),
-                  content: Text(state.error),
+                  content: Text(e),
                 );
               },
-            );
-          }
-        },
-        builder: (context, state) {
-          if (state is CredentialLoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (state is CredentialSuccessState) {
-            return _widgetBuild();
-          }
+            ),
+          );
           return _widgetBuild();
         },
       ),
@@ -76,8 +99,8 @@ class _LoginPageState extends State<LoginPage> {
               child: CircularProgressIndicator(
             color: Theme.of(context).primaryColor,
           )),
-          loaded: (uid) => HomePage(uid: uid),
-          error: () {
+          auth: (uid) => HomePage(uid: uid),
+          unAuth: () {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -233,7 +256,7 @@ class _LoginPageState extends State<LoginPage> {
                       InkWell(
                         onTap: () {
                           BlocProvider.of<CredentialBloc>(context)
-                              .add(GoogleAuthEvent());
+                              .add(const CredentialEvent.googleAuthEvent());
                         },
                         child: Ink(
                           color: Theme.of(context).primaryColor,
@@ -267,7 +290,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _submitLogin() {
     if (_formKey.currentState!.validate()) {
-      BlocProvider.of<CredentialBloc>(context).add(SignInEvent(
+      BlocProvider.of<CredentialBloc>(context).add(CredentialEvent.signInEvent(
         email: _emailController.text,
         password: _passwordController.text,
       ));
