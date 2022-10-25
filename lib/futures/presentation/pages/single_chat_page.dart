@@ -38,7 +38,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
       setState(() {});
     });
     BlocProvider.of<ChatBloc>(context)
-        .add(GetMessagesEvent(channelId: widget.singleChatEntity.groupId));
+        .add(ChatEvent.getMessages(channelId: widget.singleChatEntity.groupId));
     _photoUrl = '';
     super.initState();
   }
@@ -67,7 +67,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
               .then((value) {
             setState(() {
               _photoUrl = value;
-              BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
+              BlocProvider.of<ChatBloc>(context).add(ChatEvent.sendTextMessage(
                 textMessageEntity: TextMessageEntity(
                     time: Timestamp.now(),
                     senderId: widget.singleChatEntity.uid,
@@ -125,41 +125,48 @@ class _SingleChatPageState extends State<SingleChatPage> {
       ),
       body: BlocBuilder<ChatBloc, ChatState>(
         builder: (index, state) {
-          if (state is ChatLoadedState) {
-            return Column(
-              children: [
-                MessagesListWidget(
-                  messages: state,
-                  controller: _scrollController,
-                  image: _image,
-                  userId: widget.singleChatEntity.uid,
-                  groupId: widget.singleChatEntity.groupId,
-                  onSwipedMessage: (message) {
-                    replyToMessage(message);
-                    focusNode.requestFocus();
-                  },
-                ),
-                SendMessageTextWidget(
-                  getImage: getImage,
-                  messageFunc: updateFunc,
-                  controller: _messageController,
-                  replyMessage: replyMessage,
-                  name: widget.singleChatEntity.username,
-                  onCancelReply: cancelReply,
-                  channelId: widget.singleChatEntity.groupId,
-                  content: _messageController.text,
-                  senderId: widget.singleChatEntity.uid,
-                  receiverId: '',
-                  receiverName: '',
-                  replyName: widget.singleChatEntity.username,
-                )
-              ],
-            );
-          }
-          return Center(
-              child: CircularProgressIndicator(
-            color: Theme.of(context).primaryColor,
-          ));
+          return state.when(
+            initial: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loading: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loaded: (messages) {
+              return Column(
+                children: [
+                  MessagesListWidget(
+                    messages: messages,
+                    controller: _scrollController,
+                    image: _image,
+                    userId: widget.singleChatEntity.uid,
+                    groupId: widget.singleChatEntity.groupId,
+                    onSwipedMessage: (message) {
+                      replyToMessage(message);
+                      focusNode.requestFocus();
+                    },
+                  ),
+                  SendMessageTextWidget(
+                    getImage: getImage,
+                    messageFunc: updateFunc,
+                    controller: _messageController,
+                    replyMessage: replyMessage,
+                    name: widget.singleChatEntity.username,
+                    onCancelReply: cancelReply,
+                    channelId: widget.singleChatEntity.groupId,
+                    content: _messageController.text,
+                    senderId: widget.singleChatEntity.uid,
+                    receiverId: '',
+                    receiverName: '',
+                    replyName: widget.singleChatEntity.username,
+                  )
+                ],
+              );
+            },
+            error: () => const Center(child: Text('Error')),
+          );
         },
       ),
     );

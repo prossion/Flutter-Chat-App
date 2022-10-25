@@ -149,7 +149,8 @@ class _SendMessageTextWidgetState extends State<SendMessageTextWidget> {
                 FocusScope.of(context).unfocus();
                 widget.onCancelReply();
 
-                BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
+                BlocProvider.of<ChatBloc>(context)
+                    .add(ChatEvent.sendTextMessage(
                   textMessageEntity: TextMessageEntity(
                     time: Timestamp.now(),
                     senderId: widget.senderId,

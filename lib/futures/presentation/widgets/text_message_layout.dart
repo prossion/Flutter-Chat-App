@@ -133,8 +133,8 @@ class TextMessageLayout extends StatelessWidget {
         PopupMenuItem(
           child: const Text('Delete Message'),
           onTap: () {
-            BlocProvider.of<ChatBloc>(context).add(
-                DeleteTextMessage(channelId: groupId, messageId: messageId!));
+            BlocProvider.of<ChatBloc>(context).add(ChatEvent.deleteTextMessage(
+                channelId: groupId, messageId: messageId!));
           },
         ),
       ],

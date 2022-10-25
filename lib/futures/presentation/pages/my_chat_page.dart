@@ -39,7 +39,7 @@ class _MyChatPageState extends State<MyChatPage> {
       setState(() {});
     });
     BlocProvider.of<ChatBloc>(context)
-        .add(GetMessagesEvent(channelId: widget.arguments.groupChatId));
+        .add(ChatEvent.getMessages(channelId: widget.arguments.groupChatId));
     _photoUrl = '';
     super.initState();
   }
@@ -68,7 +68,7 @@ class _MyChatPageState extends State<MyChatPage> {
               .then((value) {
             setState(() {
               _photoUrl = value;
-              BlocProvider.of<ChatBloc>(context).add(SendTextMessageEvent(
+              BlocProvider.of<ChatBloc>(context).add(ChatEvent.sendTextMessage(
                 textMessageEntity: TextMessageEntity(
                   time: Timestamp.now(),
                   senderId: widget.arguments.uid,
@@ -128,44 +128,51 @@ class _MyChatPageState extends State<MyChatPage> {
       ),
       body: BlocBuilder<ChatBloc, ChatState>(
         builder: (index, state) {
-          if (state is ChatLoadedState) {
-            return Column(
-              children: [
-                MessagesListWidget(
-                  messages: state,
-                  controller: _scrollController,
-                  image: _image,
-                  userId: widget.arguments.uid,
-                  groupId: widget.arguments.groupChatId,
-                  name: widget.arguments.peerNickname,
-                  onSwipedMessage: (message) {
-                    replyToMessage(message);
-                    focusNode.requestFocus();
-                  },
-                ),
-                SendMessageTextWidget(
-                  getImage: getImage,
-                  messageFunc: updateFunc,
-                  controller: _messageController,
-                  replyMessage: replyMessage,
-                  name: widget.arguments.peerNickname,
-                  onCancelReply: cancelReply,
-                  channelId: widget.arguments.groupChatId,
-                  content: _messageController.text,
-                  senderId: widget.arguments.uid,
-                  receiverId: widget.arguments.peerId,
-                  receiverName: widget.arguments.peerNickname,
-                  replyName: widget.arguments.peerId == widget.arguments.uid
-                      ? "Me"
-                      : widget.arguments.peerNickname,
-                )
-              ],
-            );
-          }
-          return Center(
-              child: CircularProgressIndicator(
-            color: Theme.of(context).primaryColor,
-          ));
+          return state.when(
+            initial: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loading: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loaded: (messages) {
+              return Column(
+                children: [
+                  MessagesListWidget(
+                    messages: messages,
+                    controller: _scrollController,
+                    image: _image,
+                    userId: widget.arguments.uid,
+                    groupId: widget.arguments.groupChatId,
+                    name: widget.arguments.peerNickname,
+                    onSwipedMessage: (message) {
+                      replyToMessage(message);
+                      focusNode.requestFocus();
+                    },
+                  ),
+                  SendMessageTextWidget(
+                    getImage: getImage,
+                    messageFunc: updateFunc,
+                    controller: _messageController,
+                    replyMessage: replyMessage,
+                    name: widget.arguments.peerNickname,
+                    onCancelReply: cancelReply,
+                    channelId: widget.arguments.groupChatId,
+                    content: _messageController.text,
+                    senderId: widget.arguments.uid,
+                    receiverId: widget.arguments.peerId,
+                    receiverName: widget.arguments.peerNickname,
+                    replyName: widget.arguments.peerId == widget.arguments.uid
+                        ? "Me"
+                        : widget.arguments.peerNickname,
+                  )
+                ],
+              );
+            },
+            error: () => const Center(child: Text('Error')),
+          );
         },
       ),
     );

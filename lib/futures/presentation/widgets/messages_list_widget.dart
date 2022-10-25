@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
+import 'package:flutter_social_app/futures/presentation/bloc/chat/chat_state.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:swipe_to/swipe_to.dart';
@@ -19,7 +21,7 @@ class MessagesListWidget extends StatelessWidget {
       required this.onSwipedMessage,
       this.name})
       : super(key: key);
-  final ChatLoadedState messages;
+  final List<TextMessageEntity> messages;
   final ScrollController controller;
   final File? image;
   final String userId;
@@ -39,9 +41,9 @@ class MessagesListWidget extends StatelessWidget {
     return Expanded(
       child: ListView.builder(
         controller: controller,
-        itemCount: messages.messages.length,
+        itemCount: messages.length,
         itemBuilder: (_, index) {
-          final message = messages.messages[index];
+          final message = messages[index];
 
           if (message.senderId == userId) {
             return message.type == "TEXT"
