@@ -7,8 +7,6 @@ import 'package:flutter_social_app/futures/presentation/bloc/chat/chat_bloc.dart
 import 'package:flutter_social_app/futures/presentation/widgets/reply_message_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../bloc/chat/chat_event.dart';
-
 class SendMessageTextWidget extends StatefulWidget {
   const SendMessageTextWidget(
       {Key? key,

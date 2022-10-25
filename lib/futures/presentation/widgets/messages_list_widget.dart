@@ -5,7 +5,6 @@ import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
-import 'package:flutter_social_app/futures/presentation/bloc/chat/chat_state.dart';
 import 'package:flutter_social_app/futures/presentation/widgets/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:swipe_to/swipe_to.dart';
