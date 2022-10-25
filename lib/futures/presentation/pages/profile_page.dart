@@ -103,7 +103,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: InkWell(
                     onTap: () {
                       Navigator.pop(context);
-                      BlocProvider.of<AuthBloc>(context).add(LoggetOutEvent());
+                      BlocProvider.of<AuthBloc>(context)
+                          .add(const AuthEvent.loggedOut());
                     },
                     child: Row(
                       children: const [
@@ -360,7 +361,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             BlocProvider.of<UserBloc>(context)
                                 .add(GetDeleteUserEvent(uid: widget.uid));
                             BlocProvider.of<AuthBloc>(context)
-                                .add(LoggetOutEvent());
+                                .add(const AuthEvent.loggedOut());
                           },
                           child: Container(
                             padding: const EdgeInsets.all(14),

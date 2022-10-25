@@ -44,7 +44,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       body: BlocConsumer<CredentialBloc, CredentialState>(
         listener: (context, state) {
           if (state is CredentialSuccessState) {
-            BlocProvider.of<AuthBloc>(context).add(LoggedInEvent());
+            BlocProvider.of<AuthBloc>(context).add(const AuthEvent.loggedIn());
           }
         },
         builder: (context, state) {
@@ -56,11 +56,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
           if (state is CredentialSuccessState) {
             return BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
-                if (state is AuthenticatedState) {
-                  return HomePage(uid: state.uid);
-                } else {
-                  return _bodyWidget();
-                }
+                return state.when(
+                  initial: () => Center(
+                      child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                  )),
+                  loading: () => Center(
+                      child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                  )),
+                  loaded: (uid) => HomePage(uid: uid),
+                  error: _bodyWidget,
+                );
               },
             );
           }

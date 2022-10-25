@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (_) => di.sl<AuthBloc>()..add(AppStartedEvent()),
+          create: (_) => di.sl<AuthBloc>()..add(AuthEvent.appStarted()),
         ),
         BlocProvider<CredentialBloc>(
           create: (_) => di.sl<CredentialBloc>(),
@@ -76,11 +76,18 @@ class _MyAppState extends State<MyApp> {
             "/": (context) {
               return BlocBuilder<AuthBloc, AuthState>(
                 builder: (context, authState) {
-                  if (authState is AuthenticatedState) {
-                    return HomePage(uid: authState.uid);
-                  } else {
-                    return const LoginPage();
-                  }
+                  return authState.when(
+                    initial: () => Center(
+                        child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    )),
+                    loading: () => Center(
+                        child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    )),
+                    loaded: (uid) => HomePage(uid: uid),
+                    error: () => const LoginPage(),
+                  );
                 },
               );
             }

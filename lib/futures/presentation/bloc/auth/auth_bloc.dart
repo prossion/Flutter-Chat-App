@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/futures/domain/usecases/usecase.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 
 part 'auth_bloc.freezed.dart';
 
@@ -23,10 +24,9 @@ class AuthState with _$AuthState {
 
   const factory AuthState.loading() = _AuthLoadingState;
 
-  const factory AuthState.loaded({required final String uid}) =
-      _AuthLoadedState;
+  const factory AuthState.auth({required final String uid}) = _AuthLoadedState;
 
-  const factory AuthState.error() = _AuthErrorState;
+  const factory AuthState.unAuth() = _AuthErrorState;
 }
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -45,6 +45,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         loggedIn: (event) => _loggedIn(event, emitter),
         loggedOut: (event) => _loggedOut(event, emitter),
       ),
+      transformer: bloc_concurrency.droppable(),
     );
   }
 
@@ -56,12 +57,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // print(isSignIn);
       if (isSignIn = true) {
         final uid = await getCurrentUIDUseCase.call();
-        emitter(AuthState.loaded(uid: uid));
+        emitter(AuthState.auth(uid: uid));
       } else {
-        emitter(const AuthState.error());
+        emitter(const AuthState.unAuth());
       }
     } catch (_) {
-      emitter(const AuthState.error());
+      emitter(const AuthState.unAuth());
       rethrow;
     }
   }
@@ -71,10 +72,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final uid = await getCurrentUIDUseCase.call();
       // print("user Id $uid");
-      emitter(AuthState.loaded(uid: uid));
+      emitter(AuthState.auth(uid: uid));
     } catch (_) {
       // print("user Id null");
-      emitter(const AuthState.error());
+      emitter(const AuthState.unAuth());
       rethrow;
     }
   }
@@ -83,9 +84,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _LoggedOutEvent event, Emitter<AuthState> emitter) async {
     try {
       await signOutUseCase.call();
-      emitter(const AuthState.error());
+      emitter(const AuthState.unAuth());
     } catch (_) {
-      emitter(const AuthState.error());
+      emitter(const AuthState.unAuth());
       rethrow;
     }
   }

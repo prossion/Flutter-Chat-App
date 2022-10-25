@@ -1,6 +1,4 @@
 export 'auth/auth_bloc.dart';
-export 'auth/auth_state.dart';
-export 'auth/auth_event.dart';
 export 'chat/chat_bloc.dart';
 export 'credential/credential_bloc.dart';
 export 'credential/credential_state.dart';
