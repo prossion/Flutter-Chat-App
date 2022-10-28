@@ -165,7 +165,9 @@ class _SingleChatPageState extends State<SingleChatPage> {
                 ],
               );
             },
-            error: () => const Center(child: Text('Error')),
+            error: (e) => Center(
+              child: Text(e, style: const TextStyle(fontSize: 20)),
+            ),
           );
         },
       ),

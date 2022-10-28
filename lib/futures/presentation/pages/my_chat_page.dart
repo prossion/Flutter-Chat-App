@@ -171,7 +171,9 @@ class _MyChatPageState extends State<MyChatPage> {
                 ],
               );
             },
-            error: () => const Center(child: Text('Error')),
+            error: (e) => Center(
+              child: Text(e, style: const TextStyle(fontSize: 20)),
+            ),
           );
         },
       ),

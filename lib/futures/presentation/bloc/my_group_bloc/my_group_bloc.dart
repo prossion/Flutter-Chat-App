@@ -36,7 +36,8 @@ class MyGroupState with _$MyGroupState {
     required final List<ChatMessagesModel> chatMessages,
   }) = _MyGroupSuccessState;
 
-  const factory MyGroupState.error() = _MyGroupErrorState;
+  const factory MyGroupState.error(
+      {@Default('Произошла ошибка') String message}) = _MyGroupErrorState;
 }
 
 class MyGroupBloc extends Bloc<MyGroupEvent, MyGroupState> {

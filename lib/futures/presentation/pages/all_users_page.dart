@@ -170,8 +170,8 @@ class _AllUsersPageState extends State<AllUsersPage> {
                 );
               });
             },
-            error: () => const Center(
-              child: Text('Error'),
+            error: (e) => Center(
+              child: Text(e, style: const TextStyle(fontSize: 20)),
             ),
           );
         },

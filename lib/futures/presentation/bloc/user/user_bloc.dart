@@ -38,7 +38,8 @@ class UserState with _$UserState {
     required final List<UserEntity> users,
   }) = _UserLoadedState;
 
-  const factory UserState.error() = _UserErrorState;
+  const factory UserState.error({@Default('Произошла ошибка') String message}) =
+      _UserErrorState;
 }
 
 class UserBloc extends Bloc<UserEvent, UserState> {

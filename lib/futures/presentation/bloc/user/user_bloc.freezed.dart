@@ -479,7 +479,7 @@ mixin _$UserState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<UserEntity> users) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -487,7 +487,7 @@ mixin _$UserState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<UserEntity> users)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -495,7 +495,7 @@ mixin _$UserState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<UserEntity> users)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -584,7 +584,7 @@ class _$_UserInitialState extends _UserInitialState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<UserEntity> users) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
     return initial();
   }
@@ -595,7 +595,7 @@ class _$_UserInitialState extends _UserInitialState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<UserEntity> users)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
     return initial?.call();
   }
@@ -606,7 +606,7 @@ class _$_UserInitialState extends _UserInitialState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<UserEntity> users)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -699,7 +699,7 @@ class _$_UserLoadingState extends _UserLoadingState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<UserEntity> users) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
     return loading();
   }
@@ -710,7 +710,7 @@ class _$_UserLoadingState extends _UserLoadingState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<UserEntity> users)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
     return loading?.call();
   }
@@ -721,7 +721,7 @@ class _$_UserLoadingState extends _UserLoadingState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<UserEntity> users)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -847,7 +847,7 @@ class _$_UserLoadedState extends _UserLoadedState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<UserEntity> users) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
     return loaded(users);
   }
@@ -858,7 +858,7 @@ class _$_UserLoadedState extends _UserLoadedState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<UserEntity> users)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
     return loaded?.call(users);
   }
@@ -869,7 +869,7 @@ class _$_UserLoadedState extends _UserLoadedState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<UserEntity> users)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -932,6 +932,8 @@ abstract class _$$_UserErrorStateCopyWith<$Res> {
   factory _$$_UserErrorStateCopyWith(
           _$_UserErrorState value, $Res Function(_$_UserErrorState) then) =
       __$$_UserErrorStateCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String message});
 }
 
 /// @nodoc
@@ -941,26 +943,51 @@ class __$$_UserErrorStateCopyWithImpl<$Res>
   __$$_UserErrorStateCopyWithImpl(
       _$_UserErrorState _value, $Res Function(_$_UserErrorState) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+  }) {
+    return _then(_$_UserErrorState(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_UserErrorState extends _UserErrorState {
-  const _$_UserErrorState() : super._();
+  const _$_UserErrorState({this.message = 'Произошла ошибка'}) : super._();
+
+  @override
+  @JsonKey()
+  final String message;
 
   @override
   String toString() {
-    return 'UserState.error()';
+    return 'UserState.error(message: $message)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_UserErrorState);
+        (other.runtimeType == runtimeType &&
+            other is _$_UserErrorState &&
+            (identical(other.message, message) || other.message == message));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, message);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_UserErrorStateCopyWith<_$_UserErrorState> get copyWith =>
+      __$$_UserErrorStateCopyWithImpl<_$_UserErrorState>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -968,9 +995,9 @@ class _$_UserErrorState extends _UserErrorState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<UserEntity> users) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
-    return error();
+    return error(message);
   }
 
   @override
@@ -979,9 +1006,9 @@ class _$_UserErrorState extends _UserErrorState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<UserEntity> users)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
-    return error?.call();
+    return error?.call(message);
   }
 
   @override
@@ -990,11 +1017,11 @@ class _$_UserErrorState extends _UserErrorState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<UserEntity> users)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error();
+      return error(message);
     }
     return orElse();
   }
@@ -1038,6 +1065,11 @@ class _$_UserErrorState extends _UserErrorState {
 }
 
 abstract class _UserErrorState extends UserState {
-  const factory _UserErrorState() = _$_UserErrorState;
+  const factory _UserErrorState({final String message}) = _$_UserErrorState;
   const _UserErrorState._() : super._();
+
+  String get message;
+  @JsonKey(ignore: true)
+  _$$_UserErrorStateCopyWith<_$_UserErrorState> get copyWith =>
+      throw _privateConstructorUsedError;
 }

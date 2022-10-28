@@ -39,7 +39,8 @@ class ChatState with _$ChatState {
   const factory ChatState.loaded(
       {required final List<TextMessageEntity> messages}) = _ChatLoadedState;
 
-  const factory ChatState.error() = _ChatErrorState;
+  const factory ChatState.error({@Default('Произошла ошибка') String message}) =
+      _ChatErrorState;
 }
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {

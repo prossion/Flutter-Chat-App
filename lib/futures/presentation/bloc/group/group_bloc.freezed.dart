@@ -652,7 +652,7 @@ mixin _$GroupState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<GroupEntity> groups) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -660,7 +660,7 @@ mixin _$GroupState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<GroupEntity> groups)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -668,7 +668,7 @@ mixin _$GroupState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<GroupEntity> groups)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -758,7 +758,7 @@ class _$_GroupInitialState extends _GroupInitialState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<GroupEntity> groups) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
     return initial();
   }
@@ -769,7 +769,7 @@ class _$_GroupInitialState extends _GroupInitialState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<GroupEntity> groups)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
     return initial?.call();
   }
@@ -780,7 +780,7 @@ class _$_GroupInitialState extends _GroupInitialState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<GroupEntity> groups)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -873,7 +873,7 @@ class _$_GroupLoadingState extends _GroupLoadingState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<GroupEntity> groups) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
     return loading();
   }
@@ -884,7 +884,7 @@ class _$_GroupLoadingState extends _GroupLoadingState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<GroupEntity> groups)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
     return loading?.call();
   }
@@ -895,7 +895,7 @@ class _$_GroupLoadingState extends _GroupLoadingState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<GroupEntity> groups)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -1022,7 +1022,7 @@ class _$_GroupSuccessState extends _GroupSuccessState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<GroupEntity> groups) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
     return loaded(groups);
   }
@@ -1033,7 +1033,7 @@ class _$_GroupSuccessState extends _GroupSuccessState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<GroupEntity> groups)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
     return loaded?.call(groups);
   }
@@ -1044,7 +1044,7 @@ class _$_GroupSuccessState extends _GroupSuccessState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<GroupEntity> groups)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -1107,6 +1107,8 @@ abstract class _$$_GroupErrorStateCopyWith<$Res> {
   factory _$$_GroupErrorStateCopyWith(
           _$_GroupErrorState value, $Res Function(_$_GroupErrorState) then) =
       __$$_GroupErrorStateCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String message});
 }
 
 /// @nodoc
@@ -1116,26 +1118,51 @@ class __$$_GroupErrorStateCopyWithImpl<$Res>
   __$$_GroupErrorStateCopyWithImpl(
       _$_GroupErrorState _value, $Res Function(_$_GroupErrorState) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+  }) {
+    return _then(_$_GroupErrorState(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_GroupErrorState extends _GroupErrorState {
-  const _$_GroupErrorState() : super._();
+  const _$_GroupErrorState({this.message = 'Произошла ошибка'}) : super._();
+
+  @override
+  @JsonKey()
+  final String message;
 
   @override
   String toString() {
-    return 'GroupState.error()';
+    return 'GroupState.error(message: $message)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_GroupErrorState);
+        (other.runtimeType == runtimeType &&
+            other is _$_GroupErrorState &&
+            (identical(other.message, message) || other.message == message));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, message);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_GroupErrorStateCopyWith<_$_GroupErrorState> get copyWith =>
+      __$$_GroupErrorStateCopyWithImpl<_$_GroupErrorState>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1143,9 +1170,9 @@ class _$_GroupErrorState extends _GroupErrorState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<GroupEntity> groups) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
-    return error();
+    return error(message);
   }
 
   @override
@@ -1154,9 +1181,9 @@ class _$_GroupErrorState extends _GroupErrorState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<GroupEntity> groups)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
-    return error?.call();
+    return error?.call(message);
   }
 
   @override
@@ -1165,11 +1192,11 @@ class _$_GroupErrorState extends _GroupErrorState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<GroupEntity> groups)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error();
+      return error(message);
     }
     return orElse();
   }
@@ -1213,6 +1240,11 @@ class _$_GroupErrorState extends _GroupErrorState {
 }
 
 abstract class _GroupErrorState extends GroupState {
-  const factory _GroupErrorState() = _$_GroupErrorState;
+  const factory _GroupErrorState({final String message}) = _$_GroupErrorState;
   const _GroupErrorState._() : super._();
+
+  String get message;
+  @JsonKey(ignore: true)
+  _$$_GroupErrorStateCopyWith<_$_GroupErrorState> get copyWith =>
+      throw _privateConstructorUsedError;
 }

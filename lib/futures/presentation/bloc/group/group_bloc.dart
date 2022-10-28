@@ -39,7 +39,8 @@ class GroupState with _$GroupState {
     required final List<GroupEntity> groups,
   }) = _GroupSuccessState;
 
-  const factory GroupState.error() = _GroupErrorState;
+  const factory GroupState.error(
+      {@Default('Произошла ошибка') String message}) = _GroupErrorState;
 }
 
 class GroupBloc extends Bloc<GroupEvent, GroupState> {

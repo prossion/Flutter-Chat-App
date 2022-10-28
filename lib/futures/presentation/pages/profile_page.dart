@@ -130,8 +130,8 @@ class _ProfilePageState extends State<ProfilePage> {
             color: Theme.of(context).primaryColor,
           )),
           loaded: (users) => _profileWidget(users),
-          error: () => const Center(
-            child: Text('Error'),
+          error: (e) => Center(
+            child: Text(e, style: const TextStyle(fontSize: 20)),
           ),
         );
       }),

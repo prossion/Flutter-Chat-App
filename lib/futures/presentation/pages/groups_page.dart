@@ -181,19 +181,15 @@ class _GroupsPageState extends State<GroupsPage> {
                         ],
                       );
                     },
-                    error: () => Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                      ),
+                    error: (e) => Center(
+                      child: Text(e, style: const TextStyle(fontSize: 20)),
                     ),
                   );
                 },
               );
             },
-            error: () => Center(
-              child: CircularProgressIndicator(
-                color: Theme.of(context).primaryColor,
-              ),
+            error: (e) => Center(
+              child: Text(e, style: const TextStyle(fontSize: 20)),
             ),
           );
         },

@@ -590,7 +590,7 @@ mixin _$ChatState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<TextMessageEntity> messages) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -598,7 +598,7 @@ mixin _$ChatState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<TextMessageEntity> messages)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -606,7 +606,7 @@ mixin _$ChatState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<TextMessageEntity> messages)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -695,7 +695,7 @@ class _$_ChatInitialState extends _ChatInitialState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<TextMessageEntity> messages) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
     return initial();
   }
@@ -706,7 +706,7 @@ class _$_ChatInitialState extends _ChatInitialState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<TextMessageEntity> messages)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
     return initial?.call();
   }
@@ -717,7 +717,7 @@ class _$_ChatInitialState extends _ChatInitialState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<TextMessageEntity> messages)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -810,7 +810,7 @@ class _$_ChatLoadingState extends _ChatLoadingState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<TextMessageEntity> messages) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
     return loading();
   }
@@ -821,7 +821,7 @@ class _$_ChatLoadingState extends _ChatLoadingState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<TextMessageEntity> messages)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
     return loading?.call();
   }
@@ -832,7 +832,7 @@ class _$_ChatLoadingState extends _ChatLoadingState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<TextMessageEntity> messages)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -958,7 +958,7 @@ class _$_ChatLoadedState extends _ChatLoadedState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<TextMessageEntity> messages) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
     return loaded(messages);
   }
@@ -969,7 +969,7 @@ class _$_ChatLoadedState extends _ChatLoadedState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<TextMessageEntity> messages)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
     return loaded?.call(messages);
   }
@@ -980,7 +980,7 @@ class _$_ChatLoadedState extends _ChatLoadedState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<TextMessageEntity> messages)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -1043,6 +1043,8 @@ abstract class _$$_ChatErrorStateCopyWith<$Res> {
   factory _$$_ChatErrorStateCopyWith(
           _$_ChatErrorState value, $Res Function(_$_ChatErrorState) then) =
       __$$_ChatErrorStateCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String message});
 }
 
 /// @nodoc
@@ -1052,26 +1054,51 @@ class __$$_ChatErrorStateCopyWithImpl<$Res>
   __$$_ChatErrorStateCopyWithImpl(
       _$_ChatErrorState _value, $Res Function(_$_ChatErrorState) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+  }) {
+    return _then(_$_ChatErrorState(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_ChatErrorState extends _ChatErrorState {
-  const _$_ChatErrorState() : super._();
+  const _$_ChatErrorState({this.message = 'Произошла ошибка'}) : super._();
+
+  @override
+  @JsonKey()
+  final String message;
 
   @override
   String toString() {
-    return 'ChatState.error()';
+    return 'ChatState.error(message: $message)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_ChatErrorState);
+        (other.runtimeType == runtimeType &&
+            other is _$_ChatErrorState &&
+            (identical(other.message, message) || other.message == message));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, message);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_ChatErrorStateCopyWith<_$_ChatErrorState> get copyWith =>
+      __$$_ChatErrorStateCopyWithImpl<_$_ChatErrorState>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1079,9 +1106,9 @@ class _$_ChatErrorState extends _ChatErrorState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<TextMessageEntity> messages) loaded,
-    required TResult Function() error,
+    required TResult Function(String message) error,
   }) {
-    return error();
+    return error(message);
   }
 
   @override
@@ -1090,9 +1117,9 @@ class _$_ChatErrorState extends _ChatErrorState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<TextMessageEntity> messages)? loaded,
-    TResult? Function()? error,
+    TResult? Function(String message)? error,
   }) {
-    return error?.call();
+    return error?.call(message);
   }
 
   @override
@@ -1101,11 +1128,11 @@ class _$_ChatErrorState extends _ChatErrorState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<TextMessageEntity> messages)? loaded,
-    TResult Function()? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error();
+      return error(message);
     }
     return orElse();
   }
@@ -1149,6 +1176,11 @@ class _$_ChatErrorState extends _ChatErrorState {
 }
 
 abstract class _ChatErrorState extends ChatState {
-  const factory _ChatErrorState() = _$_ChatErrorState;
+  const factory _ChatErrorState({final String message}) = _$_ChatErrorState;
   const _ChatErrorState._() : super._();
+
+  String get message;
+  @JsonKey(ignore: true)
+  _$$_ChatErrorStateCopyWith<_$_ChatErrorState> get copyWith =>
+      throw _privateConstructorUsedError;
 }
