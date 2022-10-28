@@ -86,90 +86,116 @@ class _GroupsPageState extends State<GroupsPage> {
       ),
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
-          if (state is UserLoadedState) {
-            final user = state.users.firstWhere(
-                (element) => element.uid == widget.uid,
-                orElse: () => const UserModel());
-            return BlocBuilder<GroupBloc, GroupState>(
-              builder: (context, state) {
-                if (state is GroupLoadedState) {
-                  final filteredGroups = state.groups
-                      .where((group) =>
-                          group.groupName
-                              .startsWith(_searchTextController.text) ||
-                          group.groupName.startsWith(
-                              _searchTextController.text.toLowerCase()))
-                      .toList();
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: filteredGroups.isEmpty
-                            ? Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.group,
-                                        size: 40,
-                                        color: blackTextStyle.withOpacity(.4)),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "No Group Created yet",
-                                      style: TextStyle(
-                                        color: blackTextStyle.withOpacity(.2),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : ListView.builder(
-                                itemCount: filteredGroups.length,
-                                itemBuilder: (_, index) {
-                                  return GroupCard(
-                                    group: filteredGroups[index],
-                                    onTap: () {
-                                      BlocProvider.of<GroupBloc>(context).add(
-                                        JoinGroupEvent(
-                                          groupEntity: GroupEntity(
-                                              groupId: filteredGroups[index]
-                                                  .groupId),
+          return state.when(
+            initial: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loading: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loaded: (users) {
+              final user = users.firstWhere(
+                  (element) => element.uid == widget.uid,
+                  orElse: () => const UserModel());
+              return BlocBuilder<GroupBloc, GroupState>(
+                builder: (context, state) {
+                  return state.when(
+                    initial: () => Center(
+                        child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    )),
+                    loading: () => Center(
+                        child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    )),
+                    loaded: (groups) {
+                      final filteredGroups = groups
+                          .where((group) =>
+                              group.groupName
+                                  .startsWith(_searchTextController.text) ||
+                              group.groupName.startsWith(
+                                  _searchTextController.text.toLowerCase()))
+                          .toList();
+                      return Column(
+                        children: [
+                          Expanded(
+                            child: filteredGroups.isEmpty
+                                ? Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.group,
+                                            size: 40,
+                                            color:
+                                                blackTextStyle.withOpacity(.4)),
+                                        const SizedBox(
+                                          height: 10,
                                         ),
-                                      );
-                                      Navigator.pushNamed(
-                                        context,
-                                        PageConst.singleChatPage,
-                                        arguments: SingleChatEntity(
-                                          groupId:
-                                              filteredGroups[index].groupId,
-                                          groupName:
-                                              filteredGroups[index].groupName,
-                                          uid: widget.uid,
-                                          username: user.name,
-                                          groupProfileImage:
-                                              filteredGroups[index]
-                                                  .groupProfileImage,
+                                        Text(
+                                          "No Group Created yet",
+                                          style: TextStyle(
+                                            color:
+                                                blackTextStyle.withOpacity(.2),
+                                          ),
                                         ),
+                                      ],
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    itemCount: filteredGroups.length,
+                                    itemBuilder: (_, index) {
+                                      return GroupCard(
+                                        group: filteredGroups[index],
+                                        onTap: () {
+                                          BlocProvider.of<GroupBloc>(context)
+                                              .add(
+                                            GroupEvent.joinGroupEvent(
+                                              groupEntity: GroupEntity(
+                                                  groupId: filteredGroups[index]
+                                                      .groupId),
+                                            ),
+                                          );
+                                          Navigator.pushNamed(
+                                            context,
+                                            PageConst.singleChatPage,
+                                            arguments: SingleChatEntity(
+                                              groupId:
+                                                  filteredGroups[index].groupId,
+                                              groupName: filteredGroups[index]
+                                                  .groupName,
+                                              uid: widget.uid,
+                                              username: user.name,
+                                              groupProfileImage:
+                                                  filteredGroups[index]
+                                                      .groupProfileImage,
+                                            ),
+                                          );
+                                        },
                                       );
                                     },
-                                  );
-                                },
-                              ),
+                                  ),
+                          ),
+                        ],
+                      );
+                    },
+                    error: () => Center(
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).primaryColor,
                       ),
-                    ],
+                    ),
                   );
-                }
-                return Center(
-                    child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor,
-                ));
-              },
-            );
-          }
-          return Center(
+                },
+              );
+            },
+            error: () => Center(
               child: CircularProgressIndicator(
-            color: Theme.of(context).primaryColor,
-          ));
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          );
         },
       ),
     );

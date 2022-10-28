@@ -80,91 +80,100 @@ class _AllUsersPageState extends State<AllUsersPage> {
       ),
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
-          if (state is UserLoadedState) {
-            final users = state.users
-                .where((element) => element.uid != widget.uid)
-                .toList();
-            final filteredUsers = users
-                .where((user) =>
-                    user.name.startsWith(_searchTextController.text) ||
-                    user.name
-                        .startsWith(_searchTextController.text.toLowerCase()))
-                .toList();
-            return BlocBuilder<MyGroupBloc, MyGroupState>(
-                builder: (context, state) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: filteredUsers.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.account_box,
-                                    size: 40,
-                                    color: blackTextStyle.withOpacity(.4)),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  "No Users Found yet",
-                                  style: TextStyle(
-                                      color: blackTextStyle.withOpacity(.2)),
-                                )
-                              ],
+          return state.when(
+            initial: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loading: () => Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
+            loaded: (users) {
+              final user =
+                  users.where((element) => element.uid != widget.uid).toList();
+              final filteredUsers = user
+                  .where((user) =>
+                      user.name.startsWith(_searchTextController.text) ||
+                      user.name
+                          .startsWith(_searchTextController.text.toLowerCase()))
+                  .toList();
+              return BlocBuilder<UserBloc, UserState>(
+                  builder: (context, state) {
+                return Column(
+                  children: [
+                    Expanded(
+                      child: filteredUsers.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.account_box,
+                                      size: 40,
+                                      color: blackTextStyle.withOpacity(.4)),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "No Users Found yet",
+                                    style: TextStyle(
+                                        color: blackTextStyle.withOpacity(.2)),
+                                  )
+                                ],
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: filteredUsers.length,
+                              itemBuilder: (_, index) {
+                                if (filteredUsers[index].uid == widget.uid) {
+                                  return const SizedBox.shrink();
+                                } else {
+                                  return ProfileCard(
+                                    user: filteredUsers[index],
+                                    onTap: () {
+                                      String peerId = filteredUsers[index].uid;
+                                      String currentUserId = widget.uid;
+                                      if (currentUserId.compareTo(peerId) > 0) {
+                                        groupChatId = '$currentUserId-$peerId';
+                                      } else {
+                                        groupChatId = '$peerId-$currentUserId';
+                                      }
+                                      BlocProvider.of<MyGroupBloc>(context).add(
+                                          MyGroupEvent.updateDataFirestoreEvent(
+                                        collectionPath: "groupChatChannel",
+                                        docPath: groupChatId,
+                                        dataNeedUpdate: {"recipientId": peerId},
+                                      ));
+                                      BlocProvider.of<MyGroupBloc>(context).add(
+                                          MyGroupEvent.joinMyGroupEvent(
+                                              groupChatId: groupChatId));
+                                      Navigator.pushNamed(
+                                        context,
+                                        PageConst.myChatPage,
+                                        arguments: MyChatPageArguments(
+                                          peerId: filteredUsers[index].uid,
+                                          peerAvatar:
+                                              filteredUsers[index].photoUrl,
+                                          peerNickname:
+                                              filteredUsers[index].name,
+                                          uid: widget.uid,
+                                          groupChatId: groupChatId,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }
+                              },
                             ),
-                          )
-                        : ListView.builder(
-                            itemCount: filteredUsers.length,
-                            itemBuilder: (_, index) {
-                              if (filteredUsers[index].uid == widget.uid) {
-                                return const SizedBox.shrink();
-                              } else {
-                                return ProfileCard(
-                                  user: filteredUsers[index],
-                                  onTap: () {
-                                    String peerId = filteredUsers[index].uid;
-                                    String currentUserId = widget.uid;
-                                    if (currentUserId.compareTo(peerId) > 0) {
-                                      groupChatId = '$currentUserId-$peerId';
-                                    } else {
-                                      groupChatId = '$peerId-$currentUserId';
-                                    }
-                                    BlocProvider.of<MyGroupBloc>(context)
-                                        .add(UpdateDataFirestoreEvent(
-                                      collectionPath: "groupChatChannel",
-                                      docPath: groupChatId,
-                                      dataNeedUpdate: {"recipientId": peerId},
-                                    ));
-                                    BlocProvider.of<MyGroupBloc>(context).add(
-                                        JoinMyGroupEvent(
-                                            groupChatId: groupChatId));
-                                    Navigator.pushNamed(
-                                      context,
-                                      PageConst.myChatPage,
-                                      arguments: MyChatPageArguments(
-                                        peerId: filteredUsers[index].uid,
-                                        peerAvatar:
-                                            filteredUsers[index].photoUrl,
-                                        peerNickname: filteredUsers[index].name,
-                                        uid: widget.uid,
-                                        groupChatId: groupChatId,
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                          ),
-                  ),
-                ],
-              );
-            });
-          }
-          return Center(
-              child: CircularProgressIndicator(
-            color: Theme.of(context).primaryColor,
-          ));
+                    ),
+                  ],
+                );
+              });
+            },
+            error: () => const Center(
+              child: Text('Error'),
+            ),
+          );
         },
       ),
     );

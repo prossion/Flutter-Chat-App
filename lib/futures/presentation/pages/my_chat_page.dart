@@ -96,7 +96,7 @@ class _MyChatPageState extends State<MyChatPage> {
 
   void updateFunc() {
     BlocProvider.of<MyGroupBloc>(context).add(
-      UpdateDataFirestoreEvent(
+      MyGroupEvent.updateDataFirestoreEvent(
         collectionPath: "groupChatChannel",
         docPath: widget.arguments.groupChatId,
         dataNeedUpdate: {"content": _messageController.text},

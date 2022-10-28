@@ -39,16 +39,18 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(
-          create: (_) => di.sl<AuthBloc>()..add(AppStartedEvent()),
+          create: (_) => di.sl<AuthBloc>()..add(const AuthEvent.appStarted()),
         ),
         BlocProvider<CredentialBloc>(
           create: (_) => di.sl<CredentialBloc>(),
         ),
         BlocProvider<UserBloc>(
-          create: (_) => di.sl<UserBloc>()..add(GetUsersEvent()),
+          create: (_) =>
+              di.sl<UserBloc>()..add(const UserEvent.getUsersEvent()),
         ),
         BlocProvider<GroupBloc>(
-          create: (_) => di.sl<GroupBloc>()..add(GetGroupsEvent()),
+          create: (_) =>
+              di.sl<GroupBloc>()..add(const GroupEvent.getGroupsEvent()),
         ),
         BlocProvider<ChatBloc>(
           create: (_) => di.sl<ChatBloc>(),
@@ -76,11 +78,18 @@ class _MyAppState extends State<MyApp> {
             "/": (context) {
               return BlocBuilder<AuthBloc, AuthState>(
                 builder: (context, authState) {
-                  if (authState is AuthenticatedState) {
-                    return HomePage(uid: authState.uid);
-                  } else {
-                    return const LoginPage();
-                  }
+                  return authState.when(
+                    initial: () => Center(
+                        child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    )),
+                    loading: () => Center(
+                        child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    )),
+                    auth: (uid) => HomePage(uid: uid),
+                    unAuth: () => const LoginPage(),
+                  );
                 },
               );
             }

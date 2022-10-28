@@ -93,7 +93,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
   }
 
   void updateFunc() {
-    BlocProvider.of<GroupBloc>(context).add(UpdateGroupEvent(
+    BlocProvider.of<GroupBloc>(context).add(GroupEvent.updateGroupEvent(
         groupEntity: GroupEntity(
       groupId: widget.singleChatEntity.groupId,
       lastMessage: _messageController.text,

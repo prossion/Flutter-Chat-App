@@ -6,6 +6,7 @@ import 'package:flutter_social_app/futures/domain/usecases/delete_text_message_u
 import 'package:flutter_social_app/futures/domain/usecases/get_messages_usecase.dart';
 import 'package:flutter_social_app/futures/domain/usecases/send_text_message.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 
 part 'chat_bloc.freezed.dart';
 
@@ -57,6 +58,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         sendTextMessage: (event) => _sendMessages(event, emitter),
         deleteTextMessage: (event) => _deleteMessages(event, emitter),
       ),
+      transformer: bloc_concurrency.droppable(),
     );
   }
 

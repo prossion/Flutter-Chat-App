@@ -129,7 +129,7 @@ class _ForgotPageState extends State<ForgotPage> {
   void _submit(BuildContext context) {
     if (_emailController.text.isNotEmpty) {
       BlocProvider.of<CredentialBloc>(context)
-          .add(ForgotPasswordEvent(email: _emailController.text));
+          .add(CredentialEvent.forgotPassword(email: _emailController.text));
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
