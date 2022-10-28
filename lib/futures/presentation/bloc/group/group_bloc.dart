@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/domain/usecases/usecase.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-// import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
+import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 
 part 'group_bloc.freezed.dart';
 
@@ -61,7 +61,7 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
         joinGroupEvent: (event) => _joinGroupEvent(event, emitter),
         updateGroupEvent: (event) => _updateGroupEvent(event, emitter),
       ),
-      // transformer: bloc_concurrency.droppable(),
+      transformer: bloc_concurrency.sequential(),
     );
   }
 

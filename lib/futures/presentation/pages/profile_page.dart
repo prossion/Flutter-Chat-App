@@ -119,16 +119,22 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      body: BlocBuilder<UserBloc, UserState>(
-        builder: (context, state) {
-          if (state is UserLoadedState) {
-            return _profileWidget(state.users);
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
+      body: BlocBuilder<UserBloc, UserState>(builder: (context, state) {
+        return state.when(
+          initial: () => Center(
+              child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          )),
+          loading: () => Center(
+              child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          )),
+          loaded: (users) => _profileWidget(users),
+          error: () => const Center(
+            child: Text('Error'),
+          ),
+        );
+      }),
     );
   }
 
@@ -358,8 +364,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context);
-                            BlocProvider.of<UserBloc>(context)
-                                .add(GetDeleteUserEvent(uid: widget.uid));
+                            BlocProvider.of<UserBloc>(context).add(
+                                UserEvent.getDeleteUserEvent(uid: widget.uid));
                             BlocProvider.of<AuthBloc>(context)
                                 .add(const AuthEvent.loggedOut());
                           },
@@ -399,7 +405,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (_nameController!.text != name ||
           _statusController!.text != status ||
           _imageIsPicked) {
-        BlocProvider.of<UserBloc>(context).add(GetUpdateUserEvent(
+        BlocProvider.of<UserBloc>(context).add(UserEvent.getUpdateUserEvent(
           user: UserEntity(
             uid: widget.uid,
             name: _nameController!.text,

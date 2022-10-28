@@ -45,7 +45,8 @@ class _MyAppState extends State<MyApp> {
           create: (_) => di.sl<CredentialBloc>(),
         ),
         BlocProvider<UserBloc>(
-          create: (_) => di.sl<UserBloc>()..add(GetUsersEvent()),
+          create: (_) =>
+              di.sl<UserBloc>()..add(const UserEvent.getUsersEvent()),
         ),
         BlocProvider<GroupBloc>(
           create: (_) =>
