@@ -54,7 +54,7 @@ class MyGroupBloc extends Bloc<MyGroupEvent, MyGroupState> {
         updateDataFirestoreEvent: (event) =>
             _updateDataFirestoreEvent(event, emitter),
       ),
-      transformer: bloc_concurrency.droppable(),
+      transformer: bloc_concurrency.concurrent(),
     );
   }
 

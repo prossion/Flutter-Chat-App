@@ -62,7 +62,7 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
         joinGroupEvent: (event) => _joinGroupEvent(event, emitter),
         updateGroupEvent: (event) => _updateGroupEvent(event, emitter),
       ),
-      transformer: bloc_concurrency.sequential(),
+      transformer: bloc_concurrency.concurrent(),
     );
   }
 

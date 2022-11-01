@@ -58,7 +58,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         getUpdateUserEvent: (event) => _getUpdateUserEvent(event, emitter),
         getDeleteUserEvent: (event) => _getDeleteUserEvent(event, emitter),
       ),
-      transformer: bloc_concurrency.droppable(),
+      // transformer: bloc_concurrency.droppable(),
     );
   }
 

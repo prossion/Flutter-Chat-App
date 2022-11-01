@@ -62,7 +62,7 @@ class CredentialBloc extends Bloc<CredentialEvent, CredentialState> {
         googleAuthEvent: (event) => _googleAuthEvent(event, emitter),
         signUpEvent: (event) => _signUpEvent(event, emitter),
       ),
-      transformer: bloc_concurrency.droppable(),
+      transformer: bloc_concurrency.concurrent(),
     );
   }
 

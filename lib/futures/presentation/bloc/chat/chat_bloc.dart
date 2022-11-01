@@ -59,7 +59,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         sendTextMessage: (event) => _sendMessages(event, emitter),
         deleteTextMessage: (event) => _deleteMessages(event, emitter),
       ),
-      transformer: bloc_concurrency.droppable(),
+      transformer: bloc_concurrency.concurrent(),
     );
   }
 
