@@ -29,6 +29,8 @@ Group communication apps using Flutter and Firebase-Firestore Database
 6. intl
 7. get_it
 8. cached_network_image
+9. Freezed and freezed_annotation
+10. Bloc_concurrency
 
 ## Features :
 1. SignIn - SignUp - Logout - Remember password
