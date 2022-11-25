@@ -1,8 +1,6 @@
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 
 abstract class FirebaseRemoteDataSource {
-  Future<void> verifyPhoneNumber(String phoneNumber);
-
   Future<void> getCreateCurrentUser(UserEntity user);
 
   Future<void> getCreateGroup(GroupEntity groupEntity);
@@ -12,8 +10,6 @@ abstract class FirebaseRemoteDataSource {
   Future<void> updateGroup(GroupEntity groupEntity);
 
   Stream<List<GroupEntity>> getGroups();
-
-  Future<void> signInWithPhoneNumber(String pinCode);
 
   Future<void> forgotPassword(String email);
 

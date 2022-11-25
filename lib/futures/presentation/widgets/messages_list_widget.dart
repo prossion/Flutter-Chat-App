@@ -56,11 +56,13 @@ class MessagesListWidget extends StatelessWidget {
                       boxAlign: CrossAxisAlignment.start,
                       nip: BubbleNip.rightTop,
                       crossAlign: CrossAxisAlignment.end,
-                      name: "Me",
+                      name: name ?? "${message.senderName}",
                       alignName: TextAlign.end,
                       groupId: groupId,
                       replyingMessage: message.replyingMessage,
                       messageId: message.messageId,
+                      replyingName: message.senderId == userId ? 'Me' : name,
+                      // TODO: Need to fix this bug to show real name
                     ),
                   )
                 : ImageMessageLayout(
@@ -92,6 +94,10 @@ class MessagesListWidget extends StatelessWidget {
                       groupId: groupId,
                       replyingMessage: message.replyingMessage,
                       messageId: message.messageId,
+                      replyingName: userId == message.senderId
+                          ? name
+                          : message.senderName,
+                      // TODO: Need to fix this bug to show real name
                     ),
                   )
                 : ImageMessageLayout(

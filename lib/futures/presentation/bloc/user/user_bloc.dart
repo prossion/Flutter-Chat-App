@@ -6,7 +6,6 @@ import 'package:flutter_social_app/futures/domain/usecases/delete_user_usecase.d
 import 'package:flutter_social_app/futures/domain/usecases/get_all_users_usecase.dart';
 import 'package:flutter_social_app/futures/domain/usecases/get_update_user_usecase.dart';
 
-import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_bloc.freezed.dart';

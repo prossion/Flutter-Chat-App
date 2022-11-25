@@ -36,10 +36,10 @@ class ReplyMessageWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'User',
-                          style: TextStyle(
+                          name,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             // color: Colors.white,
                           ),

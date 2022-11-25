@@ -5,7 +5,6 @@ import 'package:flutter_social_app/common/text_form_field_widget.dart';
 import 'package:flutter_social_app/config/app_theme.dart';
 import 'package:flutter_social_app/futures/domain/entites/entites.dart';
 import 'package:flutter_social_app/futures/presentation/bloc/bloc.dart';
-import 'package:flutter_social_app/futures/presentation/pages/home_page.dart';
 import 'package:flutter_social_app/futures/presentation/pages/login_page.dart';
 
 class RegistrationPage extends StatefulWidget {

@@ -14,8 +14,6 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   final FirebaseAuth auth;
   final GoogleSignIn googleSignIn;
 
-  String _verificationId = "";
-
   FirebaseRemoteDataSourceImpl(this.firestore, this.auth, this.googleSignIn);
 
   // USERS AND AUTHENTICATION
@@ -75,52 +73,8 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   Future<bool> isSignIn() async => auth.currentUser?.uid != null;
 
   @override
-  Future<void> signInWithPhoneNumber(String pinCode) async {
-    final AuthCredential authCredential = PhoneAuthProvider.credential(
-        verificationId: _verificationId, smsCode: pinCode);
-    await auth.signInWithCredential(authCredential);
-  }
-
-  @override
   Future<void> signOut() async {
     await auth.signOut();
-  }
-
-  @override
-  Future<void> verifyPhoneNumber(String phoneNumber) async {
-    // ignore: prefer_function_declarations_over_variables
-    final PhoneVerificationCompleted phoneVerificationCompleted =
-        (AuthCredential authCredential) {
-      print("phone is verified : token ${authCredential.token}");
-    };
-
-    // ignore: prefer_function_declarations_over_variables
-    final PhoneVerificationFailed phoneVerificationFailed =
-        (FirebaseAuthException authCredential) {
-      print("phone failed ${authCredential.message},${authCredential.code}");
-    };
-
-    // ignore: prefer_function_declarations_over_variables
-    final PhoneCodeAutoRetrievalTimeout phoneCodeAutoRetrievalTimeout =
-        (String verificationId) {
-      _verificationId = verificationId;
-      print("time out $verificationId");
-    };
-
-    // ignore: prefer_function_declarations_over_variables
-    final PhoneCodeSent phoneCodeSent =
-        (String verificationID, [int? forceResendingToken]) {
-      _verificationId = verificationID;
-      print("sendPhoneCode $verificationID");
-    };
-
-    auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        timeout: const Duration(seconds: 5),
-        verificationCompleted: phoneVerificationCompleted,
-        verificationFailed: phoneVerificationFailed,
-        codeSent: phoneCodeSent,
-        codeAutoRetrievalTimeout: phoneCodeAutoRetrievalTimeout);
   }
 
   @override

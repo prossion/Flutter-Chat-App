@@ -163,32 +163,35 @@ class _ProfilePageState extends State<ProfilePage> {
               onTap: () {
                 getImage();
               },
-              child: Container(
-                width: deviceData.screenHeight! * 0.12,
-                height: deviceData.screenHeight! * 0.12,
-                decoration: const BoxDecoration(
-                  color: Colors.blueGrey,
-                  borderRadius: BorderRadius.all(Radius.circular(50)),
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(50)),
-                  child: profileWidget(
-                      imageUrl: user.photoUrl, image: _image, name: user.name),
-                ),
+              child: Column(
+                children: [
+                  Container(
+                    width: deviceData.screenHeight! * 0.12,
+                    height: deviceData.screenHeight! * 0.12,
+                    decoration: const BoxDecoration(
+                      color: Colors.blueGrey,
+                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      child: profileWidget(
+                          imageUrl: user.photoUrl,
+                          image: _image,
+                          name: user.name),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 14,
+                  ),
+                  const Text(
+                    'Change profile photo',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                  ),
+                ],
               ),
             ),
             const SizedBox(
-              height: 14,
-            ),
-            const Text(
-              'Change profile photo',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-            ),
-            const SizedBox(
               height: 28,
-            ),
-            const SizedBox(
-              height: 10,
             ),
             Container(
               margin: const EdgeInsets.only(left: 22, right: 22),
@@ -268,10 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const SizedBox(
-              height: 14,
-            ),
-            const SizedBox(
-              height: 20,
+              height: 24,
             ),
             InkWell(
               onTap: () {
