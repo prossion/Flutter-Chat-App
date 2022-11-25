@@ -19,6 +19,7 @@ class TextMessageLayout extends StatelessWidget {
     required this.groupId,
     required this.replyingMessage,
     required this.messageId,
+    required this.replyingName,
   }) : super(key: key);
   final String? text;
   final String time;
@@ -32,6 +33,7 @@ class TextMessageLayout extends StatelessWidget {
   final String groupId;
   final String? replyingMessage;
   final String? messageId;
+  final String? replyingName;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +107,9 @@ class TextMessageLayout extends StatelessWidget {
         children: [
           ReplyMessageWidget(
             replyMessage: replyMessage,
-            name: 'Text',
+            name: 'User',
+            //* Each reply message will show the 'User' instead of the actual username.
+            // TODO: Need to fix this bug to show real name
             textAlign: alignName,
             align: align,
             crossAxisAlignment: crossAlign,
