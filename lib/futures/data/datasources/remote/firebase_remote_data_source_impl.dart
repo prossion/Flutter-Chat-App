@@ -250,7 +250,7 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
       }
       return;
     }).catchError((error) {
-      print(error);
+      // print(error);
     });
   }
 
